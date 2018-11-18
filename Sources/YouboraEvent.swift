@@ -9,7 +9,6 @@
 // ===================================================================================================
 
 import UIKit
-import PlayKit
 
 @objc public class YouboraEvent: PKEvent {
     

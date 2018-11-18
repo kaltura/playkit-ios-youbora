@@ -9,7 +9,6 @@
 // ===================================================================================================
 
 import Foundation
-import PlayKit
 
 /// `YouboraPluginError` represents youbora plugin errors.
 enum YouboraPluginError: PKError {
