@@ -9,6 +9,7 @@
 // ===================================================================================================
 
 import YouboraLib
+import PlayKit
 
 class PKYouboraPlayerAdapter: YBPlayerAdapter<AnyObject> {
 

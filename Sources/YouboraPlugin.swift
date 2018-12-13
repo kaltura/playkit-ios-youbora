@@ -8,6 +8,8 @@
 // https://www.gnu.org/licenses/agpl-3.0.html
 // ===================================================================================================
 
+import PlayKit
+
 public class YouboraPlugin: BasePlugin, AppStateObservable {
     
     struct CustomPropertyKey {
@@ -79,7 +81,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         
         guard let config = pluginConfig as? AnalyticsConfig else {
             PKLog.error("Wrong config, could not setup youbora manager")
-            messageBus?.post(PlayerEvent.PluginError(nsError: YouboraPluginError.failedToSetupYouboraManager.asNSError))
+            messageBus?.post(PluginEvent.Error(nsError: YouboraPluginError.failedToSetupYouboraManager.asNSError))
             return
         }
         self.config = config
