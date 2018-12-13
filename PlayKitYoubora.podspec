@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/**/*' 
   s.dependency 'PlayKit/AnalyticsCommon', '~> 3.7.0' + suffix
-  #ssp.dependency 'YouboraAVPlayerAdapter', '6.0.11'
-  ssp.dependency 'YouboraLib', '6.1.7'
+  #s.dependency 'YouboraAVPlayerAdapter', '6.0.11'
+  s.dependency 'YouboraLib', '6.1.7'
 end
 
