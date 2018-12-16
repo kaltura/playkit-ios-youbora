@@ -87,6 +87,7 @@ extension PKYouboraPlayerAdapter {
     }
     
     override func getPlayhead() -> NSNumber? {
+        let player = self.player as? PlayKit.Player
         let currentTime = player?.currentTime
         return currentTime != nil ? NSNumber(value: currentTime!) : super.getPlayhead()
     }
@@ -96,7 +97,7 @@ extension PKYouboraPlayerAdapter {
     }
     
     override func getIsLive() -> NSValue? {
-        guard let player = self.player as? PlayerController else {
+        guard let player = self.player as? PlayKit.Player else {
             return super.getIsLive()
         }
         
