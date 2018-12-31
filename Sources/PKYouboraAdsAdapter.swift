@@ -216,7 +216,12 @@ extension PKYouboraAdsAdapter {
             case let e where e.self == AdEvent.adClicked:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let strongSelf = self else { return }
-                    strongSelf.fireClick()
+
+                    if let clickThroughUrl = event.data?[AdEventDataKeys.clickThroughUrl] as? String {
+                        strongSelf.fireClick(["adUrl": clickThroughUrl])
+                    } else {
+                        strongSelf.fireClick()
+                    }
                 }
             default: assertionFailure("All events must be handled")
             }
