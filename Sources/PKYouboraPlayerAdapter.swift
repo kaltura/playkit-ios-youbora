@@ -259,7 +259,7 @@ extension PKYouboraPlayerAdapter {
             case let e where e.self == PlayerEvent.error:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let strongSelf = self else { return }
-                    if let error = event.error, error.code == PKErrorCode.playerItemFailed {
+                    if let error = event.error {
                         strongSelf.fireFatalError(withMessage: error.localizedDescription, code: "\(error.code)", andMetadata: error.description)
                     }
                 }
