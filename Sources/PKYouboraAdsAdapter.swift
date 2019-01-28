@@ -129,7 +129,8 @@ extension PKYouboraAdsAdapter {
             AdEvent.adPlaybackReady,
             AdEvent.adsRequested,
             AdEvent.adClicked,
-            AdEvent.adDidRequestContentResume
+            AdEvent.adDidRequestContentResume,
+            AdEvent.error
         ]
     }
     
@@ -221,6 +222,14 @@ extension PKYouboraAdsAdapter {
                         strongSelf.fireClick(["adUrl": clickThroughUrl])
                     } else {
                         strongSelf.fireClick()
+                    }
+                }
+            case let e where e.self == AdEvent.error:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let strongSelf = self else { return }
+                    
+                    if let adErrorEvent = event.data?[AdEventDataKeys.error] as? NSError {
+                        strongSelf.fireFatalError(withMessage: adErrorEvent.localizedDescription, code: "\(adErrorEvent.code)", andMetadata: adErrorEvent.description)
                     }
                 }
             default: assertionFailure("All events must be handled")
