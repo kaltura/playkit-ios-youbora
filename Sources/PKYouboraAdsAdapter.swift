@@ -108,6 +108,14 @@ extension PKYouboraAdsAdapter {
     override func getPlayerName() -> String? {
         return KALTURA_IOS
     }
+    
+    override func getBitrate() -> NSNumber? {
+        if let adInfo = self.adInfo, adInfo.mediaBitrate != 0 {
+            return NSNumber(value: adInfo.mediaBitrate)
+        } else {
+            return super.getDuration()
+        }
+    }
 }
 
 /************************************************************/
