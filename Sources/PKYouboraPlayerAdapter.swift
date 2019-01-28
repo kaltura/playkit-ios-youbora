@@ -90,11 +90,13 @@ extension PKYouboraPlayerAdapter {
         guard let player = self.player as? PlayKit.Player else {
             return super.getPlayhead()
         }
-        let currentTime = player.currentTime
         
         if (player.isLive()) {
             return -1
         }
+        
+        let currentTime = player.currentTime
+        
         return NSNumber(value: currentTime)
     }
     
