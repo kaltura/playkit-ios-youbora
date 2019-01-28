@@ -113,7 +113,7 @@ extension PKYouboraAdsAdapter {
         if let adInfo = self.adInfo, adInfo.mediaBitrate != 0 {
             return NSNumber(value: adInfo.mediaBitrate)
         } else {
-            return super.getDuration()
+            return super.getBitrate()
         }
     }
 }
