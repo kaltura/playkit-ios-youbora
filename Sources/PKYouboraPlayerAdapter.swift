@@ -278,16 +278,18 @@ extension PKYouboraPlayerAdapter {
                 }
             case let e where e.self == AdEvent.adCuePointsUpdate:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let strongSelf = self else { return }
                     if let hasPostRoll = event.adCuePoints?.hasPostRoll, hasPostRoll == true {
-                        self?.shouldDelayEndedHandler = true
+                        strongSelf.shouldDelayEndedHandler = true
                     }
                 }
             case let e where e.self == AdEvent.allAdsCompleted:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
-                    if let shouldDelayEndedHandler = self?.shouldDelayEndedHandler, shouldDelayEndedHandler == true {
-                        self?.shouldDelayEndedHandler = false
-                        self?.plugin?.adsAdapter?.fireStop()
-                        self?.fireStop()
+                    guard let strongSelf = self else { return }
+                    if strongSelf.shouldDelayEndedHandler {
+                        strongSelf.shouldDelayEndedHandler = false
+                        strongSelf.plugin?.adsAdapter?.fireStop()
+                        strongSelf.fireStop()
                     }
                 }
             default: assertionFailure("All events must be handled")
