@@ -104,7 +104,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
     
     public var observations: Set<NotificationObservation> {
         return [
-            NotificationObservation(name: .UIApplicationWillTerminate) { [weak self] in
+            NotificationObservation(name: UIApplication.willTerminateNotification) { [weak self] in
                 guard let strongSelf = self else { return }
                 
                 PKLog.debug("youbora plugin will terminate event received")
@@ -112,7 +112,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
                 strongSelf.endedHandler()
                 AppStateSubject.shared.remove(observer: strongSelf)
             },
-            NotificationObservation(name: .UIApplicationDidEnterBackground) { [weak self] in
+            NotificationObservation(name: UIApplication.didEnterBackgroundNotification) { [weak self] in
                 guard let strongSelf = self else { return }
                 
                 // When entering background we should call `endedHandler()` to make sure coming back starts a new session.
