@@ -26,10 +26,10 @@ struct YouboraConfig: Decodable {
         options.accountCode = accountCode
         options.username = username
         options.userType = userType
-        options.networkObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
+        options.userObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
         options.httpSecure = httpSecure ?? true
         
-        options.parseHls = false
+        options.parseResource = false
         options.parseCdnNode = false
         
         options.deviceCode = nil // List of device codes http://mapi.youbora.com:8081/devices
@@ -40,7 +40,7 @@ struct YouboraConfig: Decodable {
             options.contentIsLiveNoSeek = media.isDVR != nil ? NSNumber(booleanLiteral: !(media.isDVR!)) : nil
             options.contentDuration = media.duration != nil ? NSNumber(value: media.duration!) : nil
             options.contentTitle = media.title
-            options.contentTitle2 = media.title2
+            options.program = media.program != nil ? media.program : media.title2
             options.contentTransactionCode = media.transactionCode
         }
         
@@ -49,16 +49,16 @@ struct YouboraConfig: Decodable {
         options.adTitle = ""
         
         if let ads = ads, let adsExtraParams = ads.extraParams {
-            options.adExtraparam1 = adsExtraParams.param1
-            options.adExtraparam2 = adsExtraParams.param2
-            options.adExtraparam3 = adsExtraParams.param3
-            options.adExtraparam4 = adsExtraParams.param4
-            options.adExtraparam5 = adsExtraParams.param5
-            options.adExtraparam6 = adsExtraParams.param6
-            options.adExtraparam7 = adsExtraParams.param7
-            options.adExtraparam8 = adsExtraParams.param8
-            options.adExtraparam9 = adsExtraParams.param9
-            options.adExtraparam10 = adsExtraParams.param10
+            options.adCustomDimension1 = adsExtraParams.param1
+            options.adCustomDimension2 = adsExtraParams.param2
+            options.adCustomDimension3 = adsExtraParams.param3
+            options.adCustomDimension4 = adsExtraParams.param4
+            options.adCustomDimension5 = adsExtraParams.param5
+            options.adCustomDimension6 = adsExtraParams.param6
+            options.adCustomDimension7 = adsExtraParams.param7
+            options.adCustomDimension8 = adsExtraParams.param8
+            options.adCustomDimension9 = adsExtraParams.param9
+            options.adCustomDimension10 = adsExtraParams.param10
         }
         
         if let properties = properties {
@@ -79,16 +79,16 @@ struct YouboraConfig: Decodable {
         }
         
         if let extraParams = extraParams {
-            options.extraparam1 = extraParams.param1
-            options.extraparam2 = extraParams.param2
-            options.extraparam3 = extraParams.param3
-            options.extraparam4 = extraParams.param4
-            options.extraparam5 = extraParams.param5
-            options.extraparam6 = extraParams.param6
-            options.extraparam7 = extraParams.param7
-            options.extraparam8 = extraParams.param8
-            options.extraparam9 = extraParams.param9
-            options.extraparam10 = extraParams.param10
+            options.contentCustomDimension1 = extraParams.param1
+            options.contentCustomDimension2 = extraParams.param2
+            options.contentCustomDimension3 = extraParams.param3
+            options.contentCustomDimension4 = extraParams.param4
+            options.contentCustomDimension5 = extraParams.param5
+            options.contentCustomDimension6 = extraParams.param6
+            options.contentCustomDimension7 = extraParams.param7
+            options.contentCustomDimension8 = extraParams.param8
+            options.contentCustomDimension9 = extraParams.param9
+            options.contentCustomDimension10 = extraParams.param10
         }
         
         return options
@@ -100,7 +100,12 @@ struct Media: Decodable {
     let isLive: Bool?
     let isDVR: Bool?
     let title: String?
-    let title2: String?
+    @available(*, deprecated, message: "Use program property instead")
+    var title2: String? {
+        get { return program }
+        set(value) { self.program = value }
+    }
+    var program: String?
     let duration: Double?
     let transactionCode: String?
 }
