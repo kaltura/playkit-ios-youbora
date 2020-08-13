@@ -69,8 +69,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         
         PKLog.debug("Start monitoring Youbora")
         
-        let options = youboraConfig?.options()
-        ybPlugin = YBPlugin(options: options, andAdapter: pkYouboraPlayerAdapter)
+        ybPlugin = YBPlugin(options: youboraConfig?.options(), andAdapter: pkYouboraPlayerAdapter)
         ybPlugin?.adsAdapter = pkYouboraAdsAdapter
 
         // Monitor app state changes
