@@ -246,6 +246,7 @@ extension PKYouboraPlayerAdapter {
                 }
             case is PlayerEvent.SourceSelected:
                 self.lastReportedResource = event.mediaSource?.playbackUrl?.absoluteString
+                self.fireStart()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Error:
                 if let error = event.error {
