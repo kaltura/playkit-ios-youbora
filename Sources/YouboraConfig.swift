@@ -40,7 +40,12 @@ struct YouboraConfig: Decodable {
             options.contentIsLiveNoSeek = media.isDVR != nil ? NSNumber(booleanLiteral: !(media.isDVR!)) : nil
             options.contentDuration = media.duration != nil ? NSNumber(value: media.duration!) : nil
             options.contentTitle = media.title
-            options.program = media.program != nil ? media.program : media.title2
+            options.contentTitle2 = media.title2
+            
+            if let program = media.program {
+                options.program = program
+            }
+            
             options.contentTransactionCode = media.transactionCode
         }
         
@@ -100,12 +105,8 @@ struct Media: Decodable {
     let isLive: Bool?
     let isDVR: Bool?
     let title: String?
-    @available(*, deprecated, message: "Use program property instead")
-    var title2: String? {
-        get { return program }
-        set(value) { self.program = value }
-    }
-    var program: String?
+    let title2: String?
+    let program: String?
     let duration: Double?
     let transactionCode: String?
 }
