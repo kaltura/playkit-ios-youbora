@@ -1,5 +1,5 @@
 
-suffix = '-dev'   # Dev mode
+suffix = '.0000'   # Dev mode
 #suffix = ''       # Release
 
 Pod::Spec.new do |s|
@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/**/*' 
   s.dependency 'PlayKit/AnalyticsCommon', '~> 3.8'
-  s.dependency 'YouboraLib', '6.1.7'
+  s.dependency 'YouboraLib', '6.5.27'
 end
 
