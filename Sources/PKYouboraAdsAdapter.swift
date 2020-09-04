@@ -116,6 +116,31 @@ extension PKYouboraAdsAdapter {
             return super.getBitrate()
         }
     }
+    
+    override func getGivenAds() -> NSNumber? {
+        guard let adInfo = self.adInfo else { return nil }
+        
+        return NSNumber(value: adInfo.totalAds)
+    }
+    
+    override func isSkippable() -> NSValue? {
+        if let adInfo = self.adInfo {
+            return NSNumber(value: adInfo.isSkippable)
+        }
+        
+        return NSNumber(value: false)
+    }
+    
+    override func getAdCreativeId() -> String? {
+        return self.adInfo?.creativeId
+    }
+    
+    override func getAdBreakNumber() -> NSNumber? {
+        guard let adInfo = self.adInfo else { return nil }
+        
+        return NSNumber(value: adInfo.podIndex)
+    }
+    
 }
 
 /************************************************************/
@@ -138,7 +163,12 @@ extension PKYouboraAdsAdapter {
             AdEvent.adsRequested,
             AdEvent.adClicked,
             AdEvent.adDidRequestContentResume,
-            AdEvent.error
+            AdEvent.error,
+            AdEvent.adFirstQuartile,
+            AdEvent.adMidpoint,
+            AdEvent.adThirdQuartile,
+            AdEvent.adBreakStarted,
+            AdEvent.adBreakEnded
         ]
     }
     
@@ -156,11 +186,19 @@ extension PKYouboraAdsAdapter {
                     guard let self = self else { return }
                     // Update ad info with the new loaded event
                     self.adInfo = event.adInfo
+                    
+                    self.tryAdBreakStart()
+                    
                     // If ad is preroll make sure to call /start event before /adStart
-                    if let positionType = event.adInfo?.positionType, positionType == .preRoll {
+                    if let positionType = event.adInfo?.positionType,
+                        positionType == .preRoll,
+                        self.adInfo?.adPosition == 1 {
                         self.plugin?.adapter?.fireStart()
                     }
-                    self.fireStart()
+                    
+                    if let adapter = self.plugin?.adapter, adapter.flags.started {
+                        self.fireStart()
+                    }
                 }
             case let e where e.self == AdEvent.adStarted:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
@@ -171,17 +209,15 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireStop()
+                    self.tryAdBreakStop()
                     self.adInfo = nil
                 }
             case let e where e.self == AdEvent.adResumed:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
-                    self.fireResume()
-                    // If we were coming from background and ad was resumed
-                    // Has no effect when already playing ad and resumed because ad was already started.
-                    self.plugin?.adapter?.fireStart()
-                    self.fireStart()
                     self.fireJoin()
+                    self.fireResume()
+
                 }
             case let e where e.self == AdEvent.adPaused:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
@@ -198,6 +234,7 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireStop(["skipped":"true"])
+                    self.tryAdBreakStop()
                 }
             case let e where e.self == AdEvent.adStartedBuffering:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
@@ -214,18 +251,19 @@ extension PKYouboraAdsAdapter {
                     guard let self = self else { return }
                     self.lastReportedResource = event.adTagUrl
                 }
-            // When ad request the content to resume (finished or error)
+                // When ad request the content to resume (finished or error)
             // Make sure to send /adStop event and clear the info.
             case let e where e.self == AdEvent.adDidRequestContentResume:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireStop()
+                    self.tryAdBreakStop()
                     self.adInfo = nil
                 }
             case let e where e.self == AdEvent.adClicked:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
-
+                    
                     if let clickThroughUrl = event.data?[AdEventDataKeys.clickThroughUrl] as? String {
                         self.fireClick(["adUrl": clickThroughUrl])
                     } else {
@@ -240,6 +278,36 @@ extension PKYouboraAdsAdapter {
                         self.fireFatalError(withMessage: adErrorEvent.localizedDescription, code: "\(adErrorEvent.code)", andMetadata: adErrorEvent.description)
                     }
                 }
+            case let e where e.self == AdEvent.adFirstQuartile:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireQuartile(1)
+                }
+            case let e where e.self == AdEvent.adMidpoint:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireQuartile(2)
+                }
+            case let e where e.self == AdEvent.adThirdQuartile:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireQuartile(3)
+                }
+            case let e where e.self == AdEvent.adBreakStarted:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireAdBreakStart()
+                }
+            case let e where e.self == AdEvent.adBreakEnded:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireAdBreakStop()
+                }
             default: assertionFailure("All events must be handled")
             }
         }
@@ -247,6 +315,24 @@ extension PKYouboraAdsAdapter {
     
     func unregisterAdEvents() {
         messageBus?.removeObserver(self, events: adEventsToRegister)
+    }
+    
+    func tryAdBreakStart() {
+        guard let adInfo = self.adInfo else { return }
+        
+        print("Info Break Start -> position \(adInfo.adPosition) total \(adInfo.totalAds)")
+        if adInfo.adPosition == 1 {
+            self.fireAdBreakStart()
+        }
+    }
+    func tryAdBreakStop() {
+        guard let adInfo = self.adInfo else { return }
+        
+        print("Info Break Stop -> position \(adInfo.adPosition) total \(adInfo.totalAds)")
+        
+        if adInfo.adPosition == adInfo.totalAds {
+            self.fireAdBreakStop()
+        }
     }
 }
 
