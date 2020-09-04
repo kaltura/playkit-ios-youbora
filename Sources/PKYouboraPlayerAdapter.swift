@@ -215,11 +215,9 @@ extension PKYouboraPlayerAdapter {
                 }
                 self.postEventLog(withMessage: "\(String(describing: event.namespace))")
             case is PlayerEvent.Seeking:
-                print("Test -> seek begin")
                 self.fireSeekBegin()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Seeked:
-                print("Test -> seek end")
                 self.fireSeekEnd()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Ended:
@@ -236,12 +234,10 @@ extension PKYouboraPlayerAdapter {
             case is PlayerEvent.StateChanged:
                 switch event.newState {
                 case .buffering:
-                    print("Test -> buffering")
                     self.fireBufferBegin()
                     self.postEventLog(withMessage: "\(event.namespace)")
                 case .ready:
                     if event.oldState == .buffering {
-                        print("Test -> buffering end")
                         self.fireBufferEnd()
                         self.postEventLog(withMessage: "\(event.namespace)")
                     }
