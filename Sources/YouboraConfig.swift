@@ -51,6 +51,22 @@ struct YouboraConfig: Decodable {
         
         options.adResource = nil
         options.adCampaign = ads?.campaign
+        
+        if let expectedPattern = ads?.expectedPattern {
+            options.adExpectedPattern = [:]
+            expectedPattern.keys.forEach { key in
+                options.adExpectedPattern[key] = expectedPattern[key, default: []].map {
+                    NSNumber(value: $0)
+                }
+            }
+        }
+        
+        if let givenBreaks = ads?.givenBreaks {
+            options.adGivenBreaks = NSNumber(value: givenBreaks)
+        }
+        
+        options.adBreaksTime = ads?.adBreaksTime
+        
         options.adTitle = ""
         
         if let ads = ads, let adsExtraParams = ads.extraParams {
@@ -113,6 +129,9 @@ struct Media: Decodable {
 
 struct Ads: Decodable {
     let campaign: String?
+    let givenBreaks: Int?
+    let expectedPattern: [String: [Int]]?
+    let adBreaksTime: [Double]?
     let extraParams: ExtraParams?
 }
 
