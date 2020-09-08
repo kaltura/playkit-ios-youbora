@@ -18,6 +18,8 @@ class PKYouboraAdsAdapter: YBPlayerAdapter<AnyObject> {
     var adInfo: PKAdInfo?
     var adPlayhead: TimeInterval?
     var lastReportedResource: String?
+    var lastAdCuePoints: [TimeInterval]?
+    var lastAdDaiCuePoints: [CuePoint]?
     
     fileprivate weak var messageBus: MessageBus?
     
@@ -135,12 +137,37 @@ extension PKYouboraAdsAdapter {
         return self.adInfo?.creativeId
     }
     
+    override func getAdGivenBreaks() -> NSNumber? {
+        if let cuePoints = self.lastAdCuePoints {
+            return NSNumber(value: cuePoints.count)
+        }
+        
+        if let cuePoints = self.lastAdDaiCuePoints {
+            return NSNumber(value: cuePoints.count)
+        }
+        
+        return super.getAdGivenBreaks()
+    }
+    
+    override func getAdBreaksTime() -> [Any]? {
+        if let cuePoints = self.lastAdCuePoints {
+            return cuePoints
+        }
+        
+        if let cuePoints = self.lastAdDaiCuePoints {
+            return cuePoints.map { cuePoint -> Double in
+                return cuePoint.startTime
+            }
+        }
+        
+        return super.getAdBreaksTime()
+    }
+    
     override func getAdBreakNumber() -> NSNumber? {
         guard let adInfo = self.adInfo else { return nil }
         
         return NSNumber(value: adInfo.podIndex)
     }
-    
 }
 
 /************************************************************/
@@ -168,7 +195,8 @@ extension PKYouboraAdsAdapter {
             AdEvent.adMidpoint,
             AdEvent.adThirdQuartile,
             AdEvent.adBreakStarted,
-            AdEvent.adBreakEnded
+            AdEvent.adBreakEnded,
+            AdEvent.adCuePointsUpdate
         ]
     }
     
@@ -292,6 +320,12 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireAdBreakStop()
+                }
+                case let e where e.self == AdEvent.adCuePointsUpdate:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    self.lastAdCuePoints = event.adCuePoints?.cuePoints
+                    self.lastAdDaiCuePoints = event.adDAICuePoints?.cuePoints
                 }
             default: assertionFailure("All events must be handled")
             }
