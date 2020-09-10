@@ -120,7 +120,7 @@ extension PKYouboraAdsAdapter {
     }
     
     override func getGivenAds() -> NSNumber? {
-        guard let adInfo = self.adInfo else { return nil }
+        guard let adInfo = self.adInfo else { return super.getGivenAds() }
         
         return NSNumber(value: adInfo.totalAds)
     }
@@ -134,7 +134,7 @@ extension PKYouboraAdsAdapter {
     }
     
     override func getAdCreativeId() -> String? {
-        return self.adInfo?.creativeId
+        return self.adInfo?.creativeId ?? super.getAdCreativeId()
     }
     
     override func getAdGivenBreaks() -> NSNumber? {
@@ -164,9 +164,13 @@ extension PKYouboraAdsAdapter {
     }
     
     override func getAdBreakNumber() -> NSNumber? {
-        guard let adInfo = self.adInfo else { return nil }
+        guard let adInfo = self.adInfo else { return super.getAdBreakNumber() }
         
         return NSNumber(value: adInfo.podIndex)
+    }
+    
+    override func getAdProvider() -> String? {
+        return adInfo?.adSystem ?? super.getAdProvider()
     }
 }
 
@@ -223,7 +227,7 @@ extension PKYouboraAdsAdapter {
                     }
                     
                     if let adapter = self.plugin?.adapter, adapter.flags.started {
-                        self.tryAdBreakStart()
+                        self.fireAdBreakStart()
                         self.fireStart()
                     }
                 }
@@ -231,7 +235,6 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireStop()
-                    self.tryAdBreakStop()
                     self.adInfo = nil
                 }
             case let e where e.self == AdEvent.adResumed:
@@ -276,9 +279,7 @@ extension PKYouboraAdsAdapter {
             case let e where e.self == AdEvent.adDidRequestContentResume:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
-                    self.fireStop()
-                    self.tryAdBreakStop()
-                    self.adInfo = nil
+                    self.fireAdBreakStop()
                 }
             case let e where e.self == AdEvent.adClicked:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
@@ -334,21 +335,6 @@ extension PKYouboraAdsAdapter {
     
     func unregisterAdEvents() {
         messageBus?.removeObserver(self, events: adEventsToRegister)
-    }
-    
-    func tryAdBreakStart() {
-        guard let adInfo = self.adInfo else { return }
-        
-        if adInfo.adPosition == 1 {
-            self.fireAdBreakStart()
-        }
-    }
-    func tryAdBreakStop() {
-        guard let adInfo = self.adInfo else { return }
-        
-        if adInfo.adPosition == adInfo.totalAds {
-            self.fireAdBreakStop()
-        }
     }
 }
 
