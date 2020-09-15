@@ -18,6 +18,8 @@ struct YouboraConfig: Decodable {
     let ads: Ads?
     let properties: Properties?
     let extraParams: ExtraParams?
+    let fastDataConfig: FastDataConfig?
+    
     let houseHoldId: String?
 
     func options() -> YBOptions {
@@ -111,8 +113,26 @@ struct YouboraConfig: Decodable {
             options.contentCustomDimension9 = extraParams.param9
             options.contentCustomDimension10 = extraParams.param10
         }
-        
         return options
+    }
+    
+    func fastDataConfiguration() -> YBFastDataConfig? {
+        guard let fastDataFields = self.fastDataConfig,
+            let beatTime = fastDataFields.beatTime,
+            let expirationTime = fastDataFields.expirationTime,
+            let pingTime = fastDataFields.pingTime else { return nil }
+        
+        let fastDataConfig = YBFastDataConfig()
+        
+        
+        fastDataConfig.beatTime = NSNumber(value: beatTime)
+        fastDataConfig.code = fastDataFields.code
+        fastDataConfig.expirationTime = NSNumber(value: expirationTime)
+        fastDataConfig.host = fastDataFields.host
+        fastDataConfig.pingTime = NSNumber(value: pingTime)
+        fastDataConfig.youboraId = fastDataFields.youboraId
+        
+        return fastDataConfig
     }
 }
 
@@ -163,4 +183,13 @@ struct ExtraParams: Decodable {
     let param8: String?
     let param9: String?
     let param10: String?
+}
+
+struct FastDataConfig: Decodable {
+    let host: String?
+    let code: String?
+    let pingTime: UInt?
+    let beatTime: UInt?
+    let expirationTime: UInt?
+    let youboraId: String?
 }
