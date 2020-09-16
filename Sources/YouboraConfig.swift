@@ -124,7 +124,7 @@ struct YouboraConfig: Decodable {
             let code = fastDataFields.code,
             let host = fastDataFields.host else { return nil }
         
-        if code.isEmpty || host.isEmpty { return nil}
+        if code.isEmpty || host.isEmpty { return nil }
         
         let fastDataConfig = YBFastDataConfig()
         
