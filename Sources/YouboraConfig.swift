@@ -120,15 +120,19 @@ struct YouboraConfig: Decodable {
         guard let fastDataFields = self.fastDataConfig,
             let beatTime = fastDataFields.beatTime,
             let expirationTime = fastDataFields.expirationTime,
-            let pingTime = fastDataFields.pingTime else { return nil }
+            let pingTime = fastDataFields.pingTime,
+            let code = fastDataFields.code,
+            let host = fastDataFields.host else { return nil }
+        
+        if code.isEmpty || host.isEmpty { return nil}
         
         let fastDataConfig = YBFastDataConfig()
         
         
         fastDataConfig.beatTime = NSNumber(value: beatTime)
-        fastDataConfig.code = fastDataFields.code
+        fastDataConfig.code = code
         fastDataConfig.expirationTime = NSNumber(value: expirationTime)
-        fastDataConfig.host = fastDataFields.host
+        fastDataConfig.host = host
         fastDataConfig.pingTime = NSNumber(value: pingTime)
         fastDataConfig.youboraId = fastDataFields.youboraId
         
