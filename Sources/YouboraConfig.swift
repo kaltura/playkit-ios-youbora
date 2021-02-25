@@ -21,7 +21,14 @@ struct YouboraConfig: Decodable {
     let extraParams: ExtraParams?
     let houseHoldId: String?
     let appName: String?
-
+    
+    var parseResource: Bool?
+    var parseCdnNode: Bool?
+    var cdnSwitchHeader: Bool?
+    let parseCdnNodeList: [String]?
+    let parseCdnNameHeader: String?
+    var cdnTTL: TimeInterval?
+    
     func options() -> YBOptions {
         let options = YBOptions()
         
@@ -31,8 +38,16 @@ struct YouboraConfig: Decodable {
         options.userObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
         options.httpSecure = httpSecure ?? true
         
-        options.parseResource = false
-        options.parseCdnNode = false
+        options.parseResource = parseResource ?? false
+        options.parseCdnNode = parseCdnNode ?? false
+        options.cdnSwitchHeader = cdnSwitchHeader ?? false
+        
+        if let cdnTTL = cdnTTL { options.cdnTTL = cdnTTL }
+        if let parseCdnNameHeader = parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
+        
+        if let parseCdnNodeList = parseCdnNodeList, !parseCdnNodeList.isEmpty {
+            options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
+        }
         
         options.deviceCode = nil // List of device codes http://mapi.youbora.com:8081/devices
         options.contentCdn = contentCDN // List of CDNs: http://mapi.youbora.com:8081/cdns
