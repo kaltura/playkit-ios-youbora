@@ -36,9 +36,10 @@ struct YouboraConfig: Decodable {
         if let parse = parse {
             options.parseResource = parse.parseManifest ?? false
             options.parseCdnNode = parse.parseCdnNode ?? false
-            options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
             
-            if let parseCdnTTL = parse.parseCdnTTL { options.cdnTTL = parseCdnTTL }
+            //options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
+            //if let parseCdnTTL = parse.parseCdnTTL { options.cdnTTL = parseCdnTTL }
+            
             if let parseCdnNameHeader = parse.parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
             
             if let parseCdnNodeList = parse.parseCdnNodeList, !parseCdnNodeList.isEmpty {
