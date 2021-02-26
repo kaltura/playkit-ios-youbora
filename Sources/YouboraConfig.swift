@@ -22,12 +22,7 @@ struct YouboraConfig: Decodable {
     let houseHoldId: String?
     let appName: String?
     
-    var parseResource: Bool?
-    var parseCdnNode: Bool?
-    var cdnSwitchHeader: Bool?
-    let parseCdnNodeList: [String]?
-    let parseCdnNameHeader: String?
-    var cdnTTL: TimeInterval?
+    let parse: Parse?
     
     func options() -> YBOptions {
         let options = YBOptions()
@@ -38,15 +33,17 @@ struct YouboraConfig: Decodable {
         options.userObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
         options.httpSecure = httpSecure ?? true
         
-        options.parseResource = parseResource ?? false
-        options.parseCdnNode = parseCdnNode ?? false
-        options.cdnSwitchHeader = cdnSwitchHeader ?? false
-        
-        if let cdnTTL = cdnTTL { options.cdnTTL = cdnTTL }
-        if let parseCdnNameHeader = parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
-        
-        if let parseCdnNodeList = parseCdnNodeList, !parseCdnNodeList.isEmpty {
-            options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
+        if let parse = parse {
+            options.parseResource = parse.parseManifest ?? false
+            options.parseCdnNode = parse.parseCdnNode ?? false
+            options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
+            
+            if let parseCdnTTL = parse.parseCdnTTL { options.cdnTTL = parseCdnTTL }
+            if let parseCdnNameHeader = parse.parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
+            
+            if let parseCdnNodeList = parse.parseCdnNodeList, !parseCdnNodeList.isEmpty {
+                options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
+            }
         }
         
         options.deviceCode = nil // List of device codes http://mapi.youbora.com:8081/devices
@@ -165,4 +162,13 @@ struct ExtraParams: Decodable {
     let param8: String?
     let param9: String?
     let param10: String?
+}
+
+struct Parse: Decodable {
+    var parseManifest: Bool?
+    var parseCdnNode: Bool?
+    var parseCdnSwitchHeader: Bool?
+    let parseCdnNodeList: [String]?
+    let parseCdnNameHeader: String?
+    var parseCdnTTL: TimeInterval?
 }
