@@ -37,9 +37,6 @@ struct YouboraConfig: Decodable {
             options.parseResource = parse.parseManifest ?? false
             options.parseCdnNode = parse.parseCdnNode ?? false
             
-            //options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
-            //if let parseCdnTTL = parse.parseCdnTTL { options.cdnTTL = parseCdnTTL }
-            
             if let parseCdnNameHeader = parse.parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
             
             if let parseCdnNodeList = parse.parseCdnNodeList, !parseCdnNodeList.isEmpty {
@@ -168,8 +165,6 @@ struct ExtraParams: Decodable {
 struct Parse: Decodable {
     var parseManifest: Bool?
     var parseCdnNode: Bool?
-    var parseCdnSwitchHeader: Bool?
     let parseCdnNodeList: [String]?
     let parseCdnNameHeader: String?
-    var parseCdnTTL: TimeInterval?
 }
