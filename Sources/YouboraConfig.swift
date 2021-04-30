@@ -9,59 +9,59 @@ import YouboraLib
 
 struct YouboraConfig: Decodable {
     let accountCode: String
+    
     let username: String?
+    let userEmail: String?
     let anonymousUser: String?
     let userType: String?
     let obfuscateIP: Bool?
+    let userObfuscateIp: Bool?
+    
     var httpSecure: Bool? = true
     let contentCDN: String?
-    
     let autoDetectBackground: Bool?
-    let offline: Bool?
-    
-    //let smartswitchConfigCode: String?
-    //let smartswitchGroupCode: String?
-    //let smartswitchContractCode: String?
-    
-    //let linkedViewId: String?
-    //let waitForMetadata: Bool?
-    //let pendingMetadata: [String]?
+    let isOffline: Bool?
     
     let media: Media?
     let content: Content?
     let ads: Ads?
-    
     let properties: Properties?
-    let contentMetadata: ContentMetadata?
-    //let contentMetrics: [String: AnyHashable]?
-    //let sessionMetrics: [String: AnyHashable]?
     
     let customDimensions: CustomDimensions?
     let extraParams: ExtraParams?
     let houseHoldId: String?
-    
+    let isAutoStart: Bool?
+    let isEnabled: Bool?
+    let isForceInit: Bool?
     let appName: String?
     let app: App?
     let parse: Parse?
-    
-//    let errors: Errors?
-    
+    let device: Device?
+    let network: Network?
+    let errors: Errors?
     
     func options() -> YBOptions {
         let options = YBOptions()
         
         options.accountCode = accountCode
+        
         options.username = username
+        options.userEmail = userEmail
+        options.anonymousUser = anonymousUser
         options.userType = userType
         options.userObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
-        options.httpSecure = httpSecure ?? true
-        options.anonymousUser = anonymousUser
+        options.userObfuscateIp = userObfuscateIp != nil ? NSNumber(booleanLiteral: userObfuscateIp!) : nil
+        options.enabled = isEnabled ?? true
         
+        options.httpSecure = httpSecure ?? true
+        options.forceInit = isForceInit ?? false
         
         if let parse = parse {
             options.parseResource = parse.parseManifest ?? false
             options.parseCdnNode = parse.parseCdnNode ?? false
+            options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
             
+            if let cdnTTL = parse.parseCdnTTL { options.cdnTTL = TimeInterval(cdnTTL) }
             if let parseCdnNameHeader = parse.parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
             
             if let parseCdnNodeList = parse.parseCdnNodeList, !parseCdnNodeList.isEmpty {
@@ -72,6 +72,7 @@ struct YouboraConfig: Decodable {
         options.deviceCode = nil // List of device codes http://mapi.youbora.com:8081/devices
         options.contentCdn = contentCDN // List of CDNs: http://mapi.youbora.com:8081/cdns
         
+        // Legacy compatibility
         if let media = media {
             options.contentIsLive = media.isLive != nil ? NSNumber(booleanLiteral: media.isLive!) :  nil
             options.contentIsLiveNoSeek = media.isDVR != nil ? NSNumber(booleanLiteral: !(media.isDVR!)) : nil
@@ -86,10 +87,61 @@ struct YouboraConfig: Decodable {
             options.contentTransactionCode = media.transactionCode
         }
         
+        if let content = content {
+            options.contentResource = content.contentResource
+            options.contentTitle = content.contentTitle
+            //options.program = content.contentTitle2
+            options.program = content.program
+            options.contentDuration = content.contentDuration as NSNumber?
+            options.contentTransactionCode = content.contentTransactionCode
+            options.contentBitrate = content.contentBitrate as NSNumber?
+            options.sendTotalBytes = content.contentSendTotalBytes as NSNumber?
+            options.contentStreamingProtocol = content.contentStreamingProtocol
+            options.contentTransportFormat = content.contentTransportFormat
+            options.contentThroughput = content.contentThroughput as NSNumber?
+            options.contentRendition = content.contentRendition
+            options.contentCdn = content.contentCdn
+            options.contentFps = content.contentFps as NSNumber?
+            
+            options.contentIsLiveNoSeek = content.contentIsLiveNoSeek as NSValue?
+            if let dvr = content.isDVR {
+                options.contentIsLiveNoSeek = NSNumber(booleanLiteral: !dvr)
+            }
+            
+            if let contentIsLive = content.contentIsLive {
+                options.contentIsLive = NSNumber(booleanLiteral: contentIsLive)
+            }
+            
+            options.contentPackage = content.contentPackage
+            options.contentSaga = content.contentSaga
+            options.contentTvShow = content.contentTvShow
+            options.contentSeason = content.contentSeason
+            options.contentEpisodeTitle = content.contentEpisodeTitle
+            options.contentChannel = content.contentChannel
+            options.contentId = content.contentId
+            options.contentImdbId = content.contentImdbId
+            options.contentGracenoteId = content.contentGracenoteId
+            options.contentType = content.contentType
+            options.contentGenre = content.contentGenre
+            options.contentLanguage = content.contentLanguage
+            options.contentSubtitles = content.contentSubtitles
+            options.contentContractedResolution = content.contentContractedResolution
+            options.contentCost = content.contentCost
+            options.contentPrice = content.contentPrice
+            options.contentPlaybackType = content.contentPlaybackType
+            options.contentDrm = content.contentDrm
+            options.contentEncodingVideoCodec = content.contentEncodingVideoCodec
+            options.contentEncodingAudioCodec = content.contentEncodingAudioCodec
+            //let contentEncodingCodecSettings: String?
+            options.contentEncodingCodecProfile = content.contentEncodingCodecProfile
+            options.contentEncodingContainerFormat = content.contentEncodingContainerFormat
+        }
+        
         options.adResource = nil
         options.adCampaign = ads?.campaign
         options.adTitle = ""
         
+        // Legacy compatibility
         if let ads = ads, let adsExtraParams = ads.extraParams {
             options.adCustomDimension1 = adsExtraParams.param1
             options.adCustomDimension2 = adsExtraParams.param2
@@ -101,6 +153,27 @@ struct YouboraConfig: Decodable {
             options.adCustomDimension8 = adsExtraParams.param8
             options.adCustomDimension9 = adsExtraParams.param9
             options.adCustomDimension10 = adsExtraParams.param10
+        }
+        
+        if let ads = ads {
+            options.adTitle = ads.adTitle
+            options.adCampaign = ads.adCampaign
+            options.adProvider = ads.adProvider
+            options.adResource = ads.adResource
+            options.adCreativeId = ads.adCreativeId
+            
+            if let adsCustomDimensions = ads.adCustomDimensions {
+                options.adCustomDimension1 = adsCustomDimensions.adCustomDimension1
+                options.adCustomDimension2 = adsCustomDimensions.adCustomDimension2
+                options.adCustomDimension3 = adsCustomDimensions.adCustomDimension3
+                options.adCustomDimension4 = adsCustomDimensions.adCustomDimension4
+                options.adCustomDimension5 = adsCustomDimensions.adCustomDimension5
+                options.adCustomDimension6 = adsCustomDimensions.adCustomDimension6
+                options.adCustomDimension7 = adsCustomDimensions.adCustomDimension7
+                options.adCustomDimension8 = adsCustomDimensions.adCustomDimension8
+                options.adCustomDimension9 = adsCustomDimensions.adCustomDimension9
+                options.adCustomDimension10 = adsCustomDimensions.adCustomDimension10
+            }
         }
         
         if let properties = properties {
@@ -165,20 +238,54 @@ struct YouboraConfig: Decodable {
             options.appReleaseVersion = app.appReleaseVersion
         }
         
+        if let device = device {
+            options.deviceBrand = device.deviceBrand
+            options.deviceCode = device.deviceCode
+            options.deviceUUID = device.deviceId
+            options.deviceModel = device.deviceModel
+            options.deviceOsName = device.deviceOsName
+            options.deviceOsVersion = device.deviceOsVersion
+            options.deviceType = device.deviceType
+            
+            if let deviceIsAnonymous = device.deviceIsAnonymous {
+                options.deviceIsAnonymous = deviceIsAnonymous
+            }
+        }
+        
+        if let network = network {
+            options.networkIP = network.networkIP
+            options.networkIsp = network.networkIsp
+            options.networkConnectionType = network.networkConnectionType
+        }
+        
+        if let errors = errors {
+            options.ignoreErrors = errors.errorsIgnore
+            options.fatalErrors = errors.errorsFatal
+            options.nonFatalErrors = errors.errorsNonFatal
+        }
+        
         return options
     }
+    
 }
 
 struct Content: Decodable {
+    let resource: String?
+    let isLive: Bool?
+    let isDVR: Bool?
+    let title: String?
+    let title2: String?
+    let duration: Double?
+    let transactionCode: String?
+    let program: String? //contentTitle2
     let contentResource: String?
-    let contentIsLive: String?
+    let contentIsLive: Bool?
     let contentTitle: String?
     let contentTitle2: String?
-    let program: String? //contentTitle2
-    let contentDuration: String?
+    let contentDuration: Double?
     let contentTransactionCode: String?
     let contentBitrate: Double? //NSNumber
-    let sendTotalBytes: Bool?
+    let contentSendTotalBytes: Bool?
     let contentStreamingProtocol: String?
     let contentTransportFormat: String?
     let contentThroughput: Int?
@@ -186,7 +293,6 @@ struct Content: Decodable {
     let contentCdn: String?
     let contentFps: Double?
     let contentIsLiveNoSeek: Bool?
-    let isDVR: Bool?
     let contentPackage: String?
     let contentSaga: String?
     let contentTvShow: String?
@@ -225,8 +331,6 @@ struct Media: Decodable {
 
 struct Ads: Decodable {
     let adBreaksTime: [Int]?
-    //let adsAfterStop: Int?
-    // let adGivenAds: Int?
     let campaign: String?
     let adCampaign: String?
     let adCreativeId: String?
@@ -237,17 +341,19 @@ struct Ads: Decodable {
     let adTitle: String?
     let extraParams: ExtraParams?
     let adCustomDimensions: AdCustomDimensions?
+    //let adsAfterStop: Int?
+    //let adGivenAds: Int?
     //let adExpectedPattern: [String: AnyHashable]?
     //let adMetadata: [String: AnyHashable]?
 }
 
-typealias ContentMetadata = Properties
+//typealias ContentMetadata = Properties
 
 struct Properties: Decodable {
     let genre: String?
     let type: String?
     let transactionType: String?
-    let year: Int?
+    let year: String?
     let cast: String?
     let director: String?
     let owner: String?
@@ -310,13 +416,46 @@ struct ExtraParams: Decodable {
 }
 
 struct Parse: Decodable {
-    var parseManifest: Bool?
-    var parseCdnNode: Bool?
+    let parseManifest: Bool?
+    let parseCdnNode: Bool?
+    let parseCdnSwitchHeader: Bool?
     let parseCdnNodeList: [String]?
     let parseCdnNameHeader: String?
+    let parseCdnTTL: Int?
 }
 
 struct App: Decodable {
     let appName: String?
     let appReleaseVersion: String?
+}
+
+struct Network: Decodable {
+    let networkIP: String?
+    let networkIsp: String?
+    let networkConnectionType: String?
+    let networkObfuscateIp: String?
+    let userObfuscateIp: String?
+}
+
+struct Device: Decodable {
+    let deviceBrand: String?
+    let brand: String?
+    let deviceCode: String?
+    let deviceId: String?
+    let id: String?
+    let deviceModel: String?
+    let model: String?
+    let deviceOsName: String?
+    let osName: String?
+    let deviceOsVersion: String?
+    let osVersion: String?
+    let deviceType: String?
+    let type: String?
+    let deviceIsAnonymous: Bool?
+}
+
+struct Errors: Decodable {
+    let errorsIgnore: [String]?
+    let errorsFatal: [String]?
+    let errorsNonFatal: [String]?
 }
