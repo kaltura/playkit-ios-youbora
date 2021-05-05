@@ -31,7 +31,7 @@ class YouboraConfigTemplate {
     
     static let username = "User Name"
     static let userEmail = "aaa1@gmail.com"
-    static let anonymousUser = "AnonymousUser123"
+    static let userAnonymousId = "AnonymousUser123"
     static let appName = "My App name"
     static let appReleaseVersion = "v1.0.0"
     static let userType = "paid"
@@ -80,6 +80,7 @@ class YouboraConfigTemplate {
     static let adProvider = "Provider name"
     static let adResource = "Some resources"
     static let adTitle = "Ad title"
+    static let adGivenAds = 3
     
     static let adCustomDimension1 = "My_adCustomDimension1"
     static let adCustomDimension2 = "My_adCustomDimension2"
@@ -102,7 +103,7 @@ class YouboraConfigTemplate {
     static let transactionCode = contentTransactionCode
     
     // Content
-    static let program = "Program template" //contentTitle2
+    static let contentProgram = "Program template" //contentTitle2
     static let contentResource = "Resource template"
     static let contentIsLive = true
     static let contentTitle = "Title template"
@@ -162,7 +163,7 @@ class YouboraConfigTemplate {
         "username": Template.username,
         "userEmail": Template.userEmail,
         "userType": Template.userType, // optional any string - free / paid etc.
-        "anonymousUser": anonymousUser,
+        "userAnonymousId": userAnonymousId,
         "userObfuscateIp": userObfuscateIp,
         "houseHoldId": Template.houseHoldId, // optional which device is used to play
         "httpSecure": Template.httpSecure, // youbora events will be sent via https
@@ -195,6 +196,7 @@ class YouboraConfigTemplate {
         "adResource": Template.adResource,
         "adTitle": Template.adTitle,
         "appName": Template.appName,
+        "adGivenAds": Template.adGivenAds,
         "adCustomDimensions": [
             "adCustomDimension1": Template.adCustomDimension1,
             "adCustomDimension2": Template.adCustomDimension2,
@@ -247,7 +249,7 @@ class YouboraConfigTemplate {
     ]
     
     static let content: [String: Any] = [
-        "program": Template.program, //contentTitle2
+        "contentProgram": Template.contentProgram, //contentTitle2
         "contentResource": Template.contentResource,
         "contentIsLive": Template.contentIsLive,
         "contentTitle": Template.contentTitle,

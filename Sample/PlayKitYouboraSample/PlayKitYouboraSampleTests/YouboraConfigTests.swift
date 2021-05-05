@@ -97,7 +97,7 @@ class YouboraConfigTests: XCTestCase {
         XCTAssertTrue(options.username == ybc.username)
         XCTAssertTrue(options.userEmail == ybc.userEmail)
         XCTAssertTrue(options.userType == ybc.userType)
-        XCTAssertTrue(options.anonymousUser == ybc.anonymousUser)
+        XCTAssertTrue(options.anonymousUser == ybc.userAnonymousId)
         XCTAssertTrue(options.userObfuscateIp as? Bool == ybc.userObfuscateIp)
     }
     
@@ -114,12 +114,14 @@ class YouboraConfigTests: XCTestCase {
         XCTAssertNotNil(options.adProvider)
         XCTAssertNotNil(options.adResource)
         XCTAssertNotNil(options.adCreativeId)
+        XCTAssertNotNil(options.adGivenAds)
         
         XCTAssertTrue(options.adTitle == ybc.adTitle)
         XCTAssertTrue(options.adCampaign == ybc.adCampaign)
         XCTAssertTrue(options.adProvider == ybc.adProvider)
         XCTAssertTrue(options.adResource == ybc.adResource)
         XCTAssertTrue(options.adCreativeId == ybc.adCreativeId)
+        XCTAssertTrue(options.adGivenAds as? Int == ybc.adGivenAds)
     }
     
     func testAdsCustomDimensions() throws {
@@ -252,7 +254,7 @@ class YouboraConfigTests: XCTestCase {
         XCTAssertNotNil(options.contentEncodingContainerFormat)
         
         //
-        XCTAssertTrue(options.program == ybc.program)
+        XCTAssertTrue(options.program == ybc.contentProgram)
         XCTAssertTrue(options.contentResource == ybc.contentResource)
         XCTAssertTrue(options.contentIsLive as? Bool == ybc.contentIsLive)
         XCTAssertTrue(options.contentTitle == ybc.contentTitle)

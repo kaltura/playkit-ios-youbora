@@ -12,7 +12,7 @@ struct YouboraConfig: Decodable {
     
     let username: String?
     let userEmail: String?
-    let anonymousUser: String?
+    let userAnonymousId: String?
     let userType: String?
     let obfuscateIP: Bool?
     let userObfuscateIp: Bool?
@@ -47,10 +47,17 @@ struct YouboraConfig: Decodable {
         
         options.username = username
         options.userEmail = userEmail
-        options.anonymousUser = anonymousUser
+        options.anonymousUser = userAnonymousId
         options.userType = userType
-        options.userObfuscateIp = obfuscateIP != nil ? NSNumber(booleanLiteral: obfuscateIP!) : nil
-        options.userObfuscateIp = userObfuscateIp != nil ? NSNumber(booleanLiteral: userObfuscateIp!) : nil
+        
+        if let obfuscateIP = obfuscateIP {
+            options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIP)
+        }
+        
+        if let userObfuscateIp = userObfuscateIp {
+            options.userObfuscateIp = NSNumber(booleanLiteral: userObfuscateIp)
+        }
+        
         options.enabled = isEnabled ?? true
         
         options.httpSecure = httpSecure ?? true
@@ -91,7 +98,7 @@ struct YouboraConfig: Decodable {
             options.contentResource = content.contentResource
             options.contentTitle = content.contentTitle
             //options.program = content.contentTitle2
-            options.program = content.program
+            options.program = content.contentProgram
             options.contentDuration = content.contentDuration as NSNumber?
             options.contentTransactionCode = content.contentTransactionCode
             options.contentBitrate = content.contentBitrate as NSNumber?
@@ -161,6 +168,7 @@ struct YouboraConfig: Decodable {
             options.adProvider = ads.adProvider
             options.adResource = ads.adResource
             options.adCreativeId = ads.adCreativeId
+            options.adGivenAds = ads.adGivenAds != nil ? NSNumber(value: ads.adGivenAds!) : nil
             
             if let adsCustomDimensions = ads.adCustomDimensions {
                 options.adCustomDimension1 = adsCustomDimensions.adCustomDimension1
@@ -277,7 +285,7 @@ struct Content: Decodable {
     let title2: String?
     let duration: Double?
     let transactionCode: String?
-    let program: String? //contentTitle2
+    let contentProgram: String? //contentTitle2
     let contentResource: String?
     let contentIsLive: Bool?
     let contentTitle: String?
@@ -341,8 +349,7 @@ struct Ads: Decodable {
     let adTitle: String?
     let extraParams: ExtraParams?
     let adCustomDimensions: AdCustomDimensions?
-    //let adsAfterStop: Int?
-    //let adGivenAds: Int?
+    let adGivenAds: Int?
     //let adExpectedPattern: [String: AnyHashable]?
     //let adMetadata: [String: AnyHashable]?
 }
@@ -439,18 +446,12 @@ struct Network: Decodable {
 
 struct Device: Decodable {
     let deviceBrand: String?
-    let brand: String?
     let deviceCode: String?
     let deviceId: String?
-    let id: String?
     let deviceModel: String?
-    let model: String?
     let deviceOsName: String?
-    let osName: String?
     let deviceOsVersion: String?
-    let osVersion: String?
     let deviceType: String?
-    let type: String?
     let deviceIsAnonymous: Bool?
 }
 
