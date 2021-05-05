@@ -188,7 +188,7 @@ struct YouboraConfig: Decodable {
             options.contentMetadata = ["genre": properties.genre ?? "",
                                        "type": properties.type ?? "",
                                        "transaction_type": properties.transactionType ?? "",
-                                       "year": String(describing: properties.year),
+                                       "year": properties.year ?? "",
                                        "cast": properties.cast ?? "",
                                        "director": properties.director ?? "",
                                        "owner": properties.owner ?? "",
