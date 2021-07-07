@@ -205,7 +205,11 @@ extension YouboraPlugin {
             
             switch event {
             case is PlayerEvent.CDNSwitched:
-                self.ybPlugin?.options.contentCdn = event.cdnCode
+                if let cdnCode = event.cdnCode, !cdnCode.isEmpty {
+                    self.ybPlugin?.options.contentCdn = cdnCode
+                } else {
+                    PKLog.debug("Content CDN code is incorrect")
+                }
             default: return
             }
         }
