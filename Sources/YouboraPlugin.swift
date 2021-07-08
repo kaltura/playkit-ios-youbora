@@ -200,12 +200,12 @@ extension YouboraPlugin {
         PKLog.debug("Register CDN switch event")
         guard let messageBus = self.messageBus else { return }
         
-        messageBus.addObserver(self, events: [PlayerEvent.cdnSwitched]) { [weak self] event in
+        messageBus.addObserver(self, events: [InterceptorEvent.cdnSwitched]) { [weak self] event in
             guard let self = self else { return }
             
             switch event {
-            case is PlayerEvent.CDNSwitched:
-                if let cdnCode = event.cdnCode, !cdnCode.isEmpty {
+            case let cdnSwitchedEvent as InterceptorEvent.CDNSwitched:
+                if let cdnCode = cdnSwitchedEvent.cdnCode, !cdnCode.isEmpty {
                     self.ybPlugin?.options.contentCdn = cdnCode
                 } else {
                     PKLog.debug("Content CDN code is incorrect")
@@ -217,6 +217,6 @@ extension YouboraPlugin {
     
     func unregisterCdnSwitchEvent() {
         PKLog.debug("Unregister CDN switch event")
-        messageBus?.removeObserver(self, events: [PlayerEvent.cdnSwitched])
+        messageBus?.removeObserver(self, events: [InterceptorEvent.cdnSwitched])
     }
 }
