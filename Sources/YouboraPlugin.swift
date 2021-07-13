@@ -197,7 +197,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
 extension YouboraPlugin {
     
     fileprivate func registerCdnSwitchEvent() {
-        PKLog.debug("Register CDN switch event")
+        PKLog.debug("Register CDN switched event")
         guard let messageBus = self.messageBus else { return }
         
         messageBus.addObserver(self, events: [InterceptorEvent.cdnSwitched]) { [weak self] event in
@@ -216,7 +216,7 @@ extension YouboraPlugin {
     }
     
     func unregisterCdnSwitchEvent() {
-        PKLog.debug("Unregister CDN switch event")
+        PKLog.debug("Unregister CDN switched event")
         messageBus?.removeObserver(self, events: [InterceptorEvent.cdnSwitched])
     }
 }
