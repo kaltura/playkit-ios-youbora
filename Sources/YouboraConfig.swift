@@ -112,12 +112,9 @@ struct YouboraConfig: Decodable {
             
             options.contentGenre = properties.genre
             options.contentType = properties.type
+            options.contentTransactionCode = properties.transactionType
             options.contentPrice = properties.price
-            
-            // TODO: Check if it is correct.
-            // options.contentEncodingAudioCodec = properties.audioType
-            // options.deviceName = properties.device
-            // options.contentTransactionCode = properties.transactionType
+            options.contentRendition = properties.quality
         }
         
         if let content = content {
