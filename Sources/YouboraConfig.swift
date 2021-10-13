@@ -40,6 +40,8 @@ struct YouboraConfig: Decodable {
     let network: Network?
     let errors: Errors?
     
+    let fastData: FastDataConfig?
+    
     func options() -> YBOptions {
         let options = YBOptions()
         
@@ -281,6 +283,20 @@ struct YouboraConfig: Decodable {
         return options
     }
     
+    func fastDataConfig() -> YBFastDataConfig? {
+        if let fastData = fastData {
+            let fastDataConfig = YBFastDataConfig()
+            fastDataConfig.host = fastData.host
+            fastDataConfig.code = fastData.code
+            fastDataConfig.pingTime = fastData.pingTime as NSNumber?
+            fastDataConfig.beatTime = fastData.beatTime as NSNumber?
+            fastDataConfig.expirationTime = fastData.expirationTime as NSNumber?
+            fastDataConfig.youboraId = fastData.youboraId
+            return fastDataConfig
+        }
+        return nil
+    }
+
 }
 
 struct Content: Decodable {
@@ -465,4 +481,13 @@ struct Errors: Decodable {
     let errorsIgnore: [String]?
     let errorsFatal: [String]?
     let errorsNonFatal: [String]?
+}
+
+struct FastDataConfig: Decodable {
+    let host: String?
+    let code: String?
+    let pingTime: Double?
+    let beatTime: Double?
+    let expirationTime: Double?
+    let youboraId: String?
 }

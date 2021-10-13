@@ -73,7 +73,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         
         YBLog.setDebugLevel(.debug)
         
-        ybPlugin = YBPlugin(options: youboraConfig?.options(), andAdapter: pkYouboraPlayerAdapter)
+        ybPlugin = YBPlugin(options: youboraConfig?.options(), adapter: pkYouboraPlayerAdapter, andConfig: youboraConfig?.fastDataConfig())
         ybPlugin?.adsAdapter = pkYouboraAdsAdapter
 
         // Monitor app state changes
