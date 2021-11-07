@@ -194,9 +194,7 @@ extension PKYouboraPlayerAdapter {
             
             switch event {
             case is PlayerEvent.Play:
-                // Play handler to start when asset starts loading.
-                // This point is the closest point to prepare call.
-                self.fireStart()
+                self.plugin?.fireInit()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Stopped:
                 // We must call `fireStop()` when stopped so youbora will know player stopped playing content.
@@ -207,10 +205,12 @@ extension PKYouboraPlayerAdapter {
                 self.firePause()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Playing:
-                self.fireJoin()
                 if self.isFirstPlay {
                     self.isFirstPlay = false
+                    self.fireStart()
+                    self.fireJoin()
                 } else {
+                    self.fireJoin()
                     self.fireResume()
                 }
                 self.postEventLog(withMessage: "\(String(describing: event.namespace))")
