@@ -156,6 +156,7 @@ extension PKYouboraAdsAdapter {
                     guard let self = self else { return }
                     // Update ad info with the new loaded event
                     self.adInfo = event.adInfo
+                    self.plugin?.fireInit()
                 }
             case let e where e.self == AdEvent.adStarted:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
