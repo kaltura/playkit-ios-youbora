@@ -15,6 +15,8 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
     
     struct CustomPropertyKey {
         static let sessionId = "sessionId"
+        static let entryId = "entryId"
+        static let uiConfId = "uiConfId"
     }
     
     public override class var pluginName: String {
@@ -37,11 +39,8 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
     private var ybPlugin: YBPlugin?
     
     /// The plugin's config
-    var config: AnalyticsConfig {
-        didSet {
-            self.addCustomProperties()
-        }
-    }
+    var config: AnalyticsConfig
+    
     var youboraConfig: YouboraConfig? {
         get {
             return parseYouboraConfig(fromConfig: config)
@@ -62,9 +61,6 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         try super.init(player: player, pluginConfig: pluginConfig, messageBus: messageBus)
         
         self.registerCdnSwitchEvent()
-        
-        // The didSet of config is not performed before the super.init, therfore it needs to be called for the first time.
-        self.addCustomProperties()
         
         pkYouboraPlayerAdapter = PKYouboraPlayerAdapter(player: player, messageBus: messageBus, config: youboraConfig)
         pkYouboraAdsAdapter = PKYouboraAdsAdapter(player: player, messageBus: messageBus)
@@ -87,6 +83,11 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         endedHandler()
         pkYouboraPlayerAdapter?.reset()
         pkYouboraAdsAdapter?.reset()
+        
+        self.addKalturaInfo(withMediaConfig: mediaConfig)
+        
+        //pkYouboraPlayerAdapter?.config = youboraConfig
+        ybPlugin?.options = youboraConfig?.options() ?? YBOptions()
     }
     
     public override func onUpdateConfig(pluginConfig: Any) {
@@ -177,19 +178,25 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         ybPlugin?.adapter?.fireStop()
     }
     
-    private func addCustomProperties() {
+    private func addKalturaInfo(withMediaConfig mediaConfig: MediaConfig) {
         guard let player = self.player else {
             PKLog.warning("couldn't add custom properties, player instance is nil")
             return
         }
+        
+        let kalturaInfo = [CustomPropertyKey.entryId: mediaConfig.mediaEntry.id,
+                           CustomPropertyKey.uiConfId: "",
+                           CustomPropertyKey.sessionId: player.sessionId]
+        
         let propertiesKey = "properties"
+        
         if var properties = config.params[propertiesKey] as? [String: Any] {
             // if properties already exists override the custom properties only
-            properties[CustomPropertyKey.sessionId] = player.sessionId
+            properties["kalturaInfo"] = kalturaInfo
             config.params[propertiesKey] = properties
         } else {
             // If properties doesn't exist then add
-            config.params[propertiesKey] = [CustomPropertyKey.sessionId: player.sessionId]
+            config.params[propertiesKey] = ["kalturaInfo": kalturaInfo]
         }
     }
 }

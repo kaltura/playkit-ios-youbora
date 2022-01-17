@@ -95,20 +95,28 @@ struct YouboraConfig: Decodable {
         }
         
         if let properties = properties {
-            options.contentMetadata = ["genre": properties.genre ?? "",
-                                       "type": properties.type ?? "",
-                                       "transaction_type": properties.transactionType ?? "",
-                                       "year": properties.year ?? "",
-                                       "cast": properties.cast ?? "",
-                                       "director": properties.director ?? "",
-                                       "owner": properties.owner ?? "",
-                                       "parental": properties.parental ?? "",
-                                       "price": properties.price ?? "",
-                                       "rating": properties.rating ?? "",
-                                       "audioType": properties.audioType ?? "",
-                                       "audioChannels": properties.audioChannels ?? "",
-                                       "device": properties.device ?? "",
-                                       "quality": properties.quality ?? ""]
+            var contentMetadata: [String: AnyHashable] = ["genre": properties.genre ?? "",
+                                                          "type": properties.type ?? "",
+                                                          "transaction_type": properties.transactionType ?? "",
+                                                          "year": properties.year ?? "",
+                                                          "cast": properties.cast ?? "",
+                                                          "director": properties.director ?? "",
+                                                          "owner": properties.owner ?? "",
+                                                          "parental": properties.parental ?? "",
+                                                          "price": properties.price ?? "",
+                                                          "rating": properties.rating ?? "",
+                                                          "audioType": properties.audioType ?? "",
+                                                          "audioChannels": properties.audioChannels ?? "",
+                                                          "device": properties.device ?? "",
+                                                          "quality": properties.quality ?? ""]
+            
+            if let kalturaInfo = properties.kalturaInfo {
+                contentMetadata["kalturaInfo"] = ["sessionId": kalturaInfo.sessionId ?? "",
+                                                  "entryId": kalturaInfo.entryId ?? "",
+                                                  "uiConfId": kalturaInfo.uiConfId ?? ""]
+            }
+            
+            options.contentMetadata = contentMetadata
             
             options.contentGenre = properties.genre
             options.contentType = properties.type
@@ -377,6 +385,7 @@ struct Properties: Decodable {
     let audioChannels: String?
     let device: String?
     let quality: String?
+    let kalturaInfo: KalturaInfo?
 }
 
 struct AdCustomDimensions: Decodable {
@@ -465,4 +474,10 @@ struct Errors: Decodable {
     let errorsIgnore: [String]?
     let errorsFatal: [String]?
     let errorsNonFatal: [String]?
+}
+
+struct KalturaInfo: Decodable {
+    let sessionId: String?
+    let entryId: String?
+    let uiConfId: String?
 }
