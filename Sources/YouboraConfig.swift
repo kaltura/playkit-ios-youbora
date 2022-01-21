@@ -95,25 +95,80 @@ struct YouboraConfig: Decodable {
         }
         
         if let properties = properties {
-            var contentMetadata: [String: AnyHashable] = ["genre": properties.genre ?? "",
-                                                          "type": properties.type ?? "",
-                                                          "transaction_type": properties.transactionType ?? "",
-                                                          "year": properties.year ?? "",
-                                                          "cast": properties.cast ?? "",
-                                                          "director": properties.director ?? "",
-                                                          "owner": properties.owner ?? "",
-                                                          "parental": properties.parental ?? "",
-                                                          "price": properties.price ?? "",
-                                                          "rating": properties.rating ?? "",
-                                                          "audioType": properties.audioType ?? "",
-                                                          "audioChannels": properties.audioChannels ?? "",
-                                                          "device": properties.device ?? "",
-                                                          "quality": properties.quality ?? ""]
+            var contentMetadata: [String: AnyHashable] = [:]
+            
+            if let genre = properties.genre, !genre.isEmpty {
+                contentMetadata["genre"] = genre
+            }
+            
+            if let type = properties.type, !type.isEmpty {
+                contentMetadata["type"] = type
+            }
+            
+            if let transactionType = properties.transactionType, !transactionType.isEmpty {
+                contentMetadata["transaction_type"] = transactionType
+            }
+             
+            if let year = properties.year, !year.isEmpty {
+                contentMetadata["year"] = year
+            }
+
+            if let cast = properties.cast, !cast.isEmpty {
+                contentMetadata["cast"] = cast
+            }
+            
+            if let director = properties.director, !director.isEmpty {
+                contentMetadata["director"] = director
+            }
+            
+            if let owner = properties.owner, !owner.isEmpty {
+                contentMetadata["owner"] = owner
+            }
+            
+            if let parental = properties.parental, !parental.isEmpty {
+                contentMetadata["parental"] = parental
+            }
+            
+            if let price = properties.price, !price.isEmpty {
+                contentMetadata["price"] = price
+            }
+            
+            if let rating = properties.rating, !rating.isEmpty {
+                contentMetadata["rating"] = rating
+            }
+            
+            if let audioType = properties.audioType, !audioType.isEmpty {
+                contentMetadata["audioType"] = audioType
+            }
+            
+            if let audioChannels = properties.audioChannels, !audioChannels.isEmpty {
+                contentMetadata["audioChannels"] = audioChannels
+            }
+
+            if let device = properties.device, !device.isEmpty {
+                contentMetadata["device"] = device
+            }
+
+            if let quality = properties.quality, !quality.isEmpty {
+                contentMetadata["quality"] = quality
+            }
             
             if let kalturaInfo = properties.kalturaInfo {
-                contentMetadata["kalturaInfo"] = ["sessionId": kalturaInfo.sessionId ?? "",
-                                                  "entryId": kalturaInfo.entryId ?? "",
-                                                  "uiConfId": kalturaInfo.uiConfId ?? ""]
+                var kalturaInfoData: [String: AnyHashable] = [:]
+                
+                if let sessionId = kalturaInfo.sessionId, !sessionId.isEmpty {
+                    kalturaInfoData["sessionId"] = sessionId
+                }
+                
+                if let entryId = kalturaInfo.entryId, !entryId.isEmpty {
+                    kalturaInfoData["entryId"] = entryId
+                }
+                
+                if let uiConfId = kalturaInfo.uiConfId, !uiConfId.isEmpty {
+                    kalturaInfoData["uiConfId"] = uiConfId
+                }
+                
+                contentMetadata["kalturaInfo"] = kalturaInfoData
             }
             
             options.contentMetadata = contentMetadata
