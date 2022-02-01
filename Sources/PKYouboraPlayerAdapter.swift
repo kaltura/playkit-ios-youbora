@@ -104,6 +104,14 @@ extension PKYouboraPlayerAdapter {
         return NSNumber(value: Float(round(100 * currentTime)/100))
     }
     
+    override func getPlayrate() -> NSNumber {
+        guard let player = self.player as? PlayKit.Player else {
+            return super.getPlayrate()
+        }
+        
+        return NSNumber(value: player.rate)
+    }
+    
     override func getPlayerVersion() -> String? {
         return YouboraPlugin.kaltura + "-" + PlayKitManager.clientTag
     }
