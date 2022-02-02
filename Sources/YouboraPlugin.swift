@@ -39,8 +39,11 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
     private var ybPlugin: YBPlugin?
     
     /// The plugin's config
-    var config: AnalyticsConfig
-    
+    var config: AnalyticsConfig {
+        didSet {
+            self.addKalturaInfo()
+        }
+    }
     var youboraConfig: YouboraConfig? {
         get {
             return parseYouboraConfig(fromConfig: config)
@@ -61,6 +64,9 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         try super.init(player: player, pluginConfig: pluginConfig, messageBus: messageBus)
         
         self.registerCdnSwitchEvent()
+        
+        // The didSet of config is not performed before the super.init, therefore addKalturaInfo() needs to be called for the first time.
+        self.addKalturaInfo()
         
         pkYouboraPlayerAdapter = PKYouboraPlayerAdapter(player: player, messageBus: messageBus, config: youboraConfig)
         pkYouboraAdsAdapter = PKYouboraAdsAdapter(player: player, messageBus: messageBus)
@@ -84,7 +90,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         pkYouboraPlayerAdapter?.reset()
         pkYouboraAdsAdapter?.reset()
         
-        self.addKalturaInfo(withMediaConfig: mediaConfig)
+        self.addKalturaInfo()
         
         //pkYouboraPlayerAdapter?.config = youboraConfig
         ybPlugin?.options = youboraConfig?.options() ?? YBOptions()
@@ -178,13 +184,13 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         ybPlugin?.adapter?.fireStop()
     }
     
-    private func addKalturaInfo(withMediaConfig mediaConfig: MediaConfig) {
+    private func addKalturaInfo() {
         guard let player = self.player else {
             PKLog.warning("couldn't add custom properties, player instance is nil")
             return
         }
         
-        let kalturaInfo = [CustomPropertyKey.entryId: mediaConfig.mediaEntry.id,
+        let kalturaInfo = [CustomPropertyKey.entryId: player.mediaEntry?.id ?? "",
                            CustomPropertyKey.uiConfId: "",
                            CustomPropertyKey.sessionId: player.sessionId]
         
