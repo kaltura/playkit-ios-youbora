@@ -254,6 +254,17 @@ extension PKYouboraPlayerAdapter {
                 }
             case is PlayerEvent.SourceSelected:
                 self.lastReportedResource = event.mediaSource?.playbackUrl?.absoluteString
+                
+                // If we don't have a value, which was sent in the config, update via the media source data.
+                let contentDRM = self.plugin?.options.contentDrm
+                if contentDRM == nil || contentDRM?.isEmpty == true {
+                    if let mediaSource = event.mediaSource {
+                        self.plugin?.options.contentDrm = mediaSource.isFairPlay() ? "FairPlay" : "Clear"
+                    } else {
+                        self.plugin?.options.contentDrm = "Unknown"
+                    }
+                }
+                
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Error:
                 if let error = event.error {
@@ -310,5 +321,11 @@ extension PKYouboraPlayerAdapter {
     fileprivate func postEventLog(withMessage message: String) {
         let eventLog = YouboraEvent.Report(message: message)
         messageBus?.post(eventLog)
+    }
+}
+
+extension PKMediaSource {
+    func isFairPlay() -> Bool {
+        return mediaFormat == .hls && drmData?.first?.scheme == .fairplay
     }
 }
