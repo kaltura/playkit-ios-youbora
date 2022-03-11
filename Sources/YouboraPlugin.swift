@@ -183,7 +183,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         ybPlugin?.adsAdapter?.fireStop()
         ybPlugin?.adapter?.fireStop()
     }
-    
+    // TODO: fix KalturaInfo!
     private func addKalturaInfo() {
         guard let player = self.player else {
             PKLog.warning("couldn't add custom properties, player instance is nil")

@@ -162,7 +162,7 @@ extension PKYouboraPlayerAdapter {
     }
     
     override func getHouseholdId() -> String {
-        return config?.houseHoldId ?? ""
+        return config?.householdId ?? ""
     }
 }
 
