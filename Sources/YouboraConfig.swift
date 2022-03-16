@@ -19,11 +19,13 @@ struct YouboraConfig: Decodable {
     let offline: Bool?
 //    let isInfinity: Bool? // Depricated
     let autoDetectBackground: Bool?
+//    let autoStart: Bool? // Can't be found in YouboraLib
     let forceInit: Bool?
     var experiments: [String]?
     let linkedViewId: String?
     let waitForMetadata: Bool?
     let pendingMetadata: [String]?
+    let householdId: String?
 
     let user: User?
     let ad: Ad?
@@ -35,29 +37,29 @@ struct YouboraConfig: Decodable {
     let app: App?
     let session: Session?
     let errors: Errors?
-
-    // Additional Data missing in the YBOptionKeys
-    let householdId: String?
     
     // Kaltura additional data
     fileprivate let kalturaInfo: KalturaInfo?
 
-    // Backward Compatible - What to keep?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
     let userEmail: String?
     let userAnonymousId: String?
     let userType: String?
     let obfuscateIP: Bool?
     let userObfuscateIp: Bool?
     let contentCDN: String?
-    let isOffline: Bool?
-    let properties: Properties?
-//    let contentCustomDimensions: ContentCustomDimensions?
-//    let extraParams: ExtraParams?
     let houseHoldId: String?
-    let isAutoStart: Bool?
+//    let isAutoStart: Bool? // No code usage found.
     let isEnabled: Bool?
     let isForceInit: Bool?
     let appName: String?
+    let properties: Properties?
+    let contentCustomDimensions: ContentCustomDimensions?
+    let extraParams: ExtraParams?
+    let ads: Ads?
+    // MARK: -
 }
 
 struct User: Decodable {
@@ -245,9 +247,11 @@ struct Content: Decodable {
     let customDimensions: [String: String]?
     let sendTotalBytes: Bool?
     
-    // Backward Compatible - What to keep?
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
     let isDVR: Bool?
     let title2: String?
+    // MARK: -
 }
 
 struct IsLive: Decodable {
@@ -288,28 +292,10 @@ struct Errors: Decodable {
     let ignore: [String]?
 }
 
-private struct KalturaInfo: Decodable {
+private struct KalturaInfo: Codable {
     let sessionId: String?
     let entryId: String?
     let uiConfId: String?
-}
-
-// Backward Compatible
-struct Properties: Decodable {
-    let genre: String?
-    let type: String?
-    let transactionType: String?
-    let year: String?
-    let cast: String?
-    let director: String?
-    let owner: String?
-    let parental: String?
-    let price: String?
-    let rating: String?
-    let audioType: String?
-    let audioChannels: String?
-    let device: String?
-    let quality: String?
 }
 
 // MARK: -
@@ -437,28 +423,6 @@ extension YouboraConfig {
             if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
             options.contentStreamingProtocol = content.streamingProtocol
             options.contentTransportFormat = content.transportFormat
-            
-            // Add KalturaInfo to the Metadata
-//            if let kalturaInfo = properties.kalturaInfo {
-//                var kalturaInfoData: [String: AnyHashable] = [:]
-//
-//                if let sessionId = kalturaInfo.sessionId, !sessionId.isEmpty {
-//                    kalturaInfoData["sessionId"] = sessionId
-//                }
-//
-//                if let entryId = kalturaInfo.entryId, !entryId.isEmpty {
-//                    kalturaInfoData["entryId"] = entryId
-//                }
-//
-//                if let uiConfId = kalturaInfo.uiConfId, !uiConfId.isEmpty {
-//                    kalturaInfoData["uiConfId"] = uiConfId
-//                }
-//
-//                contentMetadata["kalturaInfo"] = kalturaInfoData
-//                }
-//            var updatedMetadata: [String: Any] = content.metadata?.data ?? [:]
-
-            
             options.contentMetadata = content.metadata
             options.contentMetrics = content.metrics
             options.contentSaga = content.saga
@@ -527,90 +491,22 @@ extension YouboraConfig {
         }
         
         addBackwardCompatibleData(to: options)
+        addKalturaInfoData(to: options)
         
         return options
     }
-}
-
-// MARK: - BackwardCompatibleData
-
-extension YouboraConfig {
     
-    func addBackwardCompatibleData(to options: YBOptions) {
-
-
-//        if let properties = properties {
-//            var contentMetadata: [String: AnyHashable] = [:]
-//
-//            if let transactionType = properties.transactionType, !transactionType.isEmpty {
-//                contentMetadata["transaction_type"] = transactionType
-//            }
-//
-//            if let year = properties.year, !year.isEmpty {
-//                contentMetadata["year"] = year
-//            }
-//
-//            if let cast = properties.cast, !cast.isEmpty {
-//                contentMetadata["cast"] = cast
-//            }
-//
-//            if let director = properties.director, !director.isEmpty {
-//                contentMetadata["director"] = director
-//            }
-//
-//            if let owner = properties.owner, !owner.isEmpty {
-//                contentMetadata["owner"] = owner
-//            }
-//
-//            if let parental = properties.parental, !parental.isEmpty {
-//                contentMetadata["parental"] = parental
-//            }
-//
-//            if let price = properties.price, !price.isEmpty {
-//                contentMetadata["price"] = price
-//            }
-//
-//            if let rating = properties.rating, !rating.isEmpty {
-//                contentMetadata["rating"] = rating
-//            }
-//
-//            if let audioType = properties.audioType, !audioType.isEmpty {
-//                contentMetadata["audioType"] = audioType
-//            }
-//
-//            if let audioChannels = properties.audioChannels, !audioChannels.isEmpty {
-//                contentMetadata["audioChannels"] = audioChannels
-//            }
-//
-//            if let device = properties.device, !device.isEmpty {
-//                contentMetadata["device"] = device
-//            }
-//
-//            if let quality = properties.quality, !quality.isEmpty {
-//                contentMetadata["quality"] = quality
-//            }
-//
-//            if let kalturaInfo = properties.kalturaInfo {
-//                var kalturaInfoData: [String: AnyHashable] = [:]
-//
-//                if let sessionId = kalturaInfo.sessionId, !sessionId.isEmpty {
-//                    kalturaInfoData["sessionId"] = sessionId
-//                }
-//
-//                if let entryId = kalturaInfo.entryId, !entryId.isEmpty {
-//                    kalturaInfoData["entryId"] = entryId
-//                }
-//
-//                if let uiConfId = kalturaInfo.uiConfId, !uiConfId.isEmpty {
-//                    kalturaInfoData["uiConfId"] = uiConfId
-//                }
-//
-//                contentMetadata["kalturaInfo"] = kalturaInfoData
-//            }
-//
-//            options.contentMetadata = contentMetadata
-//
-//        }
-    
+    private func addKalturaInfoData(to options: YBOptions) {
+        // Add KalturaInfo to the Metadata
+        if let kalturaInfo = kalturaInfo {
+            if let kalturaInfoData = kalturaInfo.dictionary {
+                if options.contentMetadata == nil {
+                    options.contentMetadata = ["kalturaInfo": kalturaInfoData]
+                } else {
+                    options.contentMetadata?["kalturaInfo"] = kalturaInfoData
+                }
+            }
+        }
     }
 }
+

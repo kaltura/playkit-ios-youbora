@@ -183,7 +183,7 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
         ybPlugin?.adsAdapter?.fireStop()
         ybPlugin?.adapter?.fireStop()
     }
-    // TODO: fix KalturaInfo!
+    
     private func addKalturaInfo() {
         guard let player = self.player else {
             PKLog.warning("couldn't add custom properties, player instance is nil")
@@ -194,16 +194,8 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
                            CustomPropertyKey.uiConfId: "",
                            CustomPropertyKey.sessionId: player.sessionId]
         
-        let propertiesKey = "properties"
-        
-        if var properties = config.params[propertiesKey] as? [String: Any] {
-            // if properties already exists override the custom properties only
-            properties["kalturaInfo"] = kalturaInfo
-            config.params[propertiesKey] = properties
-        } else {
-            // If properties doesn't exist then add
-            config.params[propertiesKey] = ["kalturaInfo": kalturaInfo]
-        }
+        let kalturaInfoKey = "kalturaInfo"
+        config.params[kalturaInfoKey] = kalturaInfo
     }
 }
 

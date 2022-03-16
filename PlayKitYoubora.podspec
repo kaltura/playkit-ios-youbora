@@ -18,6 +18,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Sources/**/*' 
   s.dependency 'PlayKit/AnalyticsCommon', '~> 3.22'
-  s.dependency 'YouboraLib', '6.6.10'
+  s.dependency 'YouboraLib', '6.6.12'
 end
 
