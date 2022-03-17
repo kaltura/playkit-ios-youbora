@@ -220,11 +220,14 @@ struct Content: Decodable {
     let throughput: UInt?
     let rendition: String?
     let cdn: String? // List of CDNs: http://mapi.youbora.com:8081/cdns
+    let cdnNode: String?
+    let cdnType: String? // https://documentation.npaw.com/npaw-integration/docs/setting-options-and-metadata#cdn-node-types
     let fps: Double?
     let streamingProtocol: String?
     let transportFormat: String?
     let metadata: [String: String]?
     let metrics: [String: String]?
+    let package: String?
     let saga: String?
     let tvShow: String?
     let season: String?
@@ -245,6 +248,7 @@ struct Content: Decodable {
     let encoding: Encoding?
     let customDimension: CustomDimension?
     let customDimensions: [String: String]?
+    let totalBytes: UInt?
     let sendTotalBytes: Bool?
     
     // MARK: - Deprecated
@@ -421,10 +425,13 @@ extension YouboraConfig {
             options.contentRendition = content.rendition
             options.contentCdn = content.cdn
             if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
+            options.contentCdnNode = content.cdnNode
+            options.contentCdnType = content.cdnType
             options.contentStreamingProtocol = content.streamingProtocol
             options.contentTransportFormat = content.transportFormat
             options.contentMetadata = content.metadata
             options.contentMetrics = content.metrics
+            options.contentPackage = content.package
             options.contentSaga = content.saga
             options.contentTvShow = content.tvShow
             options.contentSeason = content.season
@@ -472,6 +479,7 @@ extension YouboraConfig {
                 options.contentCustomDimension20 = customDimension.twenty
             }
             options.contentCustomDimensions = content.customDimensions
+            if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
             if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(value: sendTotalBytes) }
         }
         
