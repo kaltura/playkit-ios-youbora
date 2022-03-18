@@ -183,6 +183,16 @@ struct Parse: Decodable {
     let cdnNode: CDNNode?
     let cdnTTL: Double?
     let cdnSwitchHeader: Bool?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let parseManifest: Bool?
+    let parseCdnNode: Bool?
+    let parseCdnSwitchHeader: Bool?
+    let parseCdnNodeList: [String]?
+    let parseCdnNameHeader: String?
+    let parseCdnTTL: Int?
+    // MARK: -
 }
 
 struct CDNNode: Decodable {
@@ -194,6 +204,14 @@ struct Network: Decodable {
     let ip: String?
     let isp: String?
     let connectionType: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let networkIP: String?
+    let networkIsp: String?
+    let networkConnectionType: String?
+    let userObfuscateIp: String?
+    // MARK: -
 }
 
 struct Device: Decodable {
@@ -207,6 +225,18 @@ struct Device: Decodable {
     let isAnonymous: Bool?
     let id: String?
     let EDID: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let deviceBrand: String?
+    let deviceCode: String?
+    let deviceId: String?
+    let deviceModel: String?
+    let deviceOsName: String?
+    let deviceOsVersion: String?
+    let deviceType: String?
+    let deviceIsAnonymous: Bool?
+    // MARK: -
 }
 
 struct Content: Decodable {
@@ -314,6 +344,12 @@ struct Encoding: Decodable {
 struct App: Decodable {
     let name: String?
     let releaseVersion: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let appName: String?
+    let appReleaseVersion: String?
+    // MARK: -
 }
 
 struct Session: Decodable {
@@ -333,6 +369,13 @@ struct Errors: Decodable {
     let fatal: [String]?
     let nonFatal: [String]?
     let ignore: [String]?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let errorsIgnore: [String]?
+    let errorsFatal: [String]?
+    let errorsNonFatal: [String]?
+    // MARK: -
 }
 
 private struct KalturaInfo: Codable {
@@ -365,182 +408,214 @@ extension YouboraConfig {
         if let waitForMetadata = waitForMetadata { options.waitForMetadata = waitForMetadata }
         options.pendingMetadata = pendingMetadata
         
-        if let user = user {
-            options.anonymousUser = user.anonymousId
-            options.userType = user.type
-            options.userEmail = user.email
-            if let obfuscateIp = user.obfuscateIp { options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIp) }
-        }
-        
-        if let ad = ad {
-            if let blockerDetected = ad.blockerDetected {
-                options.adBlockerDetected = NSNumber(booleanLiteral: blockerDetected)
-            }
-            options.adMetadata = ad.metadata
-            if let adsAfterStop = ad.afterStop { options.adsAfterStop = NSNumber(value: adsAfterStop) }
-            options.adCampaign = ad.campaign
-            options.adTitle = ad.title
-            options.adResource = ad.resource
-            if let givenBreaks = ad.givenBreaks { options.adGivenBreaks = NSNumber(value: givenBreaks) }
-            if let expectedBreaks = ad.expectedBreaks { options.adExpectedBreaks = NSNumber(value: expectedBreaks) }
-            options.adExpectedPattern = ad.expectedPattern?.getValuesForOptions()
-            options.adBreaksTime = ad.breaksTime
-            if let givenAds = ad.givenAds { options.adGivenAds = NSNumber(value: givenAds)}
-            options.adCreativeId = ad.creativeId
-            options.adProvider = ad.provider
-            if let customDimension = ad.customDimension {
-                options.adCustomDimension1 = customDimension.one
-                options.adCustomDimension2 = customDimension.two
-                options.adCustomDimension3 = customDimension.three
-                options.adCustomDimension4 = customDimension.four
-                options.adCustomDimension5 = customDimension.five
-                options.adCustomDimension6 = customDimension.six
-                options.adCustomDimension7 = customDimension.seven
-                options.adCustomDimension8 = customDimension.eight
-                options.adCustomDimension9 = customDimension.nine
-                options.adCustomDimension10 = customDimension.ten
-            }
-        }
-        
-        if let smartswitch = smartswitch {
-            options.smartswitchConfigCode = smartswitch.configCode
-            options.smartswitchGroupCode = smartswitch.groupCode
-            options.smartswitchContractCode = smartswitch.contractCode
-        }
-        
-        if let parse = parse {
-            if let manifest = parse.manifest { options.parseResource = manifest }
-            options.parseCdnNameHeader = parse.cdnNameHeader
-            if let cdnNode = parse.cdnNode {
-                if let requestDebugHeaders = cdnNode.requestDebugHeaders {
-                    options.parseCdnNode = requestDebugHeaders
-                } else {
-                    // Workaround if the value was sent as parse.cdnNode, If we have the object we believe it's true.
-                    options.parseCdnNode = true
-                }
-                if let list = cdnNode.list { options.parseCdnNodeList = NSMutableArray(array: list) }
-            }
-            if let cdnTTL = parse.cdnTTL { options.cdnTTL = cdnTTL }
-            if let cdnSwitchHeader = parse.cdnSwitchHeader { options.cdnSwitchHeader = cdnSwitchHeader }
-        }
-        
-        if let network = network {
-            options.networkIP = network.ip
-            options.networkIsp = network.isp
-            options.networkConnectionType = network.connectionType
-        }
-        
-        if let device = device {
-            options.deviceCode = device.code
-            options.deviceModel = device.model
-            options.deviceBrand = device.brand
-            options.deviceType = device.type
-            options.deviceName = device.name
-            options.deviceOsName = device.osName
-            options.deviceOsVersion = device.osVersion
-            if let isAnonymous = device.isAnonymous { options.deviceIsAnonymous = isAnonymous }
-            options.deviceUUID = device.id
-            options.deviceEDID = device.EDID
-        }
-        
-        if let content = content {
-            options.contentResource = content.resource
-            if let isLiveData = content.isLive {
-                if let isLiveContent = isLiveData.isLiveContent {
-                    options.contentIsLive = NSNumber(value: isLiveContent)
-                } else {
-                    // Workaround if the value was sent as content.isLive, If we have the object we believe it's true.
-                    options.contentIsLive = NSNumber(value: true)
-                }
-                if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(value: noSeek) }
-                if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(value: noMonitor) }
-            }
-            options.contentTitle = content.title
-            options.program = content.program
-            if let duration = content.duration { options.contentDuration = NSNumber(value: duration) }
-            options.contentTransactionCode = content.transactionCode
-            if let bitrate = content.bitrate { options.contentBitrate = NSNumber(value: bitrate) }
-            if let throughput = content.throughput { options.contentThroughput = NSNumber(value: throughput) }
-            options.contentRendition = content.rendition
-            options.contentCdn = content.cdn
-            if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
-            options.contentCdnNode = content.cdnNode
-            options.contentCdnType = content.cdnType
-            options.contentStreamingProtocol = content.streamingProtocol
-            options.contentTransportFormat = content.transportFormat
-            options.contentMetadata = content.metadata
-            options.contentMetrics = content.metrics
-            options.contentPackage = content.package
-            options.contentSaga = content.saga
-            options.contentTvShow = content.tvShow
-            options.contentSeason = content.season
-            options.contentEpisodeTitle = content.episodeTitle
-            options.contentChannel = content.channel
-            options.contentId = content.id
-            options.contentImdbId = content.imdbId
-            options.contentGracenoteId = content.gracenoteId
-            options.contentType = content.type
-            options.contentGenre = content.genre
-            options.contentLanguage = content.language
-            options.contentSubtitles = content.subtitles
-            options.contentContractedResolution = content.contractedResolution
-            options.contentCost = content.cost
-            options.contentPrice = content.price
-            options.contentPlaybackType = content.playbackType
-            options.contentDrm = content.drm
-            if let encoding = content.encoding {
-                options.contentEncodingVideoCodec = encoding.videoCodec
-                options.contentEncodingAudioCodec = encoding.audioCodec
-//                options.contentEncodingCodecSettings = encoding.codecSettings // This is documented as a String and I didn't find the keys that are expected in the Dictionary.
-                options.contentEncodingCodecProfile = encoding.codecProfile
-                options.contentEncodingContainerFormat = encoding.containerFormat
-            }
-            if let customDimension = content.customDimension {
-                options.contentCustomDimension1 = customDimension.one
-                options.contentCustomDimension2 = customDimension.two
-                options.contentCustomDimension3 = customDimension.three
-                options.contentCustomDimension4 = customDimension.four
-                options.contentCustomDimension5 = customDimension.five
-                options.contentCustomDimension6 = customDimension.six
-                options.contentCustomDimension7 = customDimension.seven
-                options.contentCustomDimension8 = customDimension.eight
-                options.contentCustomDimension9 = customDimension.nine
-                options.contentCustomDimension10 = customDimension.ten
-                options.contentCustomDimension11 = customDimension.eleven
-                options.contentCustomDimension12 = customDimension.twelve
-                options.contentCustomDimension13 = customDimension.thirteen
-                options.contentCustomDimension14 = customDimension.fourteen
-                options.contentCustomDimension15 = customDimension.fiveteen
-                options.contentCustomDimension16 = customDimension.sixteen
-                options.contentCustomDimension17 = customDimension.seventeen
-                options.contentCustomDimension18 = customDimension.eighteen
-                options.contentCustomDimension19 = customDimension.nineteen
-                options.contentCustomDimension20 = customDimension.twenty
-            }
-            options.contentCustomDimensions = content.customDimensions
-            if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
-            if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(value: sendTotalBytes) }
-        }
-        
-        if let app = app {
-            options.appName = app.name
-            options.appReleaseVersion = app.releaseVersion
-        }
-        
-        if let session = session {
-            options.sessionMetrics = session.metrics
-        }
-        
-        if let errors = errors {
-            options.fatalErrors = errors.fatal
-            options.nonFatalErrors = errors.nonFatal
-            options.ignoreErrors = errors.ignore
-        }
+        addUserValues(to: options)
+        addAdValues(to: options)
+        addSmartswitchValues(to: options)
+        addParseValues(to: options)
+        addNetworkValues(to: options)
+        addDeviceValues(to: options)
+        addContentValues(to: options)
+        addAppValues(to: options)
+        addSessionValues(to: options)
+        addErrorsValues(to: options)
         
         addBackwardCompatibleData(to: options)
+        
         addKalturaInfoData(to: options)
         
         return options
+    }
+    
+    func addUserValues(to options: YBOptions) {
+        guard let user = user else { return }
+        
+        options.anonymousUser = user.anonymousId
+        options.userType = user.type
+        options.userEmail = user.email
+        if let obfuscateIp = user.obfuscateIp { options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIp) }
+    }
+    
+    func addAdValues(to options: YBOptions) {
+        guard let ad = ad else { return }
+            
+        if let blockerDetected = ad.blockerDetected {
+            options.adBlockerDetected = NSNumber(booleanLiteral: blockerDetected)
+        }
+        options.adMetadata = ad.metadata
+        if let adsAfterStop = ad.afterStop { options.adsAfterStop = NSNumber(value: adsAfterStop) }
+        options.adCampaign = ad.campaign
+        options.adTitle = ad.title
+        options.adResource = ad.resource
+        if let givenBreaks = ad.givenBreaks { options.adGivenBreaks = NSNumber(value: givenBreaks) }
+        if let expectedBreaks = ad.expectedBreaks { options.adExpectedBreaks = NSNumber(value: expectedBreaks) }
+        options.adExpectedPattern = ad.expectedPattern?.getValuesForOptions()
+        options.adBreaksTime = ad.breaksTime
+        if let givenAds = ad.givenAds { options.adGivenAds = NSNumber(value: givenAds)}
+        options.adCreativeId = ad.creativeId
+        options.adProvider = ad.provider
+        if let customDimension = ad.customDimension {
+            options.adCustomDimension1 = customDimension.one
+            options.adCustomDimension2 = customDimension.two
+            options.adCustomDimension3 = customDimension.three
+            options.adCustomDimension4 = customDimension.four
+            options.adCustomDimension5 = customDimension.five
+            options.adCustomDimension6 = customDimension.six
+            options.adCustomDimension7 = customDimension.seven
+            options.adCustomDimension8 = customDimension.eight
+            options.adCustomDimension9 = customDimension.nine
+            options.adCustomDimension10 = customDimension.ten
+        }
+    }
+    
+    func addSmartswitchValues(to options:YBOptions) {
+        guard let smartswitch = smartswitch else { return }
+            
+        options.smartswitchConfigCode = smartswitch.configCode
+        options.smartswitchGroupCode = smartswitch.groupCode
+        options.smartswitchContractCode = smartswitch.contractCode
+    }
+    
+    func addParseValues(to options:YBOptions) {
+        guard let parse = parse else { return }
+            
+        if let manifest = parse.manifest { options.parseResource = manifest }
+        options.parseCdnNameHeader = parse.cdnNameHeader
+        if let cdnNode = parse.cdnNode {
+            if let requestDebugHeaders = cdnNode.requestDebugHeaders {
+                options.parseCdnNode = requestDebugHeaders
+            } else {
+                // Workaround if the value was sent as parse.cdnNode, If we have the object we believe it's true.
+                options.parseCdnNode = true
+            }
+            if let list = cdnNode.list { options.parseCdnNodeList = NSMutableArray(array: list) }
+        }
+        if let cdnTTL = parse.cdnTTL { options.cdnTTL = cdnTTL }
+        if let cdnSwitchHeader = parse.cdnSwitchHeader { options.cdnSwitchHeader = cdnSwitchHeader }
+    }
+    
+    func addNetworkValues(to options:YBOptions) {
+        guard let network = network else { return }
+            
+        options.networkIP = network.ip
+        options.networkIsp = network.isp
+        options.networkConnectionType = network.connectionType
+    }
+    
+    func addDeviceValues(to options:YBOptions) {
+        guard let device = device else { return }
+            
+        options.deviceCode = device.code
+        options.deviceModel = device.model
+        options.deviceBrand = device.brand
+        options.deviceType = device.type
+        options.deviceName = device.name
+        options.deviceOsName = device.osName
+        options.deviceOsVersion = device.osVersion
+        if let isAnonymous = device.isAnonymous { options.deviceIsAnonymous = isAnonymous }
+        options.deviceUUID = device.id
+        options.deviceEDID = device.EDID
+    }
+    
+    func addContentValues(to options:YBOptions) {
+        guard let content = content else { return }
+            
+        options.contentResource = content.resource
+        if let isLiveData = content.isLive {
+            if let isLiveContent = isLiveData.isLiveContent {
+                options.contentIsLive = NSNumber(value: isLiveContent)
+            } else {
+                // Workaround if the value was sent as content.isLive, If we have the object we believe it's true.
+                options.contentIsLive = NSNumber(value: true)
+            }
+            if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(value: noSeek) }
+            if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(value: noMonitor) }
+        }
+        options.contentTitle = content.title
+        options.program = content.program
+        if let duration = content.duration { options.contentDuration = NSNumber(value: duration) }
+        options.contentTransactionCode = content.transactionCode
+        if let bitrate = content.bitrate { options.contentBitrate = NSNumber(value: bitrate) }
+        if let throughput = content.throughput { options.contentThroughput = NSNumber(value: throughput) }
+        options.contentRendition = content.rendition
+        options.contentCdn = content.cdn
+        if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
+        options.contentCdnNode = content.cdnNode
+        options.contentCdnType = content.cdnType
+        options.contentStreamingProtocol = content.streamingProtocol
+        options.contentTransportFormat = content.transportFormat
+        options.contentMetadata = content.metadata
+        options.contentMetrics = content.metrics
+        options.contentPackage = content.package
+        options.contentSaga = content.saga
+        options.contentTvShow = content.tvShow
+        options.contentSeason = content.season
+        options.contentEpisodeTitle = content.episodeTitle
+        options.contentChannel = content.channel
+        options.contentId = content.id
+        options.contentImdbId = content.imdbId
+        options.contentGracenoteId = content.gracenoteId
+        options.contentType = content.type
+        options.contentGenre = content.genre
+        options.contentLanguage = content.language
+        options.contentSubtitles = content.subtitles
+        options.contentContractedResolution = content.contractedResolution
+        options.contentCost = content.cost
+        options.contentPrice = content.price
+        options.contentPlaybackType = content.playbackType
+        options.contentDrm = content.drm
+        if let encoding = content.encoding {
+            options.contentEncodingVideoCodec = encoding.videoCodec
+            options.contentEncodingAudioCodec = encoding.audioCodec
+//                options.contentEncodingCodecSettings = encoding.codecSettings // This is documented as a String and I didn't find the keys that are expected in the Dictionary.
+            options.contentEncodingCodecProfile = encoding.codecProfile
+            options.contentEncodingContainerFormat = encoding.containerFormat
+        }
+        if let customDimension = content.customDimension {
+            options.contentCustomDimension1 = customDimension.one
+            options.contentCustomDimension2 = customDimension.two
+            options.contentCustomDimension3 = customDimension.three
+            options.contentCustomDimension4 = customDimension.four
+            options.contentCustomDimension5 = customDimension.five
+            options.contentCustomDimension6 = customDimension.six
+            options.contentCustomDimension7 = customDimension.seven
+            options.contentCustomDimension8 = customDimension.eight
+            options.contentCustomDimension9 = customDimension.nine
+            options.contentCustomDimension10 = customDimension.ten
+            options.contentCustomDimension11 = customDimension.eleven
+            options.contentCustomDimension12 = customDimension.twelve
+            options.contentCustomDimension13 = customDimension.thirteen
+            options.contentCustomDimension14 = customDimension.fourteen
+            options.contentCustomDimension15 = customDimension.fiveteen
+            options.contentCustomDimension16 = customDimension.sixteen
+            options.contentCustomDimension17 = customDimension.seventeen
+            options.contentCustomDimension18 = customDimension.eighteen
+            options.contentCustomDimension19 = customDimension.nineteen
+            options.contentCustomDimension20 = customDimension.twenty
+        }
+        options.contentCustomDimensions = content.customDimensions
+        if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
+        if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(value: sendTotalBytes) }
+    }
+    
+    func addAppValues(to options:YBOptions) {
+        guard let app = app else { return }
+        
+        options.appName = app.name
+        options.appReleaseVersion = app.releaseVersion
+    }
+    
+    func addSessionValues(to options:YBOptions) {
+        guard let session = session else { return }
+            
+        options.sessionMetrics = session.metrics
+    }
+    
+    func addErrorsValues(to options:YBOptions) {
+        guard let errors = errors else { return }
+            
+        options.fatalErrors = errors.fatal
+        options.nonFatalErrors = errors.nonFatal
+        options.ignoreErrors = errors.ignore
     }
     
     private func addKalturaInfoData(to options: YBOptions) {

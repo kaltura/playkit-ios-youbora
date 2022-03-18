@@ -181,9 +181,14 @@ extension YouboraConfig {
     func addBackwardCompatibleData(to options: YBOptions) {
 
         // Adding data from latest to the oldest format.
-        addBackwardCompatibleFromContentValues(to: options)
-        addBackwardCompatibleFromMediaValues(to: options)
-        addBackwardCompatibleFromPropertiesValues(to: options)
+        addBackwardCompatibleFromContent(to: options)
+        addBackwardCompatibleFromParse(to: options)
+        addBackwardCompatibleFromNetwork(to: options)
+        addBackwardCompatibleFromDevice(to: options)
+        addBackwardCompatibleFromApp(to: options)
+        addBackwardCompatibleFromErrors(to: options)
+        addBackwardCompatibleFromMedia(to: options)
+        addBackwardCompatibleFromProperties(to: options)
         addBackwardCompatibleFromContentCustomDimensions(to: options)
         addBackwardCompatibleFromExtraParams(to: options)
         addBackwardCompatibleFromAds(to: options)
@@ -225,7 +230,7 @@ extension YouboraConfig {
         }
     }
     
-    func addBackwardCompatibleFromContentValues(to options: YBOptions) {
+    func addBackwardCompatibleFromContent(to options: YBOptions) {
         guard let content = content else { return }
         
         if options.program == nil {
@@ -379,7 +384,119 @@ extension YouboraConfig {
         }
     }
     
-    func addBackwardCompatibleFromMediaValues(to options: YBOptions) {
+    func addBackwardCompatibleFromParse(to options: YBOptions) {
+        guard let parse = parse else { return }
+        
+        // false is the default value
+        if options.parseResource == false, let parseManifest = parse.parseManifest {
+            options.parseResource = parseManifest
+        }
+        // false is the default value
+        if options.parseCdnNode == false, let parseCdnNode = parse.parseCdnNode {
+            options.parseCdnNode = parseCdnNode
+        }
+        // false is the default value
+        if options.cdnSwitchHeader == false, let parseCdnSwitchHeader = parse.parseCdnSwitchHeader {
+            options.cdnSwitchHeader = parseCdnSwitchHeader
+        }
+        
+        if options.parseCdnNodeList == nil, let parseCdnNodeList = parse.parseCdnNodeList {
+            options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
+        }
+        
+        if options.parseCdnNameHeader == nil {
+            options.parseCdnNameHeader = parse.parseCdnNameHeader
+        }
+        
+        // 60 is the default value
+        if options.cdnTTL == 60, let cdnTTL = parse.parseCdnTTL {
+            options.cdnTTL = Double(cdnTTL)
+        }
+    }
+    
+    func addBackwardCompatibleFromNetwork(to options: YBOptions) {
+        guard let network = network else { return }
+        
+        if options.networkIP == nil {
+            options.networkIP = network.networkIP
+        }
+        
+        if options.networkIsp == nil {
+            options.networkIsp = network.networkIsp
+        }
+        
+        if options.networkConnectionType == nil {
+            options.networkConnectionType = network.networkConnectionType
+        }
+        
+        if options.userObfuscateIp == nil,
+            let userObfuscateIp = network.userObfuscateIp, let obfuscateIp = Bool(userObfuscateIp) {
+            options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIp)
+        }
+    }
+    
+    func addBackwardCompatibleFromDevice(to options: YBOptions) {
+        guard let device = device else { return }
+        
+        if options.deviceBrand == nil {
+            options.deviceBrand = device.deviceBrand
+        }
+        
+        if options.deviceUUID == nil {
+            options.deviceUUID = device.deviceId
+        }
+        
+        if options.deviceModel == nil {
+            options.deviceModel = device.deviceModel
+        }
+        
+        if options.deviceOsName == nil {
+            options.deviceOsName = device.deviceOsName
+        }
+        
+        if options.deviceOsVersion == nil {
+            options.deviceOsVersion = device.deviceOsVersion
+        }
+        
+        if options.deviceType == nil {
+            options.deviceType = device.deviceType
+        }
+        
+        // false is the default value.
+        if options.deviceIsAnonymous == false, let deviceIsAnonymous = device.deviceIsAnonymous {
+            options.deviceIsAnonymous = deviceIsAnonymous
+        }
+    }
+    
+    func addBackwardCompatibleFromApp(to options: YBOptions) {
+        guard let app = app else { return }
+        
+        if options.appName == nil {
+            options.appName = app.appName
+        }
+        
+        if options.appReleaseVersion == nil {
+            options.appReleaseVersion = app.appReleaseVersion
+        }
+    }
+    
+    func addBackwardCompatibleFromErrors(to options: YBOptions) {
+        guard let errors = errors else { return }
+        
+        if options.ignoreErrors == nil {
+            options.ignoreErrors = errors.errorsIgnore
+        }
+        
+        if options.fatalErrors == nil {
+            options.fatalErrors = errors.errorsFatal
+        }
+        
+        if options.nonFatalErrors == nil {
+            options.nonFatalErrors = errors.errorsNonFatal
+        }
+    }
+    
+    func addBackwardCompatibleFromMedia(to options: YBOptions) {
         guard let media = media else { return }
         
         if options.contentResource == nil {
@@ -417,7 +534,7 @@ extension YouboraConfig {
         }
     }
     
-    func addBackwardCompatibleFromPropertiesValues(to options: YBOptions) {
+    func addBackwardCompatibleFromProperties(to options: YBOptions) {
         guard let properties = properties else { return }
             
         if options.contentGenre == nil {
