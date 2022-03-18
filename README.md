@@ -19,7 +19,7 @@ let youboraPluginParams: [String: Any] = [
     "offline": false,
     "autoDetectBackground": true,
     "forceInit": false,
-    "experiments": [],
+    "experiments": ["experiment"],
     "linkedViewId": "viewID",
     "waitForMetadata": false,
     "pendingMetadata": ["title","username"], // The name of the parameters in the request we are waiting for.

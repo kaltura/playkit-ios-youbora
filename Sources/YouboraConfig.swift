@@ -11,7 +11,7 @@ struct YouboraConfig: Decodable {
     let accountCode: String
     
     let enabled: Bool?
-    var httpSecure: Bool?
+    let httpSecure: Bool?
     let host: String?
     let authToken: String?
     let authType: String?
@@ -21,7 +21,7 @@ struct YouboraConfig: Decodable {
     let autoDetectBackground: Bool?
 //    let autoStart: Bool? // Can't be found in YouboraLib
     let forceInit: Bool?
-    var experiments: [String]?
+    let experiments: [String]?
     let linkedViewId: String?
     let waitForMetadata: Bool?
     let pendingMetadata: [String]?
@@ -55,6 +55,7 @@ struct YouboraConfig: Decodable {
     let isEnabled: Bool?
     let isForceInit: Bool?
     let appName: String?
+    let media: Media?
     let properties: Properties?
     let contentCustomDimensions: ContentCustomDimensions?
     let extraParams: ExtraParams?
@@ -78,7 +79,7 @@ struct Ad: Decodable {
     let resource: String?
     let givenBreaks: Int?
     let expectedBreaks: Int?
-    let expectedPattern: ExpectedPatternValue?
+    let expectedPattern: ExpectedPattern?
     let breaksTime: [Int]?
     let givenAds: Int?
     let creativeId: String?
@@ -132,7 +133,7 @@ struct CustomDimension: Decodable {
     }
 }
 
-struct ExpectedPatternValue: Decodable {
+struct ExpectedPattern: Decodable {
     let pre: [Int]?
     let mid: [Int]?
     let post: [Int]?
@@ -255,6 +256,44 @@ struct Content: Decodable {
     // Backward Compatible - Deprecated - Will be removed in the future.
     let isDVR: Bool?
     let title2: String?
+    let contentProgram: String? //contentTitle2
+    let contentResource: String?
+    let contentIsLive: Bool?
+    let contentTitle: String?
+    let contentTitle2: String?
+    let contentDuration: Double?
+    let contentTransactionCode: String?
+    let contentBitrate: Double? //NSNumber
+    let contentSendTotalBytes: Bool?
+    let contentStreamingProtocol: String?
+    let contentTransportFormat: String?
+    let contentThroughput: Int?
+    let contentRendition: String?
+    let contentCdn: String?
+    let contentFps: Double?
+    let contentIsLiveNoSeek: Bool?
+    let contentPackage: String?
+    let contentSaga: String?
+    let contentTvShow: String?
+    let contentSeason: String?
+    let contentEpisodeTitle: String?
+    let contentChannel: String?
+    let contentId: String?
+    let contentImdbId: String?
+    let contentGracenoteId: String?
+    let contentType: String?
+    let contentGenre: String?
+    let contentLanguage: String?
+    let contentSubtitles: String?
+    let contentContractedResolution: String?
+    let contentCost: String?
+    let contentPrice: String?
+    let contentPlaybackType: String?
+    let contentDrm: String?
+    let contentEncodingVideoCodec: String?
+    let contentEncodingAudioCodec: String?
+    let contentEncodingCodecProfile: String?
+    let contentEncodingContainerFormat: String?
     // MARK: -
 }
 
