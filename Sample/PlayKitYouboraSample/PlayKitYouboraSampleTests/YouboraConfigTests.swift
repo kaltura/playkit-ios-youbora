@@ -16,6 +16,8 @@ class YouboraConfigTests: XCTestCase {
     var ybBCOptions: YBOptions?
     typealias ybCT = YouboraConfigTemplate
     
+    let ybOptionsNilMessage = "The Youbora Config YBOptions is nil."
+    
     override func setUp() {
         
         var config = AnalyticsConfig(params: ybCT.ybConfigParams)
@@ -28,8 +30,7 @@ class YouboraConfigTests: XCTestCase {
         do {
             let data = try JSONSerialization.data(withJSONObject: config.params, options: .prettyPrinted)
             let decodedYouboraConfig = try JSONDecoder().decode(YouboraConfig.self, from: data)
-            let ybConfig = decodedYouboraConfig
-            self.ybOptions = ybConfig.options()
+            self.ybOptions = decodedYouboraConfig.options()
 
         } catch let error as NSError {
             XCTAssertThrowsError("Couldn't parse data into YouboraConfig error: \(error)")
@@ -46,8 +47,7 @@ class YouboraConfigTests: XCTestCase {
         do {
             let data = try JSONSerialization.data(withJSONObject: config.params, options: .prettyPrinted)
             let decodedYouboraConfig = try JSONDecoder().decode(YouboraConfig.self, from: data)
-            let ybBCConfig = decodedYouboraConfig
-            self.ybBCOptions = ybBCConfig.options()
+            self.ybBCOptions = decodedYouboraConfig.options()
 
         } catch let error as NSError {
             XCTAssertThrowsError("Couldn't parse BC data into YouboraConfig error: \(error)")
@@ -60,7 +60,7 @@ class YouboraConfigTests: XCTestCase {
 
     func testGeneralOptions() throws {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -103,7 +103,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCGeneralOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -115,18 +115,18 @@ class YouboraConfigTests: XCTestCase {
         XCTAssertNil(options.authToken)
         XCTAssertNil(options.authType)
         XCTAssertTrue(options.username == ybCT.username)
-        XCTAssertNil(options.offline)
+        XCTAssertTrue(options.offline == false) // Youbora Default value.
         XCTAssertTrue(options.autoDetectBackground == ybCT.autoDetectBackground)
         XCTAssertTrue(options.forceInit == ybCT.isForceInit)
-        XCTAssertNil(options.experimentIds)
+        XCTAssertTrue(options.experimentIds?.count == 0) // Youbora Default creates an empty Array.
         XCTAssertNil(options.linkedViewId)
-        XCTAssertNil(options.waitForMetadata)
+        XCTAssertTrue(options.waitForMetadata == false) // Youbora Default value.
         XCTAssertNil(options.pendingMetadata)
     }
     
     func testUserOptions() throws {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -139,7 +139,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCUserOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -152,7 +152,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testAdOptions() throws {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -229,14 +229,14 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCAdOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
         // Testing properties in Ad - ybBackwardCompatibleConfigParams
         XCTAssertNil(options.adBlockerDetected)
-        XCTAssertNil(options.adMetadata)
-        XCTAssertNil(options.adsAfterStop)
+        XCTAssertTrue(options.adMetadata?.count == 0) // Youbora Default creates an empty Array.
+        XCTAssertTrue(options.adsAfterStop == 0) // Youbora Default value.
         XCTAssertTrue(options.adCampaign == ybCT.Ads.adCampaign)
         XCTAssertTrue(options.adTitle == ybCT.Ads.adTitle)
         XCTAssertTrue(options.adResource == ybCT.Ads.adResource)
@@ -276,7 +276,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testSmartSwitchOptions() {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -287,8 +287,8 @@ class YouboraConfigTests: XCTestCase {
     }
     
     func testParseOptions() throws {
-        guard let options = self.ybBCOptions else {
-            XCTFail()
+        guard let options = self.ybOptions else {
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -314,7 +314,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCParseOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -340,7 +340,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testNetworkOptions() throws {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -352,7 +352,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCNetworkOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -364,7 +364,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testDeviceOptions() throws {
         guard let options = self.ybOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -384,7 +384,7 @@ class YouboraConfigTests: XCTestCase {
     
     func testBCDeviceOptions() throws {
         guard let options = self.ybBCOptions else {
-            XCTFail()
+            XCTFail(ybOptionsNilMessage)
             return
         }
         
@@ -401,9 +401,227 @@ class YouboraConfigTests: XCTestCase {
         XCTAssertNil(options.deviceEDID)
     }
     
+    func testContentOptions() throws {
+        guard let options = self.ybOptions else {
+            XCTFail(ybOptionsNilMessage)
+            return
+        }
+        
+        // Testing properties in Content
+        XCTAssertTrue(options.contentResource == ybCT.Content.resource)
+
+        // isLive
+        XCTAssertTrue(options.contentIsLive == NSNumber(booleanLiteral: ybCT.Content.IsLive.isLiveContent))
+        XCTAssertTrue(options.contentIsLiveNoSeek == NSNumber(booleanLiteral: ybCT.Content.IsLive.noSeek))
+        XCTAssertTrue(options.contentIsLiveNoMonitor == NSNumber(booleanLiteral: ybCT.Content.IsLive.noMonitor))
+
+        XCTAssertTrue(options.contentTitle == ybCT.Content.title)
+        XCTAssertTrue(options.program == ybCT.Content.program)
+        XCTAssertTrue(options.contentDuration == NSNumber(value: ybCT.Content.duration))
+        XCTAssertTrue(options.contentTransactionCode == ybCT.Content.transactionCode)
+        XCTAssertTrue(options.contentBitrate == NSNumber(value: ybCT.Content.bitrate))
+        XCTAssertTrue(options.contentThroughput == NSNumber(value: ybCT.Content.throughput))
+        XCTAssertTrue(options.contentRendition == ybCT.Content.rendition)
+        XCTAssertTrue(options.contentCdn == ybCT.Content.cdn)
+        XCTAssertTrue(options.contentCdnNode == ybCT.Content.cdnNode)
+        XCTAssertTrue(options.contentCdnType == ybCT.Content.cdnType)
+        XCTAssertTrue(options.contentFps == NSNumber(value: ybCT.Content.fps))
+        XCTAssertTrue(options.contentStreamingProtocol == ybCT.Content.streamingProtocol)
+        XCTAssertTrue(options.contentTransportFormat == ybCT.Content.transportFormat)
+        
+        let templateContentMetadata = ybCT.Content.metadata
+        for metadata in templateContentMetadata.keys {
+            if let contentMetadata = options.contentMetadata as? [String: String] {
+                XCTAssertTrue(contentMetadata[metadata] == templateContentMetadata[metadata])
+            } else {
+                XCTFail()
+            }
+        }
+        
+        let templateContentMetrics = ybCT.Content.metrics
+        for metrics in templateContentMetrics.keys {
+            if let contentMetrics = options.contentMetrics as? [String: String] {
+                XCTAssertTrue(contentMetrics[metrics] == templateContentMetrics[metrics])
+            } else {
+                XCTFail()
+            }
+        }
+        
+        XCTAssertTrue(options.contentPackage == ybCT.Content.package)
+        XCTAssertTrue(options.contentSaga == ybCT.Content.saga)
+        XCTAssertTrue(options.contentTvShow == ybCT.Content.tvShow)
+        XCTAssertTrue(options.contentSeason == ybCT.Content.season)
+        XCTAssertTrue(options.contentEpisodeTitle == ybCT.Content.episodeTitle)
+        XCTAssertTrue(options.contentChannel == ybCT.Content.channel)
+        XCTAssertTrue(options.contentId == ybCT.Content.id)
+        XCTAssertTrue(options.contentImdbId == ybCT.Content.imdbId)
+        XCTAssertTrue(options.contentGracenoteId == ybCT.Content.gracenoteId)
+        XCTAssertTrue(options.contentType == ybCT.Content.type)
+        XCTAssertTrue(options.contentGenre == ybCT.Content.genre)
+        XCTAssertTrue(options.contentLanguage == ybCT.Content.language)
+        XCTAssertTrue(options.contentSubtitles == ybCT.Content.subtitles)
+        XCTAssertTrue(options.contentContractedResolution == ybCT.Content.contractedResolution)
+        XCTAssertTrue(options.contentCost == ybCT.Content.cost)
+        XCTAssertTrue(options.contentPrice == ybCT.Content.price)
+        XCTAssertTrue(options.contentPlaybackType == ybCT.Content.playbackType)
+        XCTAssertTrue(options.contentDrm == ybCT.Content.drm)
+
+        // Encoding
+        XCTAssertTrue(options.contentEncodingVideoCodec == ybCT.Content.Encoding.videoCodec)
+        XCTAssertTrue(options.contentEncodingAudioCodec == ybCT.Content.Encoding.audioCodec)
+//        XCTAssertTrue(options.contentEncodingCodecSettings == ybCT.Content.Encoding.codecSettings)
+        XCTAssertTrue(options.contentEncodingCodecProfile == ybCT.Content.Encoding.codecProfile)
+        XCTAssertTrue(options.contentEncodingContainerFormat == ybCT.Content.Encoding.containerFormat)
+        
+        // CustomDimension
+        XCTAssertTrue(options.contentCustomDimension1 == ybCT.Content.CustomDimension.cd1)
+        XCTAssertTrue(options.contentCustomDimension2 == ybCT.Content.CustomDimension.cd2)
+        XCTAssertTrue(options.contentCustomDimension3 == ybCT.Content.CustomDimension.cd3)
+        XCTAssertTrue(options.contentCustomDimension4 == ybCT.Content.CustomDimension.cd4)
+        XCTAssertTrue(options.contentCustomDimension5 == ybCT.Content.CustomDimension.cd5)
+        XCTAssertTrue(options.contentCustomDimension6 == ybCT.Content.CustomDimension.cd6)
+        XCTAssertTrue(options.contentCustomDimension7 == ybCT.Content.CustomDimension.cd7)
+        XCTAssertTrue(options.contentCustomDimension8 == ybCT.Content.CustomDimension.cd8)
+        XCTAssertTrue(options.contentCustomDimension9 == ybCT.Content.CustomDimension.cd9)
+        XCTAssertTrue(options.contentCustomDimension10 == ybCT.Content.CustomDimension.cd10)
+        XCTAssertTrue(options.contentCustomDimension11 == ybCT.Content.CustomDimension.cd11)
+        XCTAssertTrue(options.contentCustomDimension12 == ybCT.Content.CustomDimension.cd12)
+        XCTAssertTrue(options.contentCustomDimension13 == ybCT.Content.CustomDimension.cd13)
+        XCTAssertTrue(options.contentCustomDimension14 == ybCT.Content.CustomDimension.cd14)
+        XCTAssertTrue(options.contentCustomDimension15 == ybCT.Content.CustomDimension.cd15)
+        XCTAssertTrue(options.contentCustomDimension16 == ybCT.Content.CustomDimension.cd16)
+        XCTAssertTrue(options.contentCustomDimension17 == ybCT.Content.CustomDimension.cd17)
+        XCTAssertTrue(options.contentCustomDimension18 == ybCT.Content.CustomDimension.cd18)
+        XCTAssertTrue(options.contentCustomDimension19 == ybCT.Content.CustomDimension.cd19)
+        XCTAssertTrue(options.contentCustomDimension20 == ybCT.Content.CustomDimension.cd20)
+        
+        let templateCustomDimensions = ybCT.Content.customDimensions
+        for dimension in templateCustomDimensions.keys {
+            if let contentCustomDimensions = options.contentCustomDimensions as? [String: String] {
+                XCTAssertTrue(contentCustomDimensions[dimension] == templateCustomDimensions[dimension])
+            } else {
+                XCTFail()
+            }
+        }
+        
+        XCTAssertTrue(options.contentTotalBytes == NSNumber(value: ybCT.Content.totalBytes))
+        XCTAssertTrue(options.sendTotalBytes == NSNumber(booleanLiteral: ybCT.Content.sendTotalBytes))
+    }
     
-    
-    
+    func testBCContentOptions() throws {
+        guard let options = self.ybBCOptions else {
+            XCTFail(ybOptionsNilMessage)
+            return
+        }
+        
+        // Testing properties in Content - ybBackwardCompatibleConfigParams
+        XCTAssertTrue(options.contentResource == ybCT.Content.contentResource)
+
+        // isLive
+        XCTAssertTrue(options.contentIsLive == NSNumber(booleanLiteral: ybCT.Content.contentIsLive))
+        XCTAssertTrue(options.contentIsLiveNoSeek == NSNumber(booleanLiteral: ybCT.Content.contentIsLiveNoSeek))
+        XCTAssertNil(options.contentIsLiveNoMonitor)
+
+        XCTAssertTrue(options.contentTitle == ybCT.Content.contentTitle)
+        XCTAssertTrue(options.program == ybCT.Content.contentProgram)
+        XCTAssertTrue(options.contentDuration == NSNumber(value: ybCT.Content.contentDuration))
+        XCTAssertTrue(options.contentTransactionCode == ybCT.Content.contentTransactionCode)
+        XCTAssertTrue(options.contentBitrate == NSNumber(value: ybCT.Content.contentBitrate))
+        XCTAssertTrue(options.contentThroughput == NSNumber(value: ybCT.Content.contentThroughput))
+        XCTAssertTrue(options.contentRendition == ybCT.Content.contentRendition)
+        XCTAssertTrue(options.contentCdn == ybCT.Content.contentCdn)
+        XCTAssertNil(options.contentCdnNode)
+        XCTAssertNil(options.contentCdnType)
+        XCTAssertTrue(options.contentFps == NSNumber(value: ybCT.Content.contentFps))
+        XCTAssertTrue(options.contentStreamingProtocol == ybCT.Content.contentStreamingProtocol)
+        XCTAssertTrue(options.contentTransportFormat == ybCT.Content.contentTransportFormat)
+        
+        // Some values from the Properties should be inside
+        if let contentMetadata = options.contentMetadata as? [String: String] {
+            XCTAssertNil(contentMetadata["transaction_type"])
+            XCTAssertTrue(contentMetadata["year"] == ybCT.Properties.year)
+            XCTAssertTrue(contentMetadata["cast"] == ybCT.Properties.cast)
+            XCTAssertTrue(contentMetadata["director"] == ybCT.Properties.director)
+            XCTAssertTrue(contentMetadata["owner"] == ybCT.Properties.owner)
+            XCTAssertTrue(contentMetadata["parental"] == ybCT.Properties.parental)
+            XCTAssertTrue(contentMetadata["rating"] == ybCT.Properties.rating)
+            XCTAssertNil(contentMetadata["audioType"])
+            XCTAssertTrue(contentMetadata["audioChannels"] == ybCT.Properties.audioChannels)
+            XCTAssertTrue(contentMetadata["device"] == ybCT.Properties.device)
+            XCTAssertNil(contentMetadata["quality"])
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertNil(options.contentMetrics)
+        
+        XCTAssertTrue(options.contentPackage == ybCT.Content.contentPackage)
+        XCTAssertTrue(options.contentSaga == ybCT.Content.contentSaga)
+        XCTAssertTrue(options.contentTvShow == ybCT.Content.contentTvShow)
+        XCTAssertTrue(options.contentSeason == ybCT.Content.contentSeason)
+        XCTAssertTrue(options.contentEpisodeTitle == ybCT.Content.contentEpisodeTitle)
+        XCTAssertTrue(options.contentChannel == ybCT.Content.contentChannel)
+        XCTAssertTrue(options.contentId == ybCT.Content.contentId)
+        XCTAssertTrue(options.contentImdbId == ybCT.Content.contentImdbId)
+        XCTAssertTrue(options.contentGracenoteId == ybCT.Content.contentGracenoteId)
+        XCTAssertTrue(options.contentType == ybCT.Content.contentType)
+        XCTAssertTrue(options.contentGenre == ybCT.Content.contentGenre)
+        XCTAssertTrue(options.contentLanguage == ybCT.Content.contentLanguage)
+        XCTAssertTrue(options.contentSubtitles == ybCT.Content.contentSubtitles)
+        XCTAssertTrue(options.contentContractedResolution == ybCT.Content.contentContractedResolution)
+        XCTAssertTrue(options.contentCost == ybCT.Content.contentCost)
+        XCTAssertTrue(options.contentPrice == ybCT.Content.contentPrice)
+        XCTAssertTrue(options.contentPlaybackType == ybCT.Content.contentPlaybackType)
+        XCTAssertTrue(options.contentDrm == ybCT.Content.contentDrm)
+
+        // Encoding
+        XCTAssertTrue(options.contentEncodingVideoCodec == ybCT.Content.contentEncodingVideoCodec)
+        XCTAssertTrue(options.contentEncodingAudioCodec == ybCT.Content.contentEncodingAudioCodec)
+//        XCTAssertTrue(options.contentEncodingCodecSettings == ybCT.Content.Encoding.codecSettings)
+        XCTAssertTrue(options.contentEncodingCodecProfile == ybCT.Content.contentEncodingCodecProfile)
+        XCTAssertTrue(options.contentEncodingContainerFormat == ybCT.Content.contentEncodingContainerFormat)
+        
+        // CustomDimension
+        XCTAssertTrue(options.contentCustomDimension1 == ybCT.ContentCustomDimension.contentCustomDimension1)
+        XCTAssertTrue(options.contentCustomDimension2 == ybCT.ContentCustomDimension.contentCustomDimension2)
+        XCTAssertTrue(options.contentCustomDimension3 == ybCT.ContentCustomDimension.contentCustomDimension3)
+        XCTAssertTrue(options.contentCustomDimension4 == ybCT.ContentCustomDimension.contentCustomDimension4)
+        XCTAssertTrue(options.contentCustomDimension5 == ybCT.ContentCustomDimension.contentCustomDimension5)
+        XCTAssertTrue(options.contentCustomDimension6 == ybCT.ContentCustomDimension.contentCustomDimension6)
+        XCTAssertTrue(options.contentCustomDimension7 == ybCT.ContentCustomDimension.contentCustomDimension7)
+        XCTAssertTrue(options.contentCustomDimension8 == ybCT.ContentCustomDimension.contentCustomDimension8)
+        XCTAssertTrue(options.contentCustomDimension9 == ybCT.ContentCustomDimension.contentCustomDimension9)
+        XCTAssertTrue(options.contentCustomDimension10 == ybCT.ContentCustomDimension.contentCustomDimension10)
+        XCTAssertNil(options.contentCustomDimension11)
+        XCTAssertNil(options.contentCustomDimension12)
+        XCTAssertNil(options.contentCustomDimension13)
+        XCTAssertNil(options.contentCustomDimension14)
+        XCTAssertNil(options.contentCustomDimension15)
+        XCTAssertNil(options.contentCustomDimension16)
+        XCTAssertNil(options.contentCustomDimension17)
+        XCTAssertNil(options.contentCustomDimension18)
+        XCTAssertNil(options.contentCustomDimension19)
+        XCTAssertNil(options.contentCustomDimension20)
+        
+        // The ExtraParams should be inside
+        if let contentCustomDimensions = options.contentCustomDimensions as? [String: String] {
+            XCTAssertTrue(contentCustomDimensions["param1"] == ybCT.ExtraParams.param1)
+            XCTAssertTrue(contentCustomDimensions["param2"] == ybCT.ExtraParams.param2)
+            XCTAssertTrue(contentCustomDimensions["param3"] == ybCT.ExtraParams.param3)
+            XCTAssertTrue(contentCustomDimensions["param4"] == ybCT.ExtraParams.param4)
+            XCTAssertTrue(contentCustomDimensions["param5"] == ybCT.ExtraParams.param5)
+            XCTAssertTrue(contentCustomDimensions["param6"] == ybCT.ExtraParams.param6)
+            XCTAssertTrue(contentCustomDimensions["param7"] == ybCT.ExtraParams.param7)
+            XCTAssertTrue(contentCustomDimensions["param8"] == ybCT.ExtraParams.param8)
+            XCTAssertTrue(contentCustomDimensions["param9"] == ybCT.ExtraParams.param9)
+            XCTAssertTrue(contentCustomDimensions["param10"] == ybCT.ExtraParams.param10)
+        } else {
+            XCTFail()
+        }
+        
+        XCTAssertNil(options.contentTotalBytes)
+        XCTAssertTrue(options.sendTotalBytes == NSNumber(booleanLiteral: ybCT.Content.contentSendTotalBytes))
+    }
     
     
     
@@ -421,151 +639,6 @@ class YouboraConfigTests: XCTestCase {
 //        XCTAssertTrue(options.appName == ybCT.appName)
 //        XCTAssertTrue(options.appReleaseVersion == ybCT.appReleaseVersion)
 //    }
-//
-//
-//
-//
-//
-//
-//
-//    func testCustomDimensions() throws {
-//        guard let config = self.ybConfig else {
-//            XCTExpectFailure("YouboraConfig is missing")
-//            return
-//        }
-//        let options: YBOptions = config.options()
-//
-//        // Testing Custom Dimensions aka Extra parameters
-//        XCTAssertNotNil(options.contentCustomDimension1)
-//        XCTAssertNotNil(options.contentCustomDimension2)
-//        XCTAssertNotNil(options.contentCustomDimension3)
-//        XCTAssertNotNil(options.contentCustomDimension4)
-//        XCTAssertNotNil(options.contentCustomDimension5)
-//        XCTAssertNotNil(options.contentCustomDimension6)
-//        XCTAssertNotNil(options.contentCustomDimension7)
-//        XCTAssertNotNil(options.contentCustomDimension8)
-//        XCTAssertNotNil(options.contentCustomDimension9)
-//        XCTAssertNotNil(options.contentCustomDimension10)
-//        XCTAssertNotNil(options.contentCustomDimension11)
-//        XCTAssertNotNil(options.contentCustomDimension12)
-//        XCTAssertNotNil(options.contentCustomDimension13)
-//        XCTAssertNotNil(options.contentCustomDimension14)
-//        XCTAssertNotNil(options.contentCustomDimension15)
-//        XCTAssertNotNil(options.contentCustomDimension16)
-//        XCTAssertNotNil(options.contentCustomDimension17)
-//        XCTAssertNotNil(options.contentCustomDimension18)
-//        XCTAssertNotNil(options.contentCustomDimension19)
-//        XCTAssertNotNil(options.contentCustomDimension20)
-//
-//        // extraParams
-//        XCTAssertTrue(options.contentCustomDimension1 == ybCT.extraParam1)
-//        XCTAssertTrue(options.contentCustomDimension2 == ybCT.extraParam2)
-//        XCTAssertTrue(options.contentCustomDimension3 == ybCT.extraParam3)
-//        XCTAssertTrue(options.contentCustomDimension4 == ybCT.extraParam4)
-//        XCTAssertTrue(options.contentCustomDimension5 == ybCT.extraParam5)
-//        XCTAssertTrue(options.contentCustomDimension6 == ybCT.extraParam6)
-//        XCTAssertTrue(options.contentCustomDimension7 == ybCT.extraParam7)
-//        XCTAssertTrue(options.contentCustomDimension8 == ybCT.extraParam8)
-//        XCTAssertTrue(options.contentCustomDimension9 == ybCT.extraParam9)
-//        XCTAssertTrue(options.contentCustomDimension10 == ybCT.extraParam10)
-//        XCTAssertTrue(options.contentCustomDimension11 == ybCT.extraParam11)
-//        XCTAssertTrue(options.contentCustomDimension12 == ybCT.extraParam12)
-//        XCTAssertTrue(options.contentCustomDimension13 == ybCT.extraParam13)
-//        XCTAssertTrue(options.contentCustomDimension14 == ybCT.extraParam14)
-//        XCTAssertTrue(options.contentCustomDimension15 == ybCT.extraParam15)
-//        XCTAssertTrue(options.contentCustomDimension16 == ybCT.extraParam16)
-//        XCTAssertTrue(options.contentCustomDimension17 == ybCT.extraParam17)
-//        XCTAssertTrue(options.contentCustomDimension18 == ybCT.extraParam18)
-//        XCTAssertTrue(options.contentCustomDimension19 == ybCT.extraParam19)
-//        XCTAssertTrue(options.contentCustomDimension20 == ybCT.extraParam20)
-//    }
-//
-//    func testContentOptions() throws {
-//        guard let config = self.ybConfig else {
-//            XCTExpectFailure("YouboraConfig is missing")
-//            return
-//        }
-//        let options: YBOptions = config.options()
-//
-//        // Testing Content options
-//        XCTAssertNotNil(options.program)
-//        XCTAssertNotNil(options.contentResource)
-//        XCTAssertNotNil(options.contentIsLive)
-//        XCTAssertNotNil(options.contentTitle)
-//        XCTAssertNotNil(options.contentDuration)
-//        XCTAssertNotNil(options.contentTransactionCode)
-//        XCTAssertNotNil(options.contentBitrate)
-//        XCTAssertNotNil(options.sendTotalBytes)
-//        XCTAssertNotNil(options.contentStreamingProtocol)
-//        XCTAssertNotNil(options.contentTransportFormat)
-//        XCTAssertNotNil(options.contentThroughput)
-//        XCTAssertNotNil(options.contentRendition)
-//        XCTAssertNotNil(options.contentCdn)
-//        XCTAssertNotNil(options.contentFps)
-//        XCTAssertNotNil(options.contentIsLiveNoSeek)
-//        XCTAssertNotNil(options.contentPackage)
-//        XCTAssertNotNil(options.contentSaga)
-//        XCTAssertNotNil(options.contentTvShow)
-//        XCTAssertNotNil(options.contentSeason)
-//        XCTAssertNotNil(options.contentEpisodeTitle)
-//        XCTAssertNotNil(options.contentChannel)
-//        XCTAssertNotNil(options.contentId)
-//        XCTAssertNotNil(options.contentImdbId)
-//        XCTAssertNotNil(options.contentGracenoteId)
-//        XCTAssertNotNil(options.contentType)
-//        XCTAssertNotNil(options.contentGenre)
-//        XCTAssertNotNil(options.contentLanguage)
-//        XCTAssertNotNil(options.contentSubtitles)
-//        XCTAssertNotNil(options.contentContractedResolution)
-//        XCTAssertNotNil(options.contentCost)
-//        XCTAssertNotNil(options.contentPrice)
-//        XCTAssertNotNil(options.contentPlaybackType)
-//        XCTAssertNotNil(options.contentDrm)
-//        XCTAssertNotNil(options.contentEncodingVideoCodec)
-//        XCTAssertNotNil(options.contentEncodingAudioCodec)
-//        XCTAssertNotNil(options.contentEncodingCodecProfile)
-//        XCTAssertNotNil(options.contentEncodingContainerFormat)
-//
-//        //
-//        XCTAssertTrue(options.program == ybCT.contentProgram)
-//        XCTAssertTrue(options.contentResource == ybCT.contentResource)
-//        XCTAssertTrue(options.contentIsLive as? Bool == ybCT.contentIsLive)
-//        XCTAssertTrue(options.contentTitle == ybCT.contentTitle)
-//        XCTAssertTrue(options.contentDuration as? Double == ybCT.contentDuration)
-//        XCTAssertTrue(options.contentTransactionCode == ybCT.contentTransactionCode)
-//        XCTAssertTrue(options.contentBitrate as? Double == ybCT.contentBitrate)
-//        XCTAssertTrue(options.sendTotalBytes as? Bool == ybCT.contentSendTotalBytes)
-//        XCTAssertTrue(options.contentStreamingProtocol == ybCT.contentStreamingProtocol)
-//        XCTAssertTrue(options.contentTransportFormat == ybCT.contentTransportFormat)
-//        XCTAssertTrue(options.contentThroughput as? Int == ybCT.contentThroughput)
-//        XCTAssertTrue(options.contentRendition == ybCT.contentRendition)
-//        XCTAssertTrue(options.contentCdn == ybCT.contentCdn)
-//        XCTAssertTrue(options.contentFps as? Double == ybCT.contentFps)
-//        XCTAssertTrue(options.contentIsLiveNoSeek as? Bool != ybCT.isDVR)
-//        XCTAssertTrue(options.contentPackage == ybCT.contentPackage)
-//        XCTAssertTrue(options.contentSaga == ybCT.contentSaga)
-//        XCTAssertTrue(options.contentTvShow == ybCT.contentTvShow)
-//        XCTAssertTrue(options.contentSeason == ybCT.contentSeason)
-//        XCTAssertTrue(options.contentEpisodeTitle == ybCT.contentEpisodeTitle)
-//        XCTAssertTrue(options.contentChannel == ybCT.contentChannel)
-//        XCTAssertTrue(options.contentId == ybCT.contentId)
-//        XCTAssertTrue(options.contentImdbId == ybCT.contentImdbId)
-//        XCTAssertTrue(options.contentGracenoteId == ybCT.contentGracenoteId)
-//        XCTAssertTrue(options.contentType == ybCT.contentType)
-//        XCTAssertTrue(options.contentGenre == ybCT.contentGenre)
-//        XCTAssertTrue(options.contentLanguage == ybCT.contentLanguage)
-//        XCTAssertTrue(options.contentSubtitles == ybCT.contentSubtitles)
-//        XCTAssertTrue(options.contentContractedResolution == ybCT.contentContractedResolution)
-//        XCTAssertTrue(options.contentCost == ybCT.contentCost)
-//        XCTAssertTrue(options.contentPrice == ybCT.contentPrice)
-//        XCTAssertTrue(options.contentPlaybackType == ybCT.contentPlaybackType)
-//        XCTAssertTrue(options.contentDrm == ybCT.contentDrm)
-//        XCTAssertTrue(options.contentEncodingVideoCodec == ybCT.contentEncodingVideoCodec)
-//        XCTAssertTrue(options.contentEncodingAudioCodec == ybCT.contentEncodingAudioCodec)
-//        XCTAssertTrue(options.contentEncodingCodecProfile == ybCT.contentEncodingCodecProfile)
-//        XCTAssertTrue(options.contentEncodingContainerFormat == ybCT.contentEncodingContainerFormat)
-//    }
-//
 //
 //
 //    func testErrorsOptions() throws {
@@ -588,34 +661,5 @@ class YouboraConfigTests: XCTestCase {
 //        XCTAssertTrue(options.nonFatalErrors?.last == ybCT.errorsNonFatal.last)
 //    }
 //
-//
-//
-//
-//
-//    func testContentMetadataOptions() throws {
-//        guard let config = self.ybConfig else {
-//            XCTExpectFailure("YouboraConfig is missing")
-//            return
-//        }
-//        let options: YBOptions = config.options()
-//
-//        // Testing Content
-//        XCTAssertNotNil(options.contentMetadata)
-//
-//        XCTAssertNotNil(options.contentMetadata?["genre"])
-//        XCTAssertNotNil(options.contentMetadata?["type"])
-//        XCTAssertNotNil(options.contentMetadata?["transaction_type"])
-//        XCTAssertNotNil(options.contentMetadata?["year"])
-//        XCTAssertNotNil(options.contentMetadata?["cast"])
-//        XCTAssertNotNil(options.contentMetadata?["director"])
-//        XCTAssertNotNil(options.contentMetadata?["owner"])
-//        XCTAssertNotNil(options.contentMetadata?["parental"])
-//        XCTAssertNotNil(options.contentMetadata?["price"])
-//        XCTAssertNotNil(options.contentMetadata?["rating"])
-//        XCTAssertNotNil(options.contentMetadata?["audioType"])
-//        XCTAssertNotNil(options.contentMetadata?["audioChannels"])
-//        XCTAssertNotNil(options.contentMetadata?["device"])
-//        XCTAssertNotNil(options.contentMetadata?["quality"])
-//    }
     
 }

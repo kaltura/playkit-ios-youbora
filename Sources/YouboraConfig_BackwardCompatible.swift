@@ -400,7 +400,8 @@ extension YouboraConfig {
             options.cdnSwitchHeader = parseCdnSwitchHeader
         }
         
-        if options.parseCdnNodeList == nil, let parseCdnNodeList = parse.parseCdnNodeList {
+        // options.parseCdnNodeList is never nil cause it has the default values from Youbora.
+        if parse.cdnNode?.list == nil, let parseCdnNodeList = parse.parseCdnNodeList {
             options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
         }
         
@@ -440,6 +441,10 @@ extension YouboraConfig {
         
         if options.deviceBrand == nil {
             options.deviceBrand = device.deviceBrand
+        }
+        
+        if options.deviceCode == nil {
+            options.deviceCode = device.deviceCode
         }
         
         if options.deviceUUID == nil {
@@ -545,6 +550,10 @@ extension YouboraConfig {
             options.contentType = properties.type
         }
         
+        if options.contentPrice == nil {
+            options.contentPrice = properties.price
+        }
+        
         var additionalContentMetadata: [String: String] = [:]
         if let transactionType = properties.transactionType, !transactionType.isEmpty {
             additionalContentMetadata["transaction_type"] = transactionType
@@ -563,9 +572,6 @@ extension YouboraConfig {
         }
         if let parental = properties.parental, !parental.isEmpty {
             additionalContentMetadata["parental"] = parental
-        }
-        if let price = properties.price, !price.isEmpty {
-            additionalContentMetadata["price"] = price
         }
         if let rating = properties.rating, !rating.isEmpty {
             additionalContentMetadata["rating"] = rating

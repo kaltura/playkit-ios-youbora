@@ -254,8 +254,8 @@ struct Content: Decodable {
     let cdnNode: String?
     let cdnType: String? // https://documentation.npaw.com/npaw-integration/docs/setting-options-and-metadata#cdn-node-types
     let fps: Double?
-    let streamingProtocol: String?
-    let transportFormat: String?
+    let streamingProtocol: String? // Valid values by Youbora: "HDS"/"HLS"/"MSS"/"DASH"/"RTMP"/"RTP"/"RTSP"
+    let transportFormat: String? // Valid values by Youbora: "HLS-TS"/"HLS-FMP4"/"HLS-CMF"
     let metadata: [String: String]?
     let metrics: [String: String]?
     let package: String?

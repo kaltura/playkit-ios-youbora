@@ -159,8 +159,8 @@ class YouboraConfigTemplate {
         static let cdnNode = "cdnNode"
         static let cdnType = "cdnType"
         static let fps = 60
-        static let streamingProtocol = "HLS"
-        static let transportFormat = "transportFormat"
+        static let streamingProtocol = "HLS" // Youbora has logic to check the value and if it's not one of the following it won't be set ("HDS"/"HLS"/"MSS"/"DASH"/"RTMP"/"RTP"/"RTSP")
+        static let transportFormat = "HLS-TS" // Youbora has logic to check the value and if it's not one of the following it won't be set ("HLS-TS"/"HLS-FMP4"/"HLS-CMF")
         static let metadata = [
             "genre": "genreTest",
             "language": "languageTest",
@@ -242,8 +242,8 @@ class YouboraConfigTemplate {
         static let contentTransactionCode = "BC_TransactionCode template"
         static let contentBitrate: Double = 123231.32
         static let contentSendTotalBytes: Bool = true
-        static let contentStreamingProtocol = "BC_HLS"
-        static let contentTransportFormat = "BC_HLS-TS"
+        static let contentStreamingProtocol = "DASH"
+        static let contentTransportFormat = "HLS-CMF"
         static let contentThroughput: Int = 2
         static let contentRendition = "BC_Rendition template"
         static let contentCdn = "BC_KALTURA"
@@ -350,16 +350,16 @@ class YouboraConfigTemplate {
     }
     
     class ExtraParams {
-        static let extraParam1 = "BC_MyParam1"
-        static let extraParam2 = "BC_MyParam2"
-        static let extraParam3 = "BC_MyParam3"
-        static let extraParam4 = "BC_MyParam4"
-        static let extraParam5 = "BC_MyParam5"
-        static let extraParam6 = "BC_MyParam6"
-        static let extraParam7 = "BC_MyParam7"
-        static let extraParam8 = "BC_MyParam8"
-        static let extraParam9 = "BC_MyParam9"
-        static let extraParam10 = "BC_MyParam10"
+        static let param1 = "BC_MyParam1"
+        static let param2 = "BC_MyParam2"
+        static let param3 = "BC_MyParam3"
+        static let param4 = "BC_MyParam4"
+        static let param5 = "BC_MyParam5"
+        static let param6 = "BC_MyParam6"
+        static let param7 = "BC_MyParam7"
+        static let param8 = "BC_MyParam8"
+        static let param9 = "BC_MyParam9"
+        static let param10 = "BC_MyParam10"
     }
     
     class Ads {
@@ -388,7 +388,7 @@ class YouboraConfigTemplate {
     
     class Media {
         static let resource = "BC_Media_resource"
-        static let isLive = "BC_Media_isLive"
+        static let isLive = true
         static let isDVR = true
         static let title = "BC_Media_title"
         static let title2 = "BC_Media_title2"
@@ -599,28 +599,28 @@ extension YouboraConfigTemplate {
             "appReleaseVersion": Template.App.appReleaseVersion
         ],
         "extraParams": [
-            "extraParam1": Template.ExtraParams.extraParam1,
-            "extraParam2": Template.ExtraParams.extraParam2,
-            "extraParam3": Template.ExtraParams.extraParam3,
-            "extraParam4": Template.ExtraParams.extraParam4,
-            "extraParam5": Template.ExtraParams.extraParam5,
-            "extraParam6": Template.ExtraParams.extraParam6,
-            "extraParam7": Template.ExtraParams.extraParam7,
-            "extraParam8": Template.ExtraParams.extraParam8,
-            "extraParam9": Template.ExtraParams.extraParam9,
-            "extraParam10": Template.ExtraParams.extraParam10
+            "param1": Template.ExtraParams.param1,
+            "param2": Template.ExtraParams.param2,
+            "param3": Template.ExtraParams.param3,
+            "param4": Template.ExtraParams.param4,
+            "param5": Template.ExtraParams.param5,
+            "param6": Template.ExtraParams.param6,
+            "param7": Template.ExtraParams.param7,
+            "param8": Template.ExtraParams.param8,
+            "param9": Template.ExtraParams.param9,
+            "param10": Template.ExtraParams.param10
         ],
         "contentCustomDimensions": [
-            "contentCustomDimension1": Template.ExtraParams.extraParam1,
-            "contentCustomDimension2": Template.ExtraParams.extraParam2,
-            "contentCustomDimension3": Template.ExtraParams.extraParam3,
-            "contentCustomDimension4": Template.ExtraParams.extraParam4,
-            "contentCustomDimension5": Template.ExtraParams.extraParam5,
-            "contentCustomDimension6": Template.ExtraParams.extraParam6,
-            "contentCustomDimension7": Template.ExtraParams.extraParam7,
-            "contentCustomDimension8": Template.ExtraParams.extraParam8,
-            "contentCustomDimension9": Template.ExtraParams.extraParam9,
-            "contentCustomDimension10": Template.ExtraParams.extraParam10
+            "contentCustomDimension1": Template.ContentCustomDimension.contentCustomDimension1,
+            "contentCustomDimension2": Template.ContentCustomDimension.contentCustomDimension2,
+            "contentCustomDimension3": Template.ContentCustomDimension.contentCustomDimension3,
+            "contentCustomDimension4": Template.ContentCustomDimension.contentCustomDimension4,
+            "contentCustomDimension5": Template.ContentCustomDimension.contentCustomDimension5,
+            "contentCustomDimension6": Template.ContentCustomDimension.contentCustomDimension6,
+            "contentCustomDimension7": Template.ContentCustomDimension.contentCustomDimension7,
+            "contentCustomDimension8": Template.ContentCustomDimension.contentCustomDimension8,
+            "contentCustomDimension9": Template.ContentCustomDimension.contentCustomDimension9,
+            "contentCustomDimension10": Template.ContentCustomDimension.contentCustomDimension10
         ],
         "ads": [
             "adBreaksTime": Template.Ads.adBreaksTime,
