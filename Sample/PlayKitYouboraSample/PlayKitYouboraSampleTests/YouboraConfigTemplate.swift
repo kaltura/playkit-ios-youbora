@@ -26,18 +26,6 @@ class YouboraConfigTemplate {
     static let waitForMetadata = false
     static let pendingMetadata = ["title", "username"]
     static let householdId = "qwerty HH"
-    // MARK: - Backward Compatible
-    static let userEmail = "BC_aaa1@gmail.com"
-    static let userAnonymousId = "BC_AnonymousUser123"
-    static let userType = "BC_paid"
-    static let obfuscateIp = true
-    static let userObfuscateIp = true
-    static let contentCDN = "BC_contentCDN"
-    static let houseHoldId = "BC_qwerty HH"
-    static let isEnabled = true
-    static let isForceInit = true
-    static let appName = "BC_My App name"
-    // End - Backward Compatible
     
     class User {
         static let anonymousId = "AnonymousUser123"
@@ -99,27 +87,12 @@ class YouboraConfigTemplate {
             static let requestDebugHeaders = true
             static let list = ["Akamai", "Amazon", "Cloudfront", "Level3", "Fastly", "Highwinds", "Telefonica", "Edgecast", "NosOtt", "Balancer"]
         }
-        
-        // MARK: - Backward Compatible
-        static let parseManifest = true
-        static let parseCdnNode = true
-        static let parseCdnSwitchHeader = true
-        static let parseCdnNodeList = ["Cloudfront", "Level3", "Fastly"]
-        static let parseCdnNameHeader = "x-cdn-forward-test"
-        static let parseCdnTTL = 55
-        // End - Backward Compatible
     }
     
     class Network {
         static let ip = "1.1.1.1"
         static let isp = "ISPTest"
         static let connectionType = "connectionType"
-        
-        // MARK: - Backward Compatible
-        static let networkIP = "127.0.0.1"
-        static let networkConnectionType = "cable/dsl"
-        static let networkIsp = "orange"
-        // End - Backward Compatible
     }
     
     class Device {
@@ -133,17 +106,6 @@ class YouboraConfigTemplate {
         static let isAnonymous = false
         static let id = "myUniqueDeviceId"
         static let EDID = "123456"
-        
-        // MARK: - Backward Compatible
-        static let deviceBrand = "BC_deviceBrand"
-        static let deviceCode = "BC_deviceCode"
-        static let deviceId = "BC_deviceId"
-        static let deviceModel = "BC_deviceModel"
-        static let deviceOsName = "BC_deviceOsName"
-        static let deviceOsVersion = "BC_deviceOsVersion"
-        static let deviceType = "BC_deviceType"
-        static let deviceIsAnonymous = false
-        // End - Backward Compatible
     }
 
     class Content {
@@ -229,68 +191,20 @@ class YouboraConfigTemplate {
             static let cd19 = "Custom Dimension 19"
             static let cd20 = "Custom Dimension 20"
         }
-        
-        // MARK: - Backward Compatible
-        static let isDVR = true
-        static let title2 = "BC_content title 2"
-        static let contentProgram = "BC_Program template" //contentTitle2
-        static let contentResource = "BC_Resource template"
-        static let contentIsLive = true
-        static let contentTitle = "BC_Title template"
-        static let contentTitle2 = "BC_Title2 template"
-        static let contentDuration: Double = 123.5
-        static let contentTransactionCode = "BC_TransactionCode template"
-        static let contentBitrate: Double = 123231.32
-        static let contentSendTotalBytes: Bool = true
-        static let contentStreamingProtocol = "DASH"
-        static let contentTransportFormat = "HLS-CMF"
-        static let contentThroughput: Int = 2
-        static let contentRendition = "BC_Rendition template"
-        static let contentCdn = "BC_KALTURA"
-        static let contentFps: Double = 60.0
-        static let contentIsLiveNoSeek: Bool = true
-        static let contentPackage = "BC_Package template"
-        static let contentSaga = "BC_Saga template"
-        static let contentTvShow = "BC_TvShow template"
-        static let contentSeason = "BC_19"
-        static let contentEpisodeTitle = "BC_EpisodeTitle template"
-        static let contentChannel = "BC_Channel template"
-        static let contentId = "BC_ASD323DDSFA321"
-        static let contentImdbId = "BC_1234567897654"
-        static let contentGracenoteId = "BC_kdkdk488447yyfhfhf7373"
-        static let contentType = "BC_Type template"
-        static let contentGenre = "BC_Drama"
-        static let contentLanguage = "BC_EN"
-        static let contentSubtitles = "BC_DE"
-        static let contentContractedResolution = "BC_1080p"
-        static let contentCost = "BC_FREE"
-        static let contentPrice = "BC_0 USD"
-        static let contentPlaybackType = "BC_PlaybackType template"
-        static let contentDrm = "BC_FPS"
-        static let contentEncodingVideoCodec = "BC_mpeg"
-        static let contentEncodingAudioCodec = "BC_dd"
-        static let contentEncodingCodecProfile = "BC_EncodingCodecProfile template"
-        static let contentEncodingContainerFormat = "BC_EncodingContainerFormat template"
-        // End - Backward Compatible
     }
-    
-
     
     class App {
         static let name = "myCustomApp"
         static let releaseVersion = "0.1-beta"
-        
-        // MARK: - Backward Compatible
-        static let appName = "BC_App_appName"
-        static let appReleaseVersion = "BC_App_appReleaseVersion"
-        // End - Backward Compatible
     }
     
     class Session {
         static let metrics: [String : Any] = [
             "metricskey": ["test": 66],
             "metricskey2": "test",
-            "metricskey3": 2
+            "metricskey3": 2,
+            "metricskey4": 4.6,
+            "metricskey5": true
         ]
     }
     
@@ -298,103 +212,6 @@ class YouboraConfigTemplate {
         static let fatal = ["errorcode1", "errorcode2"]
         static let nonFatal = ["errorcode3", "errorcode4"]
         static let ignore = ["errorcode5", "errorcode6"]
-        
-        // MARK: - Backward Compatible
-        static let errorsIgnore = ["exception1", "exception2"]
-        static let errorsFatal = ["exception3", "exception4"]
-        static let errorsNonFatal = ["exception5", "exception6"]
-        // End - Backward Compatible
-    }
-    
-    
-    // MARK: - Backward Compatible
-    
-    class Properties {
-        static let genre = "BC genre"
-        static let type = "BC type"
-        static let transactionType = "BC transactionType"
-        static let year = "BC year"
-        static let cast = "BC cast"
-        static let director = "BC director"
-        static let owner = "BC owner"
-        static let parental = "BC parental"
-        static let price = "BC price"
-        static let rating = "BC rating"
-        static let audioType = "BC audioType"
-        static let audioChannels = "BC audioChannels"
-        static let device = "BC device"
-        static let quality = "BC quality"
-    }
-    
-    class ContentCustomDimension {
-        static let contentCustomDimension1 = "BC_contentCustomDimension1"
-        static let contentCustomDimension2 = "BC_contentCustomDimension2"
-        static let contentCustomDimension3 = "BC_contentCustomDimension3"
-        static let contentCustomDimension4 = "BC_contentCustomDimension4"
-        static let contentCustomDimension5 = "BC_contentCustomDimension5"
-        static let contentCustomDimension6 = "BC_contentCustomDimension6"
-        static let contentCustomDimension7 = "BC_contentCustomDimension7"
-        static let contentCustomDimension8 = "BC_contentCustomDimension8"
-        static let contentCustomDimension9 = "BC_contentCustomDimension9"
-        static let contentCustomDimension10 = "BC_contentCustomDimension10"
-        static let contentCustomDimension11 = "BC_contentCustomDimension11"
-        static let contentCustomDimension12 = "BC_contentCustomDimension12"
-        static let contentCustomDimension13 = "BC_contentCustomDimension13"
-        static let contentCustomDimension14 = "BC_contentCustomDimension14"
-        static let contentCustomDimension15 = "BC_contentCustomDimension15"
-        static let contentCustomDimension16 = "BC_contentCustomDimension16"
-        static let contentCustomDimension17 = "BC_contentCustomDimension17"
-        static let contentCustomDimension18 = "BC_contentCustomDimension18"
-        static let contentCustomDimension19 = "BC_contentCustomDimension19"
-        static let contentCustomDimension20 = "BC_contentCustomDimension20"
-    }
-    
-    class ExtraParams {
-        static let param1 = "BC_MyParam1"
-        static let param2 = "BC_MyParam2"
-        static let param3 = "BC_MyParam3"
-        static let param4 = "BC_MyParam4"
-        static let param5 = "BC_MyParam5"
-        static let param6 = "BC_MyParam6"
-        static let param7 = "BC_MyParam7"
-        static let param8 = "BC_MyParam8"
-        static let param9 = "BC_MyParam9"
-        static let param10 = "BC_MyParam10"
-    }
-    
-    class Ads {
-        static let adBreaksTime = [10, 20, 30]
-        static let adCampaign = "BC_Campaign Name 1"
-        static let campaign = "BC_Campaign Name 2"
-        static let adCreativeId = "BC_123456"
-        static let adExpectedBreaks = 123
-        static let adGivenBreaks = 234
-        static let adProvider = "BC_Provider name"
-        static let adResource = "BC_Some resources"
-        static let adTitle = "BC_Ad title"
-        static let adGivenAds = 3
-        
-        static let adCustomDimension1 = "BC_My_adCustomDimension1"
-        static let adCustomDimension2 = "BC_My_adCustomDimension2"
-        static let adCustomDimension3 = "BC_My_adCustomDimension3"
-        static let adCustomDimension4 = "BC_My_adCustomDimension4"
-        static let adCustomDimension5 = "BC_My_adCustomDimension5"
-        static let adCustomDimension6 = "BC_My_adCustomDimension6"
-        static let adCustomDimension7 = "BC_My_adCustomDimension7"
-        static let adCustomDimension8 = "BC_My_adCustomDimension8"
-        static let adCustomDimension9 = "BC_My_adCustomDimension9"
-        static let adCustomDimension10 = "BC_My_adCustomDimension10"
-    }
-    
-    class Media {
-        static let resource = "BC_Media_resource"
-        static let isLive = true
-        static let isDVR = true
-        static let title = "BC_Media_title"
-        static let title2 = "BC_Media_title2"
-        static let program = "BC_Media_program"
-        static let duration = 222
-        static let transactionCode = "BC_Media_transactionCode"
     }
 }
 
@@ -571,161 +388,6 @@ extension YouboraConfigTemplate {
             "fatal": Template.Errors.fatal,
             "nonFatal": Template.Errors.nonFatal,
             "ignore": Template.Errors.ignore
-        ]
-    ]
-    
-    static let ybBackwardCompatibleConfigParams: [String: Any] = [
-        "accountCode": Template.accountCode,
-        "username": Template.username,
-        "userEmail": Template.userEmail,
-        "userType": Template.userType, // optional any string - free / paid etc.
-        "userAnonymousId": Template.userAnonymousId,
-        "userObfuscateIp": Template.userObfuscateIp,
-        "houseHoldId": Template.houseHoldId, // optional which device is used to play
-        "httpSecure": Template.httpSecure, // youbora events will be sent via https
-        "autoDetectBackground": Template.autoDetectBackground,
-        "isEnabled": Template.isEnabled,
-        "isForceInit": Template.isForceInit,
-        "parse": [
-            "parseManifest": Template.Parse.parseManifest,
-            "parseCdnNode": Template.Parse.parseCdnNode,
-            "parseCdnSwitchHeader": Template.Parse.parseCdnSwitchHeader,
-            "parseCdnNodeList": Template.Parse.parseCdnNodeList,
-            "parseCdnNameHeader": Template.Parse.parseCdnNameHeader,
-            "parseCdnTTL": Template.Parse.parseCdnTTL
-        ],
-        "app": [
-            "appName": Template.App.appName,
-            "appReleaseVersion": Template.App.appReleaseVersion
-        ],
-        "extraParams": [
-            "param1": Template.ExtraParams.param1,
-            "param2": Template.ExtraParams.param2,
-            "param3": Template.ExtraParams.param3,
-            "param4": Template.ExtraParams.param4,
-            "param5": Template.ExtraParams.param5,
-            "param6": Template.ExtraParams.param6,
-            "param7": Template.ExtraParams.param7,
-            "param8": Template.ExtraParams.param8,
-            "param9": Template.ExtraParams.param9,
-            "param10": Template.ExtraParams.param10
-        ],
-        "contentCustomDimensions": [
-            "contentCustomDimension1": Template.ContentCustomDimension.contentCustomDimension1,
-            "contentCustomDimension2": Template.ContentCustomDimension.contentCustomDimension2,
-            "contentCustomDimension3": Template.ContentCustomDimension.contentCustomDimension3,
-            "contentCustomDimension4": Template.ContentCustomDimension.contentCustomDimension4,
-            "contentCustomDimension5": Template.ContentCustomDimension.contentCustomDimension5,
-            "contentCustomDimension6": Template.ContentCustomDimension.contentCustomDimension6,
-            "contentCustomDimension7": Template.ContentCustomDimension.contentCustomDimension7,
-            "contentCustomDimension8": Template.ContentCustomDimension.contentCustomDimension8,
-            "contentCustomDimension9": Template.ContentCustomDimension.contentCustomDimension9,
-            "contentCustomDimension10": Template.ContentCustomDimension.contentCustomDimension10
-        ],
-        "ads": [
-            "adBreaksTime": Template.Ads.adBreaksTime,
-            "adCampaign": Template.Ads.adCampaign,
-            "campaign": Template.Ads.campaign,
-            "adCreativeId": Template.Ads.adCreativeId,
-            "adExpectedBreaks": Template.Ads.adExpectedBreaks,
-            "adGivenBreaks": Template.Ads.adGivenBreaks,
-            "adProvider": Template.Ads.adProvider,
-            "adResource": Template.Ads.adResource,
-            "adTitle": Template.Ads.adTitle,
-            "adGivenAds": Template.Ads.adGivenAds,
-            "adCustomDimensions": [
-                "adCustomDimension1": Template.Ads.adCustomDimension1,
-                "adCustomDimension2": Template.Ads.adCustomDimension2,
-                "adCustomDimension3": Template.Ads.adCustomDimension3,
-                "adCustomDimension4": Template.Ads.adCustomDimension4,
-                "adCustomDimension5": Template.Ads.adCustomDimension5,
-                "adCustomDimension6": Template.Ads.adCustomDimension6,
-                "adCustomDimension7": Template.Ads.adCustomDimension7,
-                "adCustomDimension8": Template.Ads.adCustomDimension8,
-                "adCustomDimension9": Template.Ads.adCustomDimension9,
-                "adCustomDimension10": Template.Ads.adCustomDimension10
-            ]
-        ],
-        "media": [
-            "resource": Template.Media.resource,
-            "isLive": Template.Media.isLive,
-            "isDVR": Template.Media.isDVR,
-            "title": Template.Media.title,
-            "title2": Template.Media.title2,
-            "program": Template.Media.program,
-            "duration": Template.Media.duration,
-            "transactionCode": Template.Media.transactionCode
-        ],
-        "content": [
-            "contentProgram": Template.Content.contentProgram, //contentTitle2
-            "contentResource": Template.Content.contentResource,
-            "contentIsLive": Template.Content.contentIsLive,
-            "contentTitle": Template.Content.contentTitle,
-            "contentTitle2": Template.Content.contentTitle2,
-            "contentDuration": Template.Content.contentDuration,
-            "contentTransactionCode": Template.Content.contentTransactionCode,
-            "contentBitrate": Template.Content.contentBitrate,
-            "contentSendTotalBytes": Template.Content.contentSendTotalBytes,
-            "contentStreamingProtocol": Template.Content.contentStreamingProtocol,
-            "contentTransportFormat": Template.Content.contentTransportFormat,
-            "contentThroughput": Template.Content.contentThroughput,
-            "contentRendition": Template.Content.contentRendition,
-            "contentCdn": Template.Content.contentCdn,
-            "contentFps": Template.Content.contentFps,
-            "contentIsLiveNoSeek": Template.Content.contentIsLiveNoSeek,
-            "contentPackage": Template.Content.contentPackage,
-            "contentSaga": Template.Content.contentSaga,
-            "contentTvShow": Template.Content.contentTvShow,
-            "contentSeason": Template.Content.contentSeason,
-            "contentEpisodeTitle": Template.Content.contentEpisodeTitle,
-            "contentChannel": Template.Content.contentChannel,
-            "contentId": Template.Content.contentId,
-            "contentImdbId": Template.Content.contentImdbId,
-            "contentGracenoteId": Template.Content.contentGracenoteId,
-            "contentType": Template.Content.contentType,
-            "contentGenre": Template.Content.contentGenre,
-            "contentLanguage": Template.Content.contentLanguage,
-            "contentSubtitles": Template.Content.contentSubtitles,
-            "contentContractedResolution": Template.Content.contentContractedResolution,
-            "contentCost": Template.Content.contentCost,
-            "contentPrice": Template.Content.contentPrice,
-            "contentPlaybackType": Template.Content.contentPlaybackType,
-            "contentDrm": Template.Content.contentDrm,
-            "contentEncodingVideoCodec": Template.Content.contentEncodingVideoCodec,
-            "contentEncodingAudioCodec": Template.Content.contentEncodingAudioCodec,
-            "contentEncodingCodecProfile": Template.Content.contentEncodingCodecProfile,
-            "contentEncodingContainerFormat": Template.Content.contentEncodingContainerFormat,
-            "isDVR": Template.Content.isDVR
-        ],
-        "device": [
-            "deviceBrand": Template.Device.deviceBrand,
-            "deviceCode": Template.Device.deviceCode,
-            "deviceId": Template.Device.deviceId,
-            "deviceModel": Template.Device.deviceModel,
-            "deviceOsName": Template.Device.deviceOsName,
-            "deviceOsVersion": Template.Device.deviceOsVersion,
-            "deviceType": Template.Device.deviceType,
-            "deviceIsAnonymous": Template.Device.deviceIsAnonymous
-        ],
-        "network": [
-            "networkIP": Template.Network.networkIP,
-            "networkIsp": Template.Network.networkIsp,
-            "networkConnectionType": Template.Network.networkConnectionType
-        ],
-        "errors": [
-            "errorsIgnore": Template.Errors.errorsIgnore,
-            "errorsFatal": Template.Errors.errorsFatal,
-            "errorsNonFatal": Template.Errors.errorsNonFatal
-        ],
-        "properties": [
-            "year": Template.Properties.year,
-            "cast": Template.Properties.cast,
-            "director": Template.Properties.director,
-            "owner": Template.Properties.owner,
-            "parental": Template.Properties.parental,
-            "rating": Template.Properties.rating,
-            "audioChannels": Template.Properties.audioChannels,
-            "device": Template.Properties.device
         ]
     ]
 }
