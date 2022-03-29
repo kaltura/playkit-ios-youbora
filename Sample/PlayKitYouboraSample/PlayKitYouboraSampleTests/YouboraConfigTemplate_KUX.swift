@@ -9,12 +9,12 @@
 // A test case for KUX sent values.
 extension YouboraConfigTemplate {
     class KUXValues {
-        static let accountCode = "cetin"
-        static let username = "b61f49d6-3931-3c56-9236-9502ae4d6ce4"
+        static let accountCode = "testKUXAccountCode"
+        static let username = "testUserName"
         
         class App {
             static let releaseVersion = "1.4.1"
-            static let name = "com.Kaltura.telenorserbia.web"
+            static let name = "testAppName"
         }
         
         class Content {
@@ -26,7 +26,7 @@ extension YouboraConfigTemplate {
             static let program = "Lovac na starine"
             
             class CustomDimension {
-                static let cd1 = "3200"
+                static let cd1 = "testCD"
             }
         }
     }
