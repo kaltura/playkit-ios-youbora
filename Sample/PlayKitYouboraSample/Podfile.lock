@@ -1,28 +1,28 @@
 PODS:
-  - KalturaNetKit (1.5.0):
-    - KalturaNetKit/Core (= 1.5.0)
-  - KalturaNetKit/Core (1.5.0):
+  - KalturaNetKit (1.5.1):
+    - KalturaNetKit/Core (= 1.5.1)
+  - KalturaNetKit/Core (1.5.1):
     - SwiftyJSON (= 5.0.0)
   - ObjcExceptionBridging (1.0.1):
     - ObjcExceptionBridging/ObjcExceptionBridging (= 1.0.1)
   - ObjcExceptionBridging/ObjcExceptionBridging (1.0.1)
-  - PlayKit/AnalyticsCommon (3.20.1):
+  - PlayKit/AnalyticsCommon (3.25.0):
     - PlayKit/Core
-  - PlayKit/Core (3.20.1):
-    - KalturaNetKit (~> 1.4)
+  - PlayKit/Core (3.25.0):
+    - KalturaNetKit (~> 1.5.1)
     - PlayKitUtils (~> 0.5)
     - SwiftyJSON (= 5.0.0)
     - XCGLogger (= 7.0.0)
   - PlayKitUtils (0.5.0)
-  - PlayKitYoubora (1.8.0.0000):
-    - PlayKit/AnalyticsCommon (~> 3.8)
-    - YouboraLib (= 6.5.39)
+  - PlayKitYoubora (1.12.0.0000):
+    - PlayKit/AnalyticsCommon (~> 3.22)
+    - YouboraLib (= 6.6.12)
   - SwiftyJSON (5.0.0)
   - XCGLogger (7.0.0):
     - XCGLogger/Core (= 7.0.0)
   - XCGLogger/Core (7.0.0):
     - ObjcExceptionBridging
-  - YouboraLib (6.5.39)
+  - YouboraLib (6.6.12)
 
 DEPENDENCIES:
   - PlayKitYoubora (from `../../`)
@@ -42,15 +42,15 @@ EXTERNAL SOURCES:
     :path: "../../"
 
 SPEC CHECKSUMS:
-  KalturaNetKit: 7d9cba0df8fa93311dfabaef019f34b3bf52e2f5
+  KalturaNetKit: 8774fdc2e73d3d013c3df88aa49376dd922d3606
   ObjcExceptionBridging: c30e00eb3700467e695faeea30e26e18bd445001
-  PlayKit: 0309961050118b6bc002bc48fdbb625394661a26
+  PlayKit: 535ee453b55becb60ec3fa38e42e6c41966024f7
   PlayKitUtils: 8edb43515c8b91d9aa9a47ae8b5af1e7dd58f6f3
-  PlayKitYoubora: d8eabb721a8d83fbf64e1d3a5541993bb6b6f2d4
+  PlayKitYoubora: 2f73e1d74fe939923a5af511d18517f363325a3a
   SwiftyJSON: 36413e04c44ee145039d332b4f4e2d3e8d6c4db7
   XCGLogger: 0434f15e3909cdc450bb63faf638b8792ab782ab
-  YouboraLib: 10429980003aeeeb24b7fe52cb10de6e31d67147
+  YouboraLib: dc2dde41db8caea32e9560fabb6317b9dad216b4
 
-PODFILE CHECKSUM: 34c827b2db99b5c0178f42cbfc4658daab246911
+PODFILE CHECKSUM: 6057f786bdfb983ae52f8a8141af4fdba1704c91
 
-COCOAPODS: 1.10.1
+COCOAPODS: 1.11.2

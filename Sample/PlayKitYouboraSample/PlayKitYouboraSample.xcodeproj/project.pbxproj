@@ -17,6 +17,10 @@
 		A52D4B152638337800035FD8 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = A52D4B132638337800035FD8 /* LaunchScreen.storyboard */; };
 		A52D4B4D263836A200035FD8 /* YouboraConfigTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = A52D4B4C263836A200035FD8 /* YouboraConfigTests.swift */; };
 		A5717F902639FDAA00190E5C /* YouboraConfigTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A5717F8F2639FDAA00190E5C /* YouboraConfigTemplate.swift */; };
+		DADB08AF27EDDFE8000F57B1 /* YouboraConfigTemplate_KUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADB08AE27EDDFE8000F57B1 /* YouboraConfigTemplate_KUX.swift */; };
+		DADB08B127EDE075000F57B1 /* YouboraConfigTests_KUX.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADB08B027EDE075000F57B1 /* YouboraConfigTests_KUX.swift */; };
+		DADB08B327EDE124000F57B1 /* YouboraConfigTests_BC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADB08B227EDE124000F57B1 /* YouboraConfigTests_BC.swift */; };
+		DADB08B527EDE34A000F57B1 /* YouboraConfigTemplate_BC.swift in Sources */ = {isa = PBXBuildFile; fileRef = DADB08B427EDE34A000F57B1 /* YouboraConfigTemplate_BC.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -48,6 +52,10 @@
 		A52D4B4C263836A200035FD8 /* YouboraConfigTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTests.swift; sourceTree = "<group>"; };
 		A5717F8F2639FDAA00190E5C /* YouboraConfigTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTemplate.swift; sourceTree = "<group>"; };
 		B145496BE7DD40DCDF1AC0D6 /* Pods-PlayKitYouboraSample.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayKitYouboraSample.debug.xcconfig"; path = "Target Support Files/Pods-PlayKitYouboraSample/Pods-PlayKitYouboraSample.debug.xcconfig"; sourceTree = "<group>"; };
+		DADB08AE27EDDFE8000F57B1 /* YouboraConfigTemplate_KUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTemplate_KUX.swift; sourceTree = "<group>"; };
+		DADB08B027EDE075000F57B1 /* YouboraConfigTests_KUX.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTests_KUX.swift; sourceTree = "<group>"; };
+		DADB08B227EDE124000F57B1 /* YouboraConfigTests_BC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTests_BC.swift; sourceTree = "<group>"; };
+		DADB08B427EDE34A000F57B1 /* YouboraConfigTemplate_BC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = YouboraConfigTemplate_BC.swift; sourceTree = "<group>"; };
 		DB770EE989BA9012C0FC4884 /* Pods-PlayKitYouboraSampleTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayKitYouboraSampleTests.debug.xcconfig"; path = "Target Support Files/Pods-PlayKitYouboraSampleTests/Pods-PlayKitYouboraSampleTests.debug.xcconfig"; sourceTree = "<group>"; };
 		DDE74AEF8712CC0B58182FB8 /* Pods-PlayKitYouboraSample-PlayKitYouboraSampleUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-PlayKitYouboraSample-PlayKitYouboraSampleUITests.debug.xcconfig"; path = "Target Support Files/Pods-PlayKitYouboraSample-PlayKitYouboraSampleUITests/Pods-PlayKitYouboraSample-PlayKitYouboraSampleUITests.debug.xcconfig"; sourceTree = "<group>"; };
 		FA15786D4A98FB5721FA22A7 /* Pods_PlayKitYouboraSample_PlayKitYouboraSampleUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_PlayKitYouboraSample_PlayKitYouboraSampleUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -124,7 +132,11 @@
 			isa = PBXGroup;
 			children = (
 				A52D4B4C263836A200035FD8 /* YouboraConfigTests.swift */,
+				DADB08B227EDE124000F57B1 /* YouboraConfigTests_BC.swift */,
+				DADB08B027EDE075000F57B1 /* YouboraConfigTests_KUX.swift */,
 				A5717F8F2639FDAA00190E5C /* YouboraConfigTemplate.swift */,
+				DADB08B427EDE34A000F57B1 /* YouboraConfigTemplate_BC.swift */,
+				DADB08AE27EDDFE8000F57B1 /* YouboraConfigTemplate_KUX.swift */,
 				A52D4B212638337800035FD8 /* Info.plist */,
 			);
 			path = PlayKitYouboraSampleTests;
@@ -335,6 +347,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				DADB08B127EDE075000F57B1 /* YouboraConfigTests_KUX.swift in Sources */,
+				DADB08AF27EDDFE8000F57B1 /* YouboraConfigTemplate_KUX.swift in Sources */,
+				DADB08B527EDE34A000F57B1 /* YouboraConfigTemplate_BC.swift in Sources */,
+				DADB08B327EDE124000F57B1 /* YouboraConfigTests_BC.swift in Sources */,
 				A5717F902639FDAA00190E5C /* YouboraConfigTemplate.swift in Sources */,
 				A52D4B4D263836A200035FD8 /* YouboraConfigTests.swift in Sources */,
 			);

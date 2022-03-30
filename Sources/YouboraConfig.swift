@@ -10,350 +10,282 @@ import YouboraLib
 struct YouboraConfig: Decodable {
     let accountCode: String
     
+    let enabled: Bool?
+    let httpSecure: Bool?
+    let host: String?
+    let authToken: String?
+    let authType: String?
     let username: String?
+    let offline: Bool?
+//    let isInfinity: Bool? // Depricated
+    let autoDetectBackground: Bool?
+//    let autoStart: Bool? // Can't be found in YouboraLib
+    let forceInit: Bool?
+    let experiments: [String]?
+    let linkedViewId: String?
+    let waitForMetadata: Bool?
+    let pendingMetadata: [String]?
+    let householdId: String?
+
+    let user: User?
+    let ad: Ad?
+    let smartswitch: Smartswitch?
+    let parse: Parse?
+    let network: Network?
+    let device: Device?
+    let content: Content?
+    let app: App?
+    let session: Session?
+    let errors: Errors?
+    
+    // Kaltura additional data
+    fileprivate let kalturaInfo: KalturaInfo?
+
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
     let userEmail: String?
     let userAnonymousId: String?
     let userType: String?
     let obfuscateIP: Bool?
     let userObfuscateIp: Bool?
-    
-    var httpSecure: Bool? = true
     let contentCDN: String?
-    let autoDetectBackground: Bool?
-    let isOffline: Bool?
-    
-    let media: Media?
-    let content: Content?
-    let ads: Ads?
-    let properties: Properties?
-    
-    let contentCustomDimensions: ContentCustomDimensions?
-    let extraParams: ExtraParams?
     let houseHoldId: String?
-    let isAutoStart: Bool?
+//    let isAutoStart: Bool? // No code usage found.
     let isEnabled: Bool?
     let isForceInit: Bool?
     let appName: String?
-    let app: App?
-    let parse: Parse?
-    let device: Device?
-    let network: Network?
-    let errors: Errors?
+    let media: Media?
+    let properties: Properties?
+    let contentCustomDimensions: ContentCustomDimensions?
+    let extraParams: ExtraParams?
+    let ads: Ads?
+    // MARK: -
+}
+
+struct User: Decodable {
+    let anonymousId: String?
+    let type: String?
+    let email: String?
+    let obfuscateIp: Bool?
+}
+
+struct Ad: Decodable {
+    let blockerDetected: Bool?
+    let metadata: [String: String]?
+    let afterStop: Int?
+    let campaign: String?
+    let title: String?
+    let resource: String?
+    let givenBreaks: Int?
+    let expectedBreaks: Int?
+    let expectedPattern: ExpectedPattern?
+    let breaksTime: [Int]?
+    let givenAds: Int?
+    let creativeId: String?
+    let provider: String?
+    let customDimension: CustomDimension?
+}
+
+struct CustomDimension: Decodable {
+    let one: String?
+    let two: String?
+    let three: String?
+    let four: String?
+    let five: String?
+    let six: String?
+    let seven: String?
+    let eight: String?
+    let nine: String?
+    let ten: String?
+    let eleven: String?
+    let twelve: String?
+    let thirteen: String?
+    let fourteen: String?
+    let fiveteen: String?
+    let sixteen: String?
+    let seventeen: String?
+    let eighteen: String?
+    let nineteen: String?
+    let twenty: String?
     
-    func options() -> YBOptions {
-        let options = YBOptions()
-        
-        options.accountCode = accountCode
-        
-        options.username = username
-        options.userEmail = userEmail
-        options.anonymousUser = userAnonymousId
-        options.userType = userType
-        
-        if let obfuscateIP = obfuscateIP {
-            options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIP)
-        }
-        
-        if let userObfuscateIp = userObfuscateIp {
-            options.userObfuscateIp = NSNumber(booleanLiteral: userObfuscateIp)
-        }
-        
-        options.enabled = isEnabled ?? true
-        
-        options.httpSecure = httpSecure ?? true
-        options.forceInit = isForceInit ?? false
-        
-        if let parse = parse {
-            options.parseResource = parse.parseManifest ?? false
-            options.parseCdnNode = parse.parseCdnNode ?? false
-            options.cdnSwitchHeader = parse.parseCdnSwitchHeader ?? false
-            
-            if let cdnTTL = parse.parseCdnTTL { options.cdnTTL = TimeInterval(cdnTTL) }
-            if let parseCdnNameHeader = parse.parseCdnNameHeader { options.parseCdnNameHeader = parseCdnNameHeader }
-            
-            if let parseCdnNodeList = parse.parseCdnNodeList, !parseCdnNodeList.isEmpty {
-                options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
-            }
-        }
-        
-        options.deviceCode = nil // List of device codes http://mapi.youbora.com:8081/devices
-        options.contentCdn = contentCDN // List of CDNs: http://mapi.youbora.com:8081/cdns
-        
-        // Legacy compatibility
-        if let media = media {
-            options.contentIsLive = media.isLive != nil ? NSNumber(booleanLiteral: media.isLive!) :  nil
-            options.contentIsLiveNoSeek = media.isDVR != nil ? NSNumber(booleanLiteral: !(media.isDVR!)) : nil
-            options.contentDuration = media.duration != nil ? NSNumber(value: media.duration!) : nil
-            options.contentTitle = media.title
-            options.program = media.title2
-            
-            if let program = media.program {
-                options.program = program
-            }
-            
-            options.contentTransactionCode = media.transactionCode
-        }
-        
-        if let properties = properties {
-            var contentMetadata: [String: AnyHashable] = [:]
-            
-            if let genre = properties.genre, !genre.isEmpty {
-                contentMetadata["genre"] = genre
-            }
-            
-            if let type = properties.type, !type.isEmpty {
-                contentMetadata["type"] = type
-            }
-            
-            if let transactionType = properties.transactionType, !transactionType.isEmpty {
-                contentMetadata["transaction_type"] = transactionType
-            }
-             
-            if let year = properties.year, !year.isEmpty {
-                contentMetadata["year"] = year
-            }
-
-            if let cast = properties.cast, !cast.isEmpty {
-                contentMetadata["cast"] = cast
-            }
-            
-            if let director = properties.director, !director.isEmpty {
-                contentMetadata["director"] = director
-            }
-            
-            if let owner = properties.owner, !owner.isEmpty {
-                contentMetadata["owner"] = owner
-            }
-            
-            if let parental = properties.parental, !parental.isEmpty {
-                contentMetadata["parental"] = parental
-            }
-            
-            if let price = properties.price, !price.isEmpty {
-                contentMetadata["price"] = price
-            }
-            
-            if let rating = properties.rating, !rating.isEmpty {
-                contentMetadata["rating"] = rating
-            }
-            
-            if let audioType = properties.audioType, !audioType.isEmpty {
-                contentMetadata["audioType"] = audioType
-            }
-            
-            if let audioChannels = properties.audioChannels, !audioChannels.isEmpty {
-                contentMetadata["audioChannels"] = audioChannels
-            }
-
-            if let device = properties.device, !device.isEmpty {
-                contentMetadata["device"] = device
-            }
-
-            if let quality = properties.quality, !quality.isEmpty {
-                contentMetadata["quality"] = quality
-            }
-            
-            if let kalturaInfo = properties.kalturaInfo {
-                var kalturaInfoData: [String: AnyHashable] = [:]
-                
-                if let sessionId = kalturaInfo.sessionId, !sessionId.isEmpty {
-                    kalturaInfoData["sessionId"] = sessionId
-                }
-                
-                if let entryId = kalturaInfo.entryId, !entryId.isEmpty {
-                    kalturaInfoData["entryId"] = entryId
-                }
-                
-                if let uiConfId = kalturaInfo.uiConfId, !uiConfId.isEmpty {
-                    kalturaInfoData["uiConfId"] = uiConfId
-                }
-                
-                contentMetadata["kalturaInfo"] = kalturaInfoData
-            }
-            
-            options.contentMetadata = contentMetadata
-            
-            options.contentGenre = properties.genre
-            options.contentType = properties.type
-            options.contentTransactionCode = properties.transactionType
-            options.contentPrice = properties.price
-            options.contentRendition = properties.quality
-        }
-        
-        if let content = content {
-            options.contentResource = content.contentResource
-            options.contentTitle = content.contentTitle
-            //options.program = content.contentTitle2
-            options.program = content.contentProgram
-            options.contentDuration = content.contentDuration as NSNumber?
-            options.contentTransactionCode = content.contentTransactionCode
-            options.contentBitrate = content.contentBitrate as NSNumber?
-            options.sendTotalBytes = content.contentSendTotalBytes as NSNumber?
-            options.contentStreamingProtocol = content.contentStreamingProtocol
-            options.contentTransportFormat = content.contentTransportFormat
-            options.contentThroughput = content.contentThroughput as NSNumber?
-            options.contentRendition = content.contentRendition
-            options.contentCdn = content.contentCdn
-            options.contentFps = content.contentFps as NSNumber?
-            
-            options.contentIsLiveNoSeek = content.contentIsLiveNoSeek as NSValue?
-            if let dvr = content.isDVR {
-                options.contentIsLiveNoSeek = NSNumber(booleanLiteral: !dvr)
-            }
-            
-            if let contentIsLive = content.contentIsLive {
-                options.contentIsLive = NSNumber(booleanLiteral: contentIsLive)
-            }
-            
-            options.contentPackage = content.contentPackage
-            options.contentSaga = content.contentSaga
-            options.contentTvShow = content.contentTvShow
-            options.contentSeason = content.contentSeason
-            options.contentEpisodeTitle = content.contentEpisodeTitle
-            options.contentChannel = content.contentChannel
-            options.contentId = content.contentId
-            options.contentImdbId = content.contentImdbId
-            options.contentGracenoteId = content.contentGracenoteId
-            options.contentType = content.contentType
-            options.contentGenre = content.contentGenre
-            options.contentLanguage = content.contentLanguage
-            options.contentSubtitles = content.contentSubtitles
-            options.contentContractedResolution = content.contentContractedResolution
-            options.contentCost = content.contentCost
-            options.contentPrice = content.contentPrice
-            options.contentPlaybackType = content.contentPlaybackType
-            options.contentDrm = content.contentDrm
-            options.contentEncodingVideoCodec = content.contentEncodingVideoCodec
-            options.contentEncodingAudioCodec = content.contentEncodingAudioCodec
-            //let contentEncodingCodecSettings: String?
-            options.contentEncodingCodecProfile = content.contentEncodingCodecProfile
-            options.contentEncodingContainerFormat = content.contentEncodingContainerFormat
-        }
-        
-        options.adResource = nil
-        options.adCampaign = ads?.campaign
-        options.adTitle = ""
-        
-        // Legacy compatibility
-        if let ads = ads, let adsExtraParams = ads.extraParams {
-            options.adCustomDimension1 = adsExtraParams.param1
-            options.adCustomDimension2 = adsExtraParams.param2
-            options.adCustomDimension3 = adsExtraParams.param3
-            options.adCustomDimension4 = adsExtraParams.param4
-            options.adCustomDimension5 = adsExtraParams.param5
-            options.adCustomDimension6 = adsExtraParams.param6
-            options.adCustomDimension7 = adsExtraParams.param7
-            options.adCustomDimension8 = adsExtraParams.param8
-            options.adCustomDimension9 = adsExtraParams.param9
-            options.adCustomDimension10 = adsExtraParams.param10
-        }
-        
-        if let ads = ads {
-            options.adTitle = ads.adTitle
-            options.adCampaign = ads.adCampaign
-            options.adProvider = ads.adProvider
-            options.adResource = ads.adResource
-            options.adCreativeId = ads.adCreativeId
-            options.adGivenAds = ads.adGivenAds != nil ? NSNumber(value: ads.adGivenAds!) : nil
-            
-            if let adsCustomDimensions = ads.adCustomDimensions {
-                options.adCustomDimension1 = adsCustomDimensions.adCustomDimension1
-                options.adCustomDimension2 = adsCustomDimensions.adCustomDimension2
-                options.adCustomDimension3 = adsCustomDimensions.adCustomDimension3
-                options.adCustomDimension4 = adsCustomDimensions.adCustomDimension4
-                options.adCustomDimension5 = adsCustomDimensions.adCustomDimension5
-                options.adCustomDimension6 = adsCustomDimensions.adCustomDimension6
-                options.adCustomDimension7 = adsCustomDimensions.adCustomDimension7
-                options.adCustomDimension8 = adsCustomDimensions.adCustomDimension8
-                options.adCustomDimension9 = adsCustomDimensions.adCustomDimension9
-                options.adCustomDimension10 = adsCustomDimensions.adCustomDimension10
-            }
-        }
-        
-        if let extraParams = extraParams {
-            options.contentCustomDimension1 = extraParams.param1
-            options.contentCustomDimension2 = extraParams.param2
-            options.contentCustomDimension3 = extraParams.param3
-            options.contentCustomDimension4 = extraParams.param4
-            options.contentCustomDimension5 = extraParams.param5
-            options.contentCustomDimension6 = extraParams.param6
-            options.contentCustomDimension7 = extraParams.param7
-            options.contentCustomDimension8 = extraParams.param8
-            options.contentCustomDimension9 = extraParams.param9
-            options.contentCustomDimension10 = extraParams.param10
-        }
-        
-        if let customDimensions = contentCustomDimensions {
-            options.contentCustomDimension1 = customDimensions.contentCustomDimension1
-            options.contentCustomDimension2 = customDimensions.contentCustomDimension2
-            options.contentCustomDimension3 = customDimensions.contentCustomDimension3
-            options.contentCustomDimension4 = customDimensions.contentCustomDimension4
-            options.contentCustomDimension5 = customDimensions.contentCustomDimension5
-            options.contentCustomDimension6 = customDimensions.contentCustomDimension6
-            options.contentCustomDimension7 = customDimensions.contentCustomDimension7
-            options.contentCustomDimension8 = customDimensions.contentCustomDimension8
-            options.contentCustomDimension9 = customDimensions.contentCustomDimension9
-            options.contentCustomDimension10 = customDimensions.contentCustomDimension10
-            options.contentCustomDimension11 = customDimensions.contentCustomDimension11
-            options.contentCustomDimension12 = customDimensions.contentCustomDimension12
-            options.contentCustomDimension13 = customDimensions.contentCustomDimension13
-            options.contentCustomDimension14 = customDimensions.contentCustomDimension14
-            options.contentCustomDimension15 = customDimensions.contentCustomDimension15
-            options.contentCustomDimension16 = customDimensions.contentCustomDimension16
-            options.contentCustomDimension17 = customDimensions.contentCustomDimension17
-            options.contentCustomDimension18 = customDimensions.contentCustomDimension18
-            options.contentCustomDimension19 = customDimensions.contentCustomDimension19
-            options.contentCustomDimension20 = customDimensions.contentCustomDimension20
-        }
-        
-        if let appName = appName {
-            options.appName = appName
-        }
-        
-        if let app = app {
-            options.appName = app.appName
-            options.appReleaseVersion = app.appReleaseVersion
-        }
-        
-        if let device = device {
-            options.deviceBrand = device.deviceBrand
-            options.deviceCode = device.deviceCode
-            options.deviceUUID = device.deviceId
-            options.deviceModel = device.deviceModel
-            options.deviceOsName = device.deviceOsName
-            options.deviceOsVersion = device.deviceOsVersion
-            options.deviceType = device.deviceType
-            
-            if let deviceIsAnonymous = device.deviceIsAnonymous {
-                options.deviceIsAnonymous = deviceIsAnonymous
-            }
-        }
-        
-        if let network = network {
-            options.networkIP = network.networkIP
-            options.networkIsp = network.networkIsp
-            options.networkConnectionType = network.networkConnectionType
-        }
-        
-        if let errors = errors {
-            options.ignoreErrors = errors.errorsIgnore
-            options.fatalErrors = errors.errorsFatal
-            options.nonFatalErrors = errors.errorsNonFatal
-        }
-        
-        return options
+    enum CodingKeys: String, CodingKey {
+        case one = "1",
+             two = "2",
+             three = "3",
+             four = "4",
+             five = "5",
+             six = "6",
+             seven = "7",
+             eight = "8",
+             nine = "9",
+             ten = "10",
+             eleven = "11",
+             twelve = "12",
+             thirteen = "13",
+             fourteen = "14",
+             fiveteen = "15",
+             sixteen = "16",
+             seventeen = "17",
+             eighteen = "18",
+             nineteen = "19",
+             twenty = "20"
     }
+}
+
+struct ExpectedPattern: Decodable {
+    let pre: [Int]?
+    let mid: [Int]?
+    let post: [Int]?
     
+    func getValuesForOptions() -> Dictionary<String, Array<NSNumber>> {
+        var dictionary: Dictionary<String, Array<NSNumber>> = [:]
+        
+        if let pre = pre, !pre.isEmpty {
+            var array: Array<NSNumber> = []
+            for value in pre {
+                array.append(NSNumber(value: value))
+            }
+            
+            dictionary[YBOptionKeys.adPositionPre] = array
+        }
+        
+        if let mid = mid, !mid.isEmpty {
+            var array: Array<NSNumber> = []
+            for value in mid {
+                array.append(NSNumber(value: value))
+            }
+            dictionary[YBOptionKeys.adPositionMid] = array
+        }
+        
+        if let post = post, !post.isEmpty {
+            var array: Array<NSNumber> = []
+            for value in post {
+                array.append(NSNumber(value: value))
+            }
+            dictionary[YBOptionKeys.adPositionPost] = array
+        }
+        
+        return dictionary
+    }
+}
+
+struct Smartswitch: Decodable {
+    let configCode: String?
+    let groupCode: String?
+    let contractCode: String?
+}
+
+struct Parse: Decodable {
+    let manifest: Bool?
+    let cdnNameHeader: String?
+//    let cdnNode: Bool? // This is being ignored. Can't be on this level! It creates a conflict in order for it to be automatically parsed. Youbora needs to fix this.
+    let cdnNode: CDNNode?
+    let cdnTTL: Double?
+    let cdnSwitchHeader: Bool?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let parseManifest: Bool?
+    let parseCdnNode: Bool?
+    let parseCdnSwitchHeader: Bool?
+    let parseCdnNodeList: [String]?
+    let parseCdnNameHeader: String?
+    let parseCdnTTL: Int?
+    // MARK: -
+}
+
+struct CDNNode: Decodable {
+    let requestDebugHeaders: Bool? // Replaces "parse.cdnNode"
+    let list: [String]? // Available ones are: (Taken from Youbora's site) 'Akamai', 'Amazon', 'Cloudfront', 'Level3', 'Fastly', 'Highwinds', 'Telefonica', 'Edgecast', 'NosOtt', 'Balancer'
+}
+
+struct Network: Decodable {
+    let ip: String?
+    let isp: String?
+    let connectionType: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let networkIP: String?
+    let networkIsp: String?
+    let networkConnectionType: String?
+    let userObfuscateIp: String?
+    // MARK: -
+}
+
+struct Device: Decodable {
+    let code: String? // List of device codes http://mapi.youbora.com:8081/devices
+    let model: String?
+    let brand: String?
+    let type: String?
+    let name: String?
+    let osName: String?
+    let osVersion: String?
+    let isAnonymous: Bool?
+    let id: String?
+    let EDID: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let deviceBrand: String?
+    let deviceCode: String?
+    let deviceId: String?
+    let deviceModel: String?
+    let deviceOsName: String?
+    let deviceOsVersion: String?
+    let deviceType: String?
+    let deviceIsAnonymous: Bool?
+    // MARK: -
 }
 
 struct Content: Decodable {
     let resource: String?
-    let isLive: Bool?
-    let isDVR: Bool?
+//    let isLive: Bool? // This is being ignored. Can't be on this level! It creates a conflict in order for it to be automatically parsed. Youbora needs to fix this.
+    let isLive: IsLive?
     let title: String?
-    let title2: String?
+    let program: String? //contentTitle2
     let duration: Double?
     let transactionCode: String?
+    let bitrate: UInt?
+    let throughput: UInt?
+    let rendition: String?
+    let cdn: String? // List of CDNs: http://mapi.youbora.com:8081/cdns
+    let cdnNode: String?
+    let cdnType: String? // https://documentation.npaw.com/npaw-integration/docs/setting-options-and-metadata#cdn-node-types
+    let fps: Double?
+    let streamingProtocol: String? // Valid values by Youbora: "HDS"/"HLS"/"MSS"/"DASH"/"RTMP"/"RTP"/"RTSP"
+    let transportFormat: String? // Valid values by Youbora: "HLS-TS"/"HLS-FMP4"/"HLS-CMF"
+    let metadata: [String: String]?
+    let metrics: [String: String]?
+    let package: String?
+    let saga: String?
+    let tvShow: String?
+    let season: String?
+    let episodeTitle: String?
+    let channel: String?
+    let id: String?
+    let imdbId: String?
+    let gracenoteId: String?
+    let type: String?
+    let genre: String?
+    let language: String?
+    let subtitles: String?
+    let contractedResolution: String?
+    let cost: String?
+    let price: String?
+    let playbackType: String?
+    let drm: String?
+    let encoding: Encoding?
+    let customDimension: CustomDimension?
+    let customDimensions: [String: String]?
+    let totalBytes: UInt?
+    let sendTotalBytes: Bool?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
+    let isDVR: Bool?
+    let title2: String?
     let contentProgram: String? //contentTitle2
     let contentResource: String?
     let contentIsLive: Bool?
@@ -390,149 +322,313 @@ struct Content: Decodable {
     let contentDrm: String?
     let contentEncodingVideoCodec: String?
     let contentEncodingAudioCodec: String?
-    //let contentEncodingCodecSettings: String?
     let contentEncodingCodecProfile: String?
     let contentEncodingContainerFormat: String?
+    // MARK: -
 }
 
-struct Media: Decodable {
-    let resource: String?
-    let isLive: Bool?
-    let isDVR: Bool?
-    let title: String?
-    let title2: String?
-    let program: String?
-    let duration: Double?
-    let transactionCode: String?
+struct IsLive: Decodable {
+    let isLiveContent: Bool? // Replaces "content.isLive"
+    let noSeek: Bool?
+    let noMonitor: Bool?
 }
 
-struct Ads: Decodable {
-    let adBreaksTime: [Int]?
-    let campaign: String?
-    let adCampaign: String?
-    let adCreativeId: String?
-    let adExpectedBreaks: Int?
-    let adGivenBreaks: Int?
-    let adProvider: String?
-    let adResource: String?
-    let adTitle: String?
-    let extraParams: ExtraParams?
-    let adCustomDimensions: AdCustomDimensions?
-    let adGivenAds: Int?
-    //let adExpectedPattern: [String: AnyHashable]?
-    //let adMetadata: [String: AnyHashable]?
-}
-
-//typealias ContentMetadata = Properties
-
-struct Properties: Decodable {
-    let genre: String?
-    let type: String?
-    let transactionType: String?
-    let year: String?
-    let cast: String?
-    let director: String?
-    let owner: String?
-    let parental: String?
-    let price: String?
-    let rating: String?
-    let audioType: String?
-    let audioChannels: String?
-    let device: String?
-    let quality: String?
-    let kalturaInfo: KalturaInfo?
-}
-
-struct AdCustomDimensions: Decodable {
-    let adCustomDimension1: String?
-    let adCustomDimension2: String?
-    let adCustomDimension3: String?
-    let adCustomDimension4: String?
-    let adCustomDimension5: String?
-    let adCustomDimension6: String?
-    let adCustomDimension7: String?
-    let adCustomDimension8: String?
-    let adCustomDimension9: String?
-    let adCustomDimension10: String?
-}
-
-struct ContentCustomDimensions: Decodable {
-    let contentCustomDimension1: String?
-    let contentCustomDimension2: String?
-    let contentCustomDimension3: String?
-    let contentCustomDimension4: String?
-    let contentCustomDimension5: String?
-    let contentCustomDimension6: String?
-    let contentCustomDimension7: String?
-    let contentCustomDimension8: String?
-    let contentCustomDimension9: String?
-    let contentCustomDimension10: String?
-    let contentCustomDimension11: String?
-    let contentCustomDimension12: String?
-    let contentCustomDimension13: String?
-    let contentCustomDimension14: String?
-    let contentCustomDimension15: String?
-    let contentCustomDimension16: String?
-    let contentCustomDimension17: String?
-    let contentCustomDimension18: String?
-    let contentCustomDimension19: String?
-    let contentCustomDimension20: String?
-}
-
-struct ExtraParams: Decodable {
-    let param1: String?
-    let param2: String?
-    let param3: String?
-    let param4: String?
-    let param5: String?
-    let param6: String?
-    let param7: String?
-    let param8: String?
-    let param9: String?
-    let param10: String?
-}
-
-struct Parse: Decodable {
-    let parseManifest: Bool?
-    let parseCdnNode: Bool?
-    let parseCdnSwitchHeader: Bool?
-    let parseCdnNodeList: [String]?
-    let parseCdnNameHeader: String?
-    let parseCdnTTL: Int?
+struct Encoding: Decodable {
+    let videoCodec: String?
+    let audioCodec: String?
+    let codecSettings: String? // Youbora site defines it as a String, but the property is configured as a dictionary, need to understand what to do with it, currently ignored.
+    let codecProfile: String?
+    let containerFormat: String?
 }
 
 struct App: Decodable {
+    let name: String?
+    let releaseVersion: String?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
     let appName: String?
     let appReleaseVersion: String?
+    // MARK: -
 }
 
-struct Network: Decodable {
-    let networkIP: String?
-    let networkIsp: String?
-    let networkConnectionType: String?
-    let networkObfuscateIp: String?
-    let userObfuscateIp: String?
-}
+struct Session: Decodable {
+    let metrics: [String: Any]?
+    
+    enum CodingKeys: String, CodingKey {
+        case metrics
+    }
 
-struct Device: Decodable {
-    let deviceBrand: String?
-    let deviceCode: String?
-    let deviceId: String?
-    let deviceModel: String?
-    let deviceOsName: String?
-    let deviceOsVersion: String?
-    let deviceType: String?
-    let deviceIsAnonymous: Bool?
+    init(from decoder: Decoder) throws {
+        let values = try decoder.container(keyedBy: CodingKeys.self)
+        self.metrics = try values.decode([String: Any].self, forKey: .metrics)
+    }
 }
 
 struct Errors: Decodable {
+    let fatal: [String]?
+    let nonFatal: [String]?
+    let ignore: [String]?
+    
+    // MARK: - Deprecated
+    // Backward Compatible - Deprecated - Will be removed in the future.
     let errorsIgnore: [String]?
     let errorsFatal: [String]?
     let errorsNonFatal: [String]?
+    // MARK: -
 }
 
-struct KalturaInfo: Decodable {
+private struct KalturaInfo: Codable {
     let sessionId: String?
     let entryId: String?
     let uiConfId: String?
 }
+
+// MARK: -
+
+extension YouboraConfig {
+    
+    func options() -> YBOptions {
+        let options = YBOptions()
+        options.accountCode = accountCode
+        
+        options.enabled = enabled ?? true
+        if let httpSecure = httpSecure { options.httpSecure = httpSecure }
+        options.host = host
+        options.authToken = authToken
+        options.authType = authType
+        options.username = username
+        if let offline = offline { options.offline = offline }
+        if let autoDetectBackground = autoDetectBackground { options.autoDetectBackground = autoDetectBackground }
+        if let forceInit = forceInit { options.forceInit = forceInit }
+        if let experiments = experiments {
+            options.experimentIds = NSMutableArray(array: experiments)
+        }
+        options.linkedViewId = linkedViewId
+        if let waitForMetadata = waitForMetadata { options.waitForMetadata = waitForMetadata }
+        options.pendingMetadata = pendingMetadata
+        
+        addUserValues(to: options)
+        addAdValues(to: options)
+        addSmartswitchValues(to: options)
+        addParseValues(to: options)
+        addNetworkValues(to: options)
+        addDeviceValues(to: options)
+        addContentValues(to: options)
+        addAppValues(to: options)
+        addSessionValues(to: options)
+        addErrorsValues(to: options)
+        
+        addBackwardCompatibleData(to: options)
+        
+        addKalturaInfoData(to: options)
+        
+        return options
+    }
+    
+    func addUserValues(to options: YBOptions) {
+        guard let user = user else { return }
+        
+        options.anonymousUser = user.anonymousId
+        options.userType = user.type
+        options.userEmail = user.email
+        if let obfuscateIp = user.obfuscateIp { options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIp) }
+    }
+    
+    func addAdValues(to options: YBOptions) {
+        guard let ad = ad else { return }
+            
+        if let blockerDetected = ad.blockerDetected {
+            options.adBlockerDetected = NSNumber(booleanLiteral: blockerDetected)
+        }
+        options.adMetadata = ad.metadata
+        if let adsAfterStop = ad.afterStop { options.adsAfterStop = NSNumber(value: adsAfterStop) }
+        options.adCampaign = ad.campaign
+        options.adTitle = ad.title
+        options.adResource = ad.resource
+        if let givenBreaks = ad.givenBreaks { options.adGivenBreaks = NSNumber(value: givenBreaks) }
+        if let expectedBreaks = ad.expectedBreaks { options.adExpectedBreaks = NSNumber(value: expectedBreaks) }
+        options.adExpectedPattern = ad.expectedPattern?.getValuesForOptions()
+        options.adBreaksTime = ad.breaksTime
+        if let givenAds = ad.givenAds { options.adGivenAds = NSNumber(value: givenAds)}
+        options.adCreativeId = ad.creativeId
+        options.adProvider = ad.provider
+        if let customDimension = ad.customDimension {
+            options.adCustomDimension1 = customDimension.one
+            options.adCustomDimension2 = customDimension.two
+            options.adCustomDimension3 = customDimension.three
+            options.adCustomDimension4 = customDimension.four
+            options.adCustomDimension5 = customDimension.five
+            options.adCustomDimension6 = customDimension.six
+            options.adCustomDimension7 = customDimension.seven
+            options.adCustomDimension8 = customDimension.eight
+            options.adCustomDimension9 = customDimension.nine
+            options.adCustomDimension10 = customDimension.ten
+        }
+    }
+    
+    func addSmartswitchValues(to options:YBOptions) {
+        guard let smartswitch = smartswitch else { return }
+            
+        options.smartswitchConfigCode = smartswitch.configCode
+        options.smartswitchGroupCode = smartswitch.groupCode
+        options.smartswitchContractCode = smartswitch.contractCode
+    }
+    
+    func addParseValues(to options:YBOptions) {
+        guard let parse = parse else { return }
+            
+        if let manifest = parse.manifest { options.parseResource = manifest }
+        options.parseCdnNameHeader = parse.cdnNameHeader
+        if let cdnNode = parse.cdnNode {
+            if let requestDebugHeaders = cdnNode.requestDebugHeaders {
+                options.parseCdnNode = requestDebugHeaders
+            } else {
+                // Workaround if the value was sent as parse.cdnNode, If we have the object we believe it's true.
+                options.parseCdnNode = true
+            }
+            if let list = cdnNode.list { options.parseCdnNodeList = NSMutableArray(array: list) }
+        }
+        if let cdnTTL = parse.cdnTTL { options.cdnTTL = cdnTTL }
+        if let cdnSwitchHeader = parse.cdnSwitchHeader { options.cdnSwitchHeader = cdnSwitchHeader }
+    }
+    
+    func addNetworkValues(to options:YBOptions) {
+        guard let network = network else { return }
+            
+        options.networkIP = network.ip
+        options.networkIsp = network.isp
+        options.networkConnectionType = network.connectionType
+    }
+    
+    func addDeviceValues(to options:YBOptions) {
+        guard let device = device else { return }
+            
+        options.deviceCode = device.code
+        options.deviceModel = device.model
+        options.deviceBrand = device.brand
+        options.deviceType = device.type
+        options.deviceName = device.name
+        options.deviceOsName = device.osName
+        options.deviceOsVersion = device.osVersion
+        if let isAnonymous = device.isAnonymous { options.deviceIsAnonymous = isAnonymous }
+        options.deviceUUID = device.id
+        options.deviceEDID = device.EDID
+    }
+    
+    func addContentValues(to options:YBOptions) {
+        guard let content = content else { return }
+            
+        options.contentResource = content.resource
+        if let isLiveData = content.isLive {
+            if let isLiveContent = isLiveData.isLiveContent {
+                options.contentIsLive = NSNumber(value: isLiveContent)
+            } else {
+                // Workaround if the value was sent as content.isLive, If we have the object we believe it's true.
+                options.contentIsLive = NSNumber(value: true)
+            }
+            if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(value: noSeek) }
+            if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(value: noMonitor) }
+        }
+        options.contentTitle = content.title
+        options.program = content.program
+        if let duration = content.duration { options.contentDuration = NSNumber(value: duration) }
+        options.contentTransactionCode = content.transactionCode
+        if let bitrate = content.bitrate { options.contentBitrate = NSNumber(value: bitrate) }
+        if let throughput = content.throughput { options.contentThroughput = NSNumber(value: throughput) }
+        options.contentRendition = content.rendition
+        options.contentCdn = content.cdn
+        if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
+        options.contentCdnNode = content.cdnNode
+        options.contentCdnType = content.cdnType
+        options.contentStreamingProtocol = content.streamingProtocol
+        options.contentTransportFormat = content.transportFormat
+        options.contentMetadata = content.metadata
+        options.contentMetrics = content.metrics
+        options.contentPackage = content.package
+        options.contentSaga = content.saga
+        options.contentTvShow = content.tvShow
+        options.contentSeason = content.season
+        options.contentEpisodeTitle = content.episodeTitle
+        options.contentChannel = content.channel
+        options.contentId = content.id
+        options.contentImdbId = content.imdbId
+        options.contentGracenoteId = content.gracenoteId
+        options.contentType = content.type
+        options.contentGenre = content.genre
+        options.contentLanguage = content.language
+        options.contentSubtitles = content.subtitles
+        options.contentContractedResolution = content.contractedResolution
+        options.contentCost = content.cost
+        options.contentPrice = content.price
+        options.contentPlaybackType = content.playbackType
+        options.contentDrm = content.drm
+        if let encoding = content.encoding {
+            options.contentEncodingVideoCodec = encoding.videoCodec
+            options.contentEncodingAudioCodec = encoding.audioCodec
+//                options.contentEncodingCodecSettings = encoding.codecSettings // This is documented as a String and I didn't find the keys that are expected in the Dictionary.
+            options.contentEncodingCodecProfile = encoding.codecProfile
+            options.contentEncodingContainerFormat = encoding.containerFormat
+        }
+        if let customDimension = content.customDimension {
+            options.contentCustomDimension1 = customDimension.one
+            options.contentCustomDimension2 = customDimension.two
+            options.contentCustomDimension3 = customDimension.three
+            options.contentCustomDimension4 = customDimension.four
+            options.contentCustomDimension5 = customDimension.five
+            options.contentCustomDimension6 = customDimension.six
+            options.contentCustomDimension7 = customDimension.seven
+            options.contentCustomDimension8 = customDimension.eight
+            options.contentCustomDimension9 = customDimension.nine
+            options.contentCustomDimension10 = customDimension.ten
+            options.contentCustomDimension11 = customDimension.eleven
+            options.contentCustomDimension12 = customDimension.twelve
+            options.contentCustomDimension13 = customDimension.thirteen
+            options.contentCustomDimension14 = customDimension.fourteen
+            options.contentCustomDimension15 = customDimension.fiveteen
+            options.contentCustomDimension16 = customDimension.sixteen
+            options.contentCustomDimension17 = customDimension.seventeen
+            options.contentCustomDimension18 = customDimension.eighteen
+            options.contentCustomDimension19 = customDimension.nineteen
+            options.contentCustomDimension20 = customDimension.twenty
+        }
+        options.contentCustomDimensions = content.customDimensions
+        if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
+        if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(value: sendTotalBytes) }
+    }
+    
+    func addAppValues(to options:YBOptions) {
+        guard let app = app else { return }
+        
+        options.appName = app.name
+        options.appReleaseVersion = app.releaseVersion
+    }
+    
+    func addSessionValues(to options:YBOptions) {
+        guard let session = session else { return }
+            
+        options.sessionMetrics = session.metrics
+    }
+    
+    func addErrorsValues(to options:YBOptions) {
+        guard let errors = errors else { return }
+            
+        options.fatalErrors = errors.fatal
+        options.nonFatalErrors = errors.nonFatal
+        options.ignoreErrors = errors.ignore
+    }
+    
+    private func addKalturaInfoData(to options: YBOptions) {
+        // Add KalturaInfo to the Metadata
+        if let kalturaInfo = kalturaInfo {
+            if let kalturaInfoData = kalturaInfo.dictionary {
+                if options.contentMetadata == nil {
+                    options.contentMetadata = ["kalturaInfo": kalturaInfoData]
+                } else {
+                    options.contentMetadata?["kalturaInfo"] = kalturaInfoData
+                }
+            }
+        }
+    }
+}
+

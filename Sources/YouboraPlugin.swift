@@ -194,16 +194,8 @@ public class YouboraPlugin: BasePlugin, AppStateObservable {
                            CustomPropertyKey.uiConfId: "",
                            CustomPropertyKey.sessionId: player.sessionId]
         
-        let propertiesKey = "properties"
-        
-        if var properties = config.params[propertiesKey] as? [String: Any] {
-            // if properties already exists override the custom properties only
-            properties["kalturaInfo"] = kalturaInfo
-            config.params[propertiesKey] = properties
-        } else {
-            // If properties doesn't exist then add
-            config.params[propertiesKey] = ["kalturaInfo": kalturaInfo]
-        }
+        let kalturaInfoKey = "kalturaInfo"
+        config.params[kalturaInfoKey] = kalturaInfo
     }
 }
 
