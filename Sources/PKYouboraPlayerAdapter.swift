@@ -104,6 +104,14 @@ extension PKYouboraPlayerAdapter {
         return NSNumber(value: Float(round(100 * currentTime)/100))
     }
     
+    override func getPlayrate() -> NSNumber {
+        guard let player = self.player as? PlayKit.Player else {
+            return super.getPlayrate()
+        }
+        
+        return NSNumber(value: player.rate)
+    }
+    
     override func getPlayerVersion() -> String? {
         return YouboraPlugin.kaltura + "-" + PlayKitManager.clientTag
     }
@@ -154,7 +162,7 @@ extension PKYouboraPlayerAdapter {
     }
     
     override func getHouseholdId() -> String {
-        return config?.houseHoldId ?? ""
+        return config?.householdId ?? config?.houseHoldId ?? "" // Backward compatible 'config?.houseHoldId'
     }
 }
 
@@ -194,9 +202,7 @@ extension PKYouboraPlayerAdapter {
             
             switch event {
             case is PlayerEvent.Play:
-                // Play handler to start when asset starts loading.
-                // This point is the closest point to prepare call.
-                self.fireStart()
+                self.plugin?.fireInit()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Stopped:
                 // We must call `fireStop()` when stopped so youbora will know player stopped playing content.
@@ -207,10 +213,12 @@ extension PKYouboraPlayerAdapter {
                 self.firePause()
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Playing:
-                self.fireJoin()
                 if self.isFirstPlay {
                     self.isFirstPlay = false
+                    self.fireStart()
+                    self.fireJoin()
                 } else {
+                    self.fireJoin()
                     self.fireResume()
                 }
                 self.postEventLog(withMessage: "\(String(describing: event.namespace))")
@@ -246,6 +254,17 @@ extension PKYouboraPlayerAdapter {
                 }
             case is PlayerEvent.SourceSelected:
                 self.lastReportedResource = event.mediaSource?.playbackUrl?.absoluteString
+                
+                // If we don't have a value, which was sent in the config, update via the media source data.
+                let contentDRM = self.plugin?.options.contentDrm
+                if contentDRM == nil || contentDRM?.isEmpty == true {
+                    if let mediaSource = event.mediaSource {
+                        self.plugin?.options.contentDrm = mediaSource.isFairPlay() ? "FairPlay" : "Clear"
+                    } else {
+                        self.plugin?.options.contentDrm = "Unknown"
+                    }
+                }
+                
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Error:
                 if let error = event.error {
@@ -302,5 +321,11 @@ extension PKYouboraPlayerAdapter {
     fileprivate func postEventLog(withMessage message: String) {
         let eventLog = YouboraEvent.Report(message: message)
         messageBus?.post(eventLog)
+    }
+}
+
+extension PKMediaSource {
+    func isFairPlay() -> Bool {
+        return mediaFormat == .hls && drmData?.first?.scheme == .fairplay
     }
 }

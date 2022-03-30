@@ -11,8 +11,8 @@ target 'PlayKitYouboraSample' do
     pod 'PlayKitYoubora', :path => '../../'
   end
 
-  target 'PlayKitYouboraSampleUITests' do
+  #target 'PlayKitYouboraSampleUITests' do
     # Pods for testing
-  end
+  #end
 
 end
