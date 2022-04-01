@@ -37,6 +37,9 @@ struct YouboraConfig: Decodable {
     let app: App?
     let session: Session?
     let errors: Errors?
+
+    // For YBFastDataConfig
+    let fastDataConfig: FastDataConfig?
     
     // Kaltura additional data
     fileprivate let kalturaInfo: KalturaInfo?
@@ -378,6 +381,15 @@ struct Errors: Decodable {
     // MARK: -
 }
 
+struct FastDataConfig: Decodable {
+    let host: String?
+    let code: String?
+    let pingTime: Double?
+    let beatTime: Double?
+    let expirationTime: Double?
+    let youboraId: String?
+}
+
 private struct KalturaInfo: Codable {
     let sessionId: String?
     let entryId: String?
@@ -629,6 +641,23 @@ extension YouboraConfig {
                 }
             }
         }
+    }
+}
+
+extension YouboraConfig {
+
+    func getYBFastDataConfig() -> YBFastDataConfig? {
+        if let fastDataConfig = fastDataConfig {
+            let ybFastDataConfig = YBFastDataConfig()
+            ybFastDataConfig.host = fastDataConfig.host
+            ybFastDataConfig.code = fastDataConfig.code
+            ybFastDataConfig.pingTime = fastDataConfig.pingTime as NSNumber?
+            ybFastDataConfig.beatTime = fastDataConfig.beatTime as NSNumber?
+            ybFastDataConfig.expirationTime = fastDataConfig.expirationTime as NSNumber?
+            ybFastDataConfig.youboraId = fastDataConfig.youboraId
+            return ybFastDataConfig
+        }
+        return nil
     }
 }
 
