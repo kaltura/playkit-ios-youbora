@@ -246,9 +246,9 @@ extension YouboraConfig {
         }
         
         if options.contentIsLiveNoSeek == nil, let isLiveNoSeek = content.contentIsLiveNoSeek {
-            options.contentIsLiveNoSeek = NSNumber(value: isLiveNoSeek)
+            options.contentIsLiveNoSeek = NSNumber(booleanLiteral: isLiveNoSeek)
         } else if let isDVR = content.isDVR {
-            options.contentIsLiveNoSeek = NSNumber(value: isDVR)
+            options.contentIsLiveNoSeek = NSNumber(booleanLiteral: isDVR)
         }
         
         if options.contentTitle == nil {
@@ -268,7 +268,7 @@ extension YouboraConfig {
         }
         
         if options.sendTotalBytes == nil, let sendTotalBytes = content.contentSendTotalBytes {
-            options.sendTotalBytes = NSNumber(value: sendTotalBytes)
+            options.sendTotalBytes = NSNumber(booleanLiteral: sendTotalBytes)
         }
         
         if options.contentStreamingProtocol == nil {

@@ -522,13 +522,13 @@ extension YouboraConfig {
         options.contentResource = content.resource
         if let isLiveData = content.isLive {
             if let isLiveContent = isLiveData.isLiveContent {
-                options.contentIsLive = NSNumber(value: isLiveContent)
+                options.contentIsLive = NSNumber(booleanLiteral: isLiveContent)
             } else {
                 // Workaround if the value was sent as content.isLive, If we have the object we believe it's true.
-                options.contentIsLive = NSNumber(value: true)
+                options.contentIsLive = NSNumber(booleanLiteral: true)
             }
-            if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(value: noSeek) }
-            if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(value: noMonitor) }
+            if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(booleanLiteral: noSeek) }
+            if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(booleanLiteral: noMonitor) }
         }
         options.contentTitle = content.title
         options.program = content.program
@@ -594,7 +594,7 @@ extension YouboraConfig {
         }
         options.contentCustomDimensions = content.customDimensions
         if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
-        if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(value: sendTotalBytes) }
+        if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(booleanLiteral: sendTotalBytes) }
     }
     
     func addAppValues(to options:YBOptions) {
