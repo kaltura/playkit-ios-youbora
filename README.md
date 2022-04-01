@@ -176,7 +176,7 @@ let youboraPluginParams: [String: Any] = [
         "nonFatal": ["123", "errorcode"],
         "ignore": ["123", "errorcode"]
     ],
-    "fastData": [
+    "fastDataConfig": [
         "host": "fastDataHost",
         "code": "fastDataCode",
         "pingTime": 60,
