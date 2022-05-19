@@ -138,6 +138,9 @@ extension PKYouboraAdsAdapter {
             AdEvent.adsRequested,
             AdEvent.adClicked,
             AdEvent.adDidRequestContentResume,
+            AdEvent.adFirstQuartile,
+            AdEvent.adMidpoint,
+            AdEvent.adThirdQuartile,
             AdEvent.error
         ]
     }
@@ -233,6 +236,21 @@ extension PKYouboraAdsAdapter {
                     } else {
                         self.fireClick()
                     }
+                }
+            case let e where e.self == AdEvent.adFirstQuartile:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    self.fireQuartile(1)
+                }
+            case let e where e.self == AdEvent.adMidpoint:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    self.fireQuartile(2)
+                }
+            case let e where e.self == AdEvent.adThirdQuartile:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    self.fireQuartile(3)
                 }
             case let e where e.self == AdEvent.error:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
