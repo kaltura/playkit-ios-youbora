@@ -406,19 +406,19 @@ extension YouboraConfig {
         
         options.enabled = enabled ?? true
         if let httpSecure = httpSecure { options.httpSecure = httpSecure }
-        options.host = host
-        options.authToken = authToken
-        options.authType = authType
-        options.username = username
+        if let host = host { options.host = host }
+        if let authToken = authToken { options.authToken = authToken }
+        if let authType = authType { options.authType = authType }
+        if let username = username { options.username = username }
         if let offline = offline { options.offline = offline }
         if let autoDetectBackground = autoDetectBackground { options.autoDetectBackground = autoDetectBackground }
         if let forceInit = forceInit { options.forceInit = forceInit }
         if let experiments = experiments {
             options.experimentIds = NSMutableArray(array: experiments)
         }
-        options.linkedViewId = linkedViewId
+        if let linkedViewId = linkedViewId { options.linkedViewId = linkedViewId }
         if let waitForMetadata = waitForMetadata { options.waitForMetadata = waitForMetadata }
-        options.pendingMetadata = pendingMetadata
+        if let pendingMetadata = pendingMetadata { options.pendingMetadata = pendingMetadata }
         
         addUserValues(to: options)
         addAdValues(to: options)
@@ -441,9 +441,9 @@ extension YouboraConfig {
     func addUserValues(to options: YBOptions) {
         guard let user = user else { return }
         
-        options.anonymousUser = user.anonymousId
-        options.userType = user.type
-        options.userEmail = user.email
+        if let anonymousId = user.anonymousId { options.anonymousUser = anonymousId }
+        if let type = user.type { options.userType = type }
+        if let email = user.email { options.userEmail = email }
         if let obfuscateIp = user.obfuscateIp { options.userObfuscateIp = NSNumber(booleanLiteral: obfuscateIp) }
     }
     
@@ -453,45 +453,45 @@ extension YouboraConfig {
         if let blockerDetected = ad.blockerDetected {
             options.adBlockerDetected = NSNumber(booleanLiteral: blockerDetected)
         }
-        options.adMetadata = ad.metadata
+        if let metadata = ad.metadata { options.adMetadata = metadata }
         if let adsAfterStop = ad.afterStop { options.adsAfterStop = NSNumber(value: adsAfterStop) }
-        options.adCampaign = ad.campaign
-        options.adTitle = ad.title
-        options.adResource = ad.resource
+        if let campaign = ad.campaign { options.adCampaign = campaign }
+        if let title = ad.title { options.adTitle = title }
+        if let resource = ad.resource { options.adResource = resource }
         if let givenBreaks = ad.givenBreaks { options.adGivenBreaks = NSNumber(value: givenBreaks) }
         if let expectedBreaks = ad.expectedBreaks { options.adExpectedBreaks = NSNumber(value: expectedBreaks) }
-        options.adExpectedPattern = ad.expectedPattern?.getValuesForOptions()
-        options.adBreaksTime = ad.breaksTime
+        if let expectedPattern = ad.expectedPattern { options.adExpectedPattern = expectedPattern.getValuesForOptions() }
+        if let breaksTime = ad.breaksTime { options.adBreaksTime = breaksTime }
         if let givenAds = ad.givenAds { options.adGivenAds = NSNumber(value: givenAds)}
-        options.adCreativeId = ad.creativeId
-        options.adProvider = ad.provider
+        if let creativeId = ad.creativeId { options.adCreativeId = creativeId }
+        if let provider = ad.provider { options.adProvider = provider }
         if let customDimension = ad.customDimension {
-            options.adCustomDimension1 = customDimension.one
-            options.adCustomDimension2 = customDimension.two
-            options.adCustomDimension3 = customDimension.three
-            options.adCustomDimension4 = customDimension.four
-            options.adCustomDimension5 = customDimension.five
-            options.adCustomDimension6 = customDimension.six
-            options.adCustomDimension7 = customDimension.seven
-            options.adCustomDimension8 = customDimension.eight
-            options.adCustomDimension9 = customDimension.nine
-            options.adCustomDimension10 = customDimension.ten
+            if let one = customDimension.one { options.adCustomDimension1 = one }
+            if let two = customDimension.two { options.adCustomDimension2 = two }
+            if let three = customDimension.three { options.adCustomDimension3 = three }
+            if let four = customDimension.four { options.adCustomDimension4 = four }
+            if let five = customDimension.five { options.adCustomDimension5 = five }
+            if let six = customDimension.six { options.adCustomDimension6 = six }
+            if let seven = customDimension.seven { options.adCustomDimension7 = seven }
+            if let eight = customDimension.eight { options.adCustomDimension8 = eight }
+            if let nine = customDimension.nine { options.adCustomDimension9 = nine }
+            if let ten = customDimension.ten { options.adCustomDimension10 = ten }
         }
     }
     
     func addSmartswitchValues(to options:YBOptions) {
         guard let smartswitch = smartswitch else { return }
             
-        options.smartswitchConfigCode = smartswitch.configCode
-        options.smartswitchGroupCode = smartswitch.groupCode
-        options.smartswitchContractCode = smartswitch.contractCode
+        if let configCode = smartswitch.configCode { options.smartswitchConfigCode = configCode }
+        if let groupCode = smartswitch.groupCode { options.smartswitchGroupCode = groupCode }
+        if let contractCode = smartswitch.contractCode { options.smartswitchContractCode = contractCode }
     }
     
     func addParseValues(to options:YBOptions) {
         guard let parse = parse else { return }
             
         if let manifest = parse.manifest { options.parseResource = manifest }
-        options.parseCdnNameHeader = parse.cdnNameHeader
+        if let cdnNameHeader = parse.cdnNameHeader { options.parseCdnNameHeader = cdnNameHeader }
         if let cdnNode = parse.cdnNode {
             if let requestDebugHeaders = cdnNode.requestDebugHeaders {
                 options.parseCdnNode = requestDebugHeaders
@@ -508,30 +508,30 @@ extension YouboraConfig {
     func addNetworkValues(to options:YBOptions) {
         guard let network = network else { return }
             
-        options.networkIP = network.ip
-        options.networkIsp = network.isp
-        options.networkConnectionType = network.connectionType
+        if let ip = network.ip { options.networkIP = ip }
+        if let isp = network.isp { options.networkIsp = isp }
+        if let connectionType = network.connectionType { options.networkConnectionType = connectionType }
     }
     
     func addDeviceValues(to options:YBOptions) {
         guard let device = device else { return }
             
-        options.deviceCode = device.code
-        options.deviceModel = device.model
-        options.deviceBrand = device.brand
-        options.deviceType = device.type
-        options.deviceName = device.name
-        options.deviceOsName = device.osName
-        options.deviceOsVersion = device.osVersion
+        if let code = device.code { options.deviceCode = code }
+        if let model = device.model { options.deviceModel = model }
+        if let brand = device.brand { options.deviceBrand = brand }
+        if let type = device.type { options.deviceType = type }
+        if let name = device.name { options.deviceName = name }
+        if let osName = device.osName { options.deviceOsName = osName }
+        if let osVersion = device.osVersion { options.deviceOsVersion = osVersion }
         if let isAnonymous = device.isAnonymous { options.deviceIsAnonymous = isAnonymous }
-        options.deviceUUID = device.id
-        options.deviceEDID = device.EDID
+        if let id = device.id { options.deviceUUID = id }
+        if let EDID = device.EDID { options.deviceEDID = EDID }
     }
     
     func addContentValues(to options:YBOptions) {
         guard let content = content else { return }
             
-        options.contentResource = content.resource
+        if let resource = content.resource { options.contentResource = resource }
         if let isLiveData = content.isLive {
             if let isLiveContent = isLiveData.isLiveContent {
                 options.contentIsLive = NSNumber(booleanLiteral: isLiveContent)
@@ -542,69 +542,69 @@ extension YouboraConfig {
             if let noSeek = isLiveData.noSeek { options.contentIsLiveNoSeek = NSNumber(booleanLiteral: noSeek) }
             if let noMonitor = isLiveData.noMonitor { options.contentIsLiveNoMonitor = NSNumber(booleanLiteral: noMonitor) }
         }
-        options.contentTitle = content.title
-        options.program = content.program
+        if let title = content.title { options.contentTitle = title }
+        if let program = content.program { options.program = program }
         if let duration = content.duration { options.contentDuration = NSNumber(value: duration) }
-        options.contentTransactionCode = content.transactionCode
+        if let transactionCode = content.transactionCode { options.contentTransactionCode = transactionCode }
         if let bitrate = content.bitrate { options.contentBitrate = NSNumber(value: bitrate) }
         if let throughput = content.throughput { options.contentThroughput = NSNumber(value: throughput) }
-        options.contentRendition = content.rendition
-        options.contentCdn = content.cdn
+        if let rendition = content.rendition { options.contentRendition = rendition }
+        if let cdn = content.cdn { options.contentCdn = cdn }
         if let fps = content.fps { options.contentFps = NSNumber(value: fps) }
-        options.contentCdnNode = content.cdnNode
-        options.contentCdnType = content.cdnType
-        options.contentStreamingProtocol = content.streamingProtocol
-        options.contentTransportFormat = content.transportFormat
-        options.contentMetadata = content.metadata
-        options.contentMetrics = content.metrics
-        options.contentPackage = content.package
-        options.contentSaga = content.saga
-        options.contentTvShow = content.tvShow
-        options.contentSeason = content.season
-        options.contentEpisodeTitle = content.episodeTitle
-        options.contentChannel = content.channel
-        options.contentId = content.id
-        options.contentImdbId = content.imdbId
-        options.contentGracenoteId = content.gracenoteId
-        options.contentType = content.type
-        options.contentGenre = content.genre
-        options.contentLanguage = content.language
-        options.contentSubtitles = content.subtitles
-        options.contentContractedResolution = content.contractedResolution
-        options.contentCost = content.cost
-        options.contentPrice = content.price
-        options.contentPlaybackType = content.playbackType
-        options.contentDrm = content.drm
+        if let cdnNode = content.cdnNode { options.contentCdnNode = cdnNode }
+        if let cdnType = content.cdnType { options.contentCdnType = cdnType }
+        if let streamingProtocol = content.streamingProtocol { options.contentStreamingProtocol = streamingProtocol }
+        if let transportFormat = content.transportFormat { options.contentTransportFormat = transportFormat }
+        if let metadata = content.metadata { options.contentMetadata = metadata }
+        if let metrics = content.metrics { options.contentMetrics = metrics }
+        if let package = content.package { options.contentPackage = package }
+        if let saga = content.saga { options.contentSaga = saga }
+        if let tvShow = content.tvShow { options.contentTvShow = tvShow }
+        if let season = content.season { options.contentSeason = season }
+        if let episodeTitle = content.episodeTitle { options.contentEpisodeTitle = episodeTitle }
+        if let channel = content.channel { options.contentChannel = channel }
+        if let id = content.id { options.contentId = id }
+        if let imdbId = content.imdbId { options.contentImdbId = imdbId }
+        if let gracenoteId = content.gracenoteId { options.contentGracenoteId = gracenoteId }
+        if let type = content.type { options.contentType = type }
+        if let genre = content.genre { options.contentGenre = genre }
+        if let language = content.language { options.contentLanguage = language }
+        if let subtitles = content.subtitles { options.contentSubtitles = subtitles }
+        if let contractedResolution = content.contractedResolution { options.contentContractedResolution = contractedResolution }
+        if let cost = content.cost { options.contentCost = cost }
+        if let price = content.price { options.contentPrice = price }
+        if let playbackType = content.playbackType { options.contentPlaybackType = playbackType }
+        if let drm = content.drm { options.contentDrm = drm }
         if let encoding = content.encoding {
-            options.contentEncodingVideoCodec = encoding.videoCodec
-            options.contentEncodingAudioCodec = encoding.audioCodec
+            if let videoCodec = encoding.videoCodec { options.contentEncodingVideoCodec = videoCodec }
+            if let audioCodec = encoding.audioCodec { options.contentEncodingAudioCodec = audioCodec }
 //                options.contentEncodingCodecSettings = encoding.codecSettings // This is documented as a String and I didn't find the keys that are expected in the Dictionary.
-            options.contentEncodingCodecProfile = encoding.codecProfile
-            options.contentEncodingContainerFormat = encoding.containerFormat
+            if let codecProfile = encoding.codecProfile { options.contentEncodingCodecProfile = codecProfile }
+            if let containerFormat = encoding.containerFormat { options.contentEncodingContainerFormat = containerFormat }
         }
         if let customDimension = content.customDimension {
-            options.contentCustomDimension1 = customDimension.one
-            options.contentCustomDimension2 = customDimension.two
-            options.contentCustomDimension3 = customDimension.three
-            options.contentCustomDimension4 = customDimension.four
-            options.contentCustomDimension5 = customDimension.five
-            options.contentCustomDimension6 = customDimension.six
-            options.contentCustomDimension7 = customDimension.seven
-            options.contentCustomDimension8 = customDimension.eight
-            options.contentCustomDimension9 = customDimension.nine
-            options.contentCustomDimension10 = customDimension.ten
-            options.contentCustomDimension11 = customDimension.eleven
-            options.contentCustomDimension12 = customDimension.twelve
-            options.contentCustomDimension13 = customDimension.thirteen
-            options.contentCustomDimension14 = customDimension.fourteen
-            options.contentCustomDimension15 = customDimension.fiveteen
-            options.contentCustomDimension16 = customDimension.sixteen
-            options.contentCustomDimension17 = customDimension.seventeen
-            options.contentCustomDimension18 = customDimension.eighteen
-            options.contentCustomDimension19 = customDimension.nineteen
-            options.contentCustomDimension20 = customDimension.twenty
+            if let one = customDimension.one { options.contentCustomDimension1 = one }
+            if let two = customDimension.two { options.contentCustomDimension2 = two }
+            if let three = customDimension.three { options.contentCustomDimension3 = three }
+            if let four = customDimension.four { options.contentCustomDimension4 = four }
+            if let five = customDimension.five { options.contentCustomDimension5 = five }
+            if let six = customDimension.six { options.contentCustomDimension6 = six }
+            if let seven = customDimension.seven { options.contentCustomDimension7 = seven }
+            if let eight = customDimension.eight { options.contentCustomDimension8 = eight }
+            if let nine = customDimension.nine { options.contentCustomDimension9 = nine }
+            if let ten = customDimension.ten { options.contentCustomDimension10 = ten }
+            if let eleven = customDimension.eleven { options.contentCustomDimension11 = eleven }
+            if let twelve = customDimension.twelve { options.contentCustomDimension12 = twelve }
+            if let thirteen = customDimension.thirteen { options.contentCustomDimension13 = thirteen }
+            if let fourteen = customDimension.fourteen { options.contentCustomDimension14 = fourteen }
+            if let fiveteen = customDimension.fiveteen { options.contentCustomDimension15 = fiveteen }
+            if let sixteen = customDimension.sixteen { options.contentCustomDimension16 = sixteen }
+            if let seventeen = customDimension.seventeen { options.contentCustomDimension17 = seventeen }
+            if let eighteen = customDimension.eighteen { options.contentCustomDimension18 = eighteen }
+            if let nineteen = customDimension.nineteen { options.contentCustomDimension19 = nineteen }
+            if let twenty = customDimension.twenty { options.contentCustomDimension20 = twenty }
         }
-        options.contentCustomDimensions = content.customDimensions
+        if let customDimensions = content.customDimensions { options.contentCustomDimensions = customDimensions }
         if let totalBytes = content.totalBytes { options.contentTotalBytes = NSNumber(value: totalBytes) }
         if let sendTotalBytes = content.sendTotalBytes { options.sendTotalBytes = NSNumber(booleanLiteral: sendTotalBytes) }
     }
@@ -612,22 +612,22 @@ extension YouboraConfig {
     func addAppValues(to options:YBOptions) {
         guard let app = app else { return }
         
-        options.appName = app.name
-        options.appReleaseVersion = app.releaseVersion
+        if let name = app.name { options.appName = name }
+        if let releaseVersion = app.releaseVersion { options.appReleaseVersion = releaseVersion }
     }
     
     func addSessionValues(to options:YBOptions) {
         guard let session = session else { return }
             
-        options.sessionMetrics = session.metrics
+        if let metrics = session.metrics { options.sessionMetrics = metrics }
     }
     
     func addErrorsValues(to options:YBOptions) {
         guard let errors = errors else { return }
             
-        options.fatalErrors = errors.fatal
-        options.nonFatalErrors = errors.nonFatal
-        options.ignoreErrors = errors.ignore
+        if let fatal = errors.fatal { options.fatalErrors = fatal }
+        if let nonFatal = errors.nonFatal { options.nonFatalErrors = nonFatal }
+        if let ignore = errors.ignore { options.ignoreErrors = ignore }
     }
     
     private func addKalturaInfoData(to options: YBOptions) {
@@ -649,12 +649,12 @@ extension YouboraConfig {
     func getYBFastDataConfig() -> YBFastDataConfig? {
         if let fastDataConfig = fastDataConfig {
             let ybFastDataConfig = YBFastDataConfig()
-            ybFastDataConfig.host = fastDataConfig.host
-            ybFastDataConfig.code = fastDataConfig.code
-            ybFastDataConfig.pingTime = fastDataConfig.pingTime as NSNumber?
-            ybFastDataConfig.beatTime = fastDataConfig.beatTime as NSNumber?
-            ybFastDataConfig.expirationTime = fastDataConfig.expirationTime as NSNumber?
-            ybFastDataConfig.youboraId = fastDataConfig.youboraId
+            if let host = fastDataConfig.host { ybFastDataConfig.host = host }
+            if let code = fastDataConfig.code { ybFastDataConfig.code = code }
+            if let pingTime = fastDataConfig.pingTime as NSNumber? { ybFastDataConfig.pingTime = pingTime }
+            if let beatTime = fastDataConfig.beatTime as NSNumber? { ybFastDataConfig.beatTime = beatTime }
+            if let expirationTime = fastDataConfig.expirationTime as NSNumber? { ybFastDataConfig.expirationTime = expirationTime }
+            if let youboraId = fastDataConfig.youboraId { ybFastDataConfig.youboraId = youboraId }
             return ybFastDataConfig
         }
         return nil

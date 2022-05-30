@@ -193,15 +193,15 @@ extension YouboraConfig {
         addBackwardCompatibleFromExtraParams(to: options)
         addBackwardCompatibleFromAds(to: options)
         
-        if options.userEmail == nil {
+        if options.userEmail == nil, let userEmail = userEmail {
             options.userEmail = userEmail
         }
         
-        if options.anonymousUser == nil {
+        if options.anonymousUser == nil, let userAnonymousId = userAnonymousId {
             options.anonymousUser = userAnonymousId
         }
         
-        if options.userType == nil {
+        if options.userType == nil, let userType = userType {
             options.userType = userType
         }
         
@@ -213,7 +213,7 @@ extension YouboraConfig {
             }
         }
         
-        if options.contentCdn == nil {
+        if options.contentCdn == nil, let contentCDN = contentCDN {
             options.contentCdn = contentCDN
         }
         
@@ -225,7 +225,7 @@ extension YouboraConfig {
             options.forceInit = isForceInit
         }
         
-        if options.appName == nil {
+        if options.appName == nil, let appName = appName {
             options.appName = appName
         }
     }
@@ -233,12 +233,12 @@ extension YouboraConfig {
     func addBackwardCompatibleFromContent(to options: YBOptions) {
         guard let content = content else { return }
         
-        if options.program == nil {
-            options.program = content.contentProgram ?? content.contentTitle2 ?? content.title2
+        if options.program == nil, let program = content.contentProgram ?? content.contentTitle2 ?? content.title2 {
+            options.program = program
         }
         
-        if options.contentResource == nil {
-            options.contentResource = content.contentResource
+        if options.contentResource == nil, let contentResource = content.contentResource {
+            options.contentResource = contentResource
         }
         
         if options.contentIsLive == nil, let isLive = content.contentIsLive {
@@ -251,16 +251,16 @@ extension YouboraConfig {
             options.contentIsLiveNoSeek = NSNumber(booleanLiteral: isDVR)
         }
         
-        if options.contentTitle == nil {
-            options.contentTitle = content.contentTitle
+        if options.contentTitle == nil, let contentTitle = content.contentTitle {
+            options.contentTitle = contentTitle
         }
         
         if options.contentDuration == nil, let duration = content.contentDuration {
             options.contentDuration = NSNumber(value: duration)
         }
         
-        if options.contentTransactionCode == nil {
-            options.contentTransactionCode = content.contentTransactionCode
+        if options.contentTransactionCode == nil, let contentTransactionCode = content.contentTransactionCode {
+            options.contentTransactionCode = contentTransactionCode
         }
         
         if options.contentBitrate == nil, let bitrate = content.contentBitrate {
@@ -271,116 +271,116 @@ extension YouboraConfig {
             options.sendTotalBytes = NSNumber(booleanLiteral: sendTotalBytes)
         }
         
-        if options.contentStreamingProtocol == nil {
-            options.contentStreamingProtocol = content.contentStreamingProtocol
+        if options.contentStreamingProtocol == nil, let contentStreamingProtocol = content.contentStreamingProtocol {
+            options.contentStreamingProtocol = contentStreamingProtocol
         }
         
-        if options.contentTransportFormat == nil {
-            options.contentTransportFormat = content.contentTransportFormat
+        if options.contentTransportFormat == nil, let contentTransportFormat = content.contentTransportFormat {
+            options.contentTransportFormat = contentTransportFormat
         }
         
         if options.contentThroughput == nil, let throughput = content.contentThroughput {
             options.contentThroughput = NSNumber(value: throughput)
         }
         
-        if options.contentRendition == nil {
-            options.contentRendition = content.contentRendition
+        if options.contentRendition == nil, let contentRendition = content.contentRendition {
+            options.contentRendition = contentRendition
         }
         
-        if options.contentCdn == nil {
-            options.contentCdn = content.contentCdn
+        if options.contentCdn == nil, let contentCdn = content.contentCdn {
+            options.contentCdn = contentCdn
         }
         
         if options.contentFps == nil, let fps = content.contentFps {
             options.contentFps = NSNumber(value: fps)
         }
         
-        if options.contentPackage == nil {
-            options.contentPackage = content.contentPackage
+        if options.contentPackage == nil, let contentPackage = content.contentPackage {
+            options.contentPackage = contentPackage
         }
         
-        if options.contentSaga == nil {
-            options.contentSaga = content.contentSaga
+        if options.contentSaga == nil, let contentSaga = content.contentSaga {
+            options.contentSaga = contentSaga
         }
         
-        if options.contentTvShow == nil {
-            options.contentTvShow = content.contentTvShow
+        if options.contentTvShow == nil, let contentTvShow = content.contentTvShow {
+            options.contentTvShow = contentTvShow
         }
         
-        if options.contentSeason == nil {
-            options.contentSeason = content.contentSeason
+        if options.contentSeason == nil, let contentSeason = content.contentSeason {
+            options.contentSeason = contentSeason
         }
         
-        if options.contentEpisodeTitle == nil {
-            options.contentEpisodeTitle = content.contentEpisodeTitle
+        if options.contentEpisodeTitle == nil, let contentEpisodeTitle = content.contentEpisodeTitle {
+            options.contentEpisodeTitle = contentEpisodeTitle
         }
         
-        if options.contentChannel == nil {
-            options.contentChannel = content.contentChannel
+        if options.contentChannel == nil, let contentChannel = content.contentChannel {
+            options.contentChannel = contentChannel
         }
         
-        if options.contentId == nil {
-            options.contentId = content.contentId
+        if options.contentId == nil, let contentId = content.contentId {
+            options.contentId = contentId
         }
         
-        if options.contentImdbId == nil {
-            options.contentImdbId = content.contentImdbId
+        if options.contentImdbId == nil, let contentImdbId = content.contentImdbId {
+            options.contentImdbId = contentImdbId
         }
         
-        if options.contentGracenoteId == nil {
-            options.contentGracenoteId = content.contentGracenoteId
+        if options.contentGracenoteId == nil, let contentGracenoteId = content.contentGracenoteId {
+            options.contentGracenoteId = contentGracenoteId
         }
         
-        if options.contentType == nil {
-            options.contentType = content.contentType
+        if options.contentType == nil, let contentType = content.contentType {
+            options.contentType = contentType
         }
         
-        if options.contentGenre == nil {
-            options.contentGenre = content.contentGenre
+        if options.contentGenre == nil, let contentGenre = content.contentGenre {
+            options.contentGenre = contentGenre
         }
         
-        if options.contentLanguage == nil {
-            options.contentLanguage = content.contentLanguage
+        if options.contentLanguage == nil, let contentLanguage = content.contentLanguage {
+            options.contentLanguage = contentLanguage
         }
         
-        if options.contentSubtitles == nil {
-            options.contentSubtitles = content.contentSubtitles
+        if options.contentSubtitles == nil, let contentSubtitles = content.contentSubtitles {
+            options.contentSubtitles = contentSubtitles
         }
         
-        if options.contentContractedResolution == nil {
-            options.contentContractedResolution = content.contentContractedResolution
+        if options.contentContractedResolution == nil, let contentContractedResolution = content.contentContractedResolution {
+            options.contentContractedResolution = contentContractedResolution
         }
         
-        if options.contentCost == nil {
-            options.contentCost = content.contentCost
+        if options.contentCost == nil, let contentCost = content.contentCost {
+            options.contentCost = contentCost
         }
         
-        if options.contentPrice == nil {
-            options.contentPrice = content.contentPrice
+        if options.contentPrice == nil, let contentPrice = content.contentPrice {
+            options.contentPrice = contentPrice
         }
         
-        if options.contentPlaybackType == nil {
-            options.contentPlaybackType = content.contentPlaybackType
+        if options.contentPlaybackType == nil, let contentPlaybackType = content.contentPlaybackType {
+            options.contentPlaybackType = contentPlaybackType
         }
         
-        if options.contentDrm == nil {
-            options.contentDrm = content.contentDrm
+        if options.contentDrm == nil, let contentDrm = content.contentDrm {
+            options.contentDrm = contentDrm
         }
         
-        if options.contentEncodingVideoCodec == nil {
-            options.contentEncodingVideoCodec = content.contentEncodingVideoCodec
+        if options.contentEncodingVideoCodec == nil, let contentEncodingVideoCodec = content.contentEncodingVideoCodec {
+            options.contentEncodingVideoCodec = contentEncodingVideoCodec
         }
         
-        if options.contentEncodingAudioCodec == nil {
-            options.contentEncodingAudioCodec = content.contentEncodingAudioCodec
+        if options.contentEncodingAudioCodec == nil, let contentEncodingAudioCodec = content.contentEncodingAudioCodec {
+            options.contentEncodingAudioCodec = contentEncodingAudioCodec
         }
         
-        if options.contentEncodingCodecProfile == nil {
-            options.contentEncodingCodecProfile = content.contentEncodingCodecProfile
+        if options.contentEncodingCodecProfile == nil, let contentEncodingCodecProfile = content.contentEncodingCodecProfile {
+            options.contentEncodingCodecProfile = contentEncodingCodecProfile
         }
         
-        if options.contentEncodingContainerFormat == nil {
-            options.contentEncodingContainerFormat = content.contentEncodingContainerFormat
+        if options.contentEncodingContainerFormat == nil, let contentEncodingContainerFormat = content.contentEncodingContainerFormat {
+            options.contentEncodingContainerFormat = contentEncodingContainerFormat
         }
     }
     
@@ -404,9 +404,9 @@ extension YouboraConfig {
         if parse.cdnNode?.list == nil, let parseCdnNodeList = parse.parseCdnNodeList {
             options.parseCdnNodeList = NSMutableArray(array: parseCdnNodeList)
         }
-        
-        if options.parseCdnNameHeader == nil {
-            options.parseCdnNameHeader = parse.parseCdnNameHeader
+        // "x-cdn-forward" is the default value from Youbora
+        if options.parseCdnNameHeader == "x-cdn-forward", let parseCdnNameHeader = parse.parseCdnNameHeader {
+            options.parseCdnNameHeader = parseCdnNameHeader
         }
         
         // 60 is the default value
@@ -418,16 +418,16 @@ extension YouboraConfig {
     func addBackwardCompatibleFromNetwork(to options: YBOptions) {
         guard let network = network else { return }
         
-        if options.networkIP == nil {
-            options.networkIP = network.networkIP
+        if options.networkIP == nil, let networkIP = network.networkIP {
+            options.networkIP = networkIP
         }
         
-        if options.networkIsp == nil {
-            options.networkIsp = network.networkIsp
+        if options.networkIsp == nil, let networkIsp = network.networkIsp {
+            options.networkIsp = networkIsp
         }
         
-        if options.networkConnectionType == nil {
-            options.networkConnectionType = network.networkConnectionType
+        if options.networkConnectionType == nil, let networkConnectionType = network.networkConnectionType {
+            options.networkConnectionType = networkConnectionType
         }
         
         if options.userObfuscateIp == nil,
@@ -439,32 +439,32 @@ extension YouboraConfig {
     func addBackwardCompatibleFromDevice(to options: YBOptions) {
         guard let device = device else { return }
         
-        if options.deviceBrand == nil {
-            options.deviceBrand = device.deviceBrand
+        if options.deviceBrand == nil, let deviceBrand = device.deviceBrand {
+            options.deviceBrand = deviceBrand
         }
         
-        if options.deviceCode == nil {
-            options.deviceCode = device.deviceCode
+        if options.deviceCode == nil, let deviceCode = device.deviceCode {
+            options.deviceCode = deviceCode
         }
         
-        if options.deviceUUID == nil {
-            options.deviceUUID = device.deviceId
+        if options.deviceUUID == nil, let deviceId = device.deviceId {
+            options.deviceUUID = deviceId
         }
         
-        if options.deviceModel == nil {
-            options.deviceModel = device.deviceModel
+        if options.deviceModel == nil, let deviceModel = device.deviceModel {
+            options.deviceModel = deviceModel
         }
         
-        if options.deviceOsName == nil {
-            options.deviceOsName = device.deviceOsName
+        if options.deviceOsName == nil, let deviceOsName = device.deviceOsName {
+            options.deviceOsName = deviceOsName
         }
         
-        if options.deviceOsVersion == nil {
-            options.deviceOsVersion = device.deviceOsVersion
+        if options.deviceOsVersion == nil, let deviceOsVersion = device.deviceOsVersion {
+            options.deviceOsVersion = deviceOsVersion
         }
         
-        if options.deviceType == nil {
-            options.deviceType = device.deviceType
+        if options.deviceType == nil, let deviceType = device.deviceType {
+            options.deviceType = deviceType
         }
         
         // false is the default value.
@@ -476,82 +476,76 @@ extension YouboraConfig {
     func addBackwardCompatibleFromApp(to options: YBOptions) {
         guard let app = app else { return }
         
-        if options.appName == nil {
-            options.appName = app.appName
+        if options.appName == nil, let appName = app.appName {
+            options.appName = appName
         }
         
-        if options.appReleaseVersion == nil {
-            options.appReleaseVersion = app.appReleaseVersion
+        if options.appReleaseVersion == nil, let appReleaseVersion = app.appReleaseVersion {
+            options.appReleaseVersion = appReleaseVersion
         }
     }
     
     func addBackwardCompatibleFromErrors(to options: YBOptions) {
         guard let errors = errors else { return }
         
-        if options.ignoreErrors == nil {
-            options.ignoreErrors = errors.errorsIgnore
+        if options.ignoreErrors == nil, let errorsIgnore = errors.errorsIgnore {
+            options.ignoreErrors = errorsIgnore
         }
         
-        if options.fatalErrors == nil {
-            options.fatalErrors = errors.errorsFatal
+        if options.fatalErrors == nil, let errorsFatal = errors.errorsFatal {
+            options.fatalErrors = errorsFatal
         }
         
-        if options.nonFatalErrors == nil {
-            options.nonFatalErrors = errors.errorsNonFatal
+        if options.nonFatalErrors == nil, let errorsNonFatal = errors.errorsNonFatal {
+            options.nonFatalErrors = errorsNonFatal
         }
     }
     
     func addBackwardCompatibleFromMedia(to options: YBOptions) {
         guard let media = media else { return }
         
-        if options.contentResource == nil {
-            options.contentResource = media.resource
+        if options.contentResource == nil, let resource = media.resource {
+            options.contentResource = resource
         }
         
-        if options.contentIsLive == nil {
-            if let isLive = media.isLive {
-                options.contentIsLive = NSNumber(booleanLiteral: isLive)
-            }
+        if options.contentIsLive == nil, let isLive = media.isLive {
+            options.contentIsLive = NSNumber(booleanLiteral: isLive)
         }
         
-        if options.contentIsLiveNoSeek == nil {
-            if let isDVR = media.isDVR {
-                options.contentIsLiveNoSeek = NSNumber(booleanLiteral: !isDVR)
-            }
+        if options.contentIsLiveNoSeek == nil, let isDVR = media.isDVR {
+            options.contentIsLiveNoSeek = NSNumber(booleanLiteral: !isDVR)
         }
         
-        if options.contentTitle == nil {
-            options.contentTitle = media.title
+        if options.contentTitle == nil, let title = media.title {
+            options.contentTitle = title
         }
         
-        if options.program == nil {
-            options.program = media.program ?? media.title2
+        if options.program == nil, let program = media.program ?? media.title2 {
+            options.program = program
         }
         
-        if options.contentDuration == nil {
-            if let duration = media.duration {
-                options.contentDuration = NSNumber(value: duration)
-            }
+        if options.contentDuration == nil, let duration = media.duration {
+            options.contentDuration = NSNumber(value: duration)
         }
         
-        if options.contentTransactionCode == nil {
-            options.contentTransactionCode = media.transactionCode
+        if options.contentTransactionCode == nil, let transactionCode = media.transactionCode {
+            options.contentTransactionCode = transactionCode
         }
     }
     
     func addBackwardCompatibleFromProperties(to options: YBOptions) {
         guard let properties = properties else { return }
             
-        if options.contentGenre == nil {
-            options.contentGenre = properties.genre
+        if options.contentGenre == nil, let genre = properties.genre {
+            options.contentGenre = genre
         }
         
-        if options.contentType == nil {
-            options.contentType = properties.type
+        if options.contentType == nil, let type = properties.type {
+            options.contentType = type
         }
         
-        if options.contentPrice == nil {
-            options.contentPrice = properties.price
+        if options.contentPrice == nil, let price = properties.price {
+            options.contentPrice = price
         }
         
         var additionalContentMetadata: [String: String] = [:]
@@ -600,84 +594,84 @@ extension YouboraConfig {
     func addBackwardCompatibleFromContentCustomDimensions(to options: YBOptions) {
         guard let contentCustomDimensions = contentCustomDimensions else { return }
             
-        if options.contentCustomDimension1 == nil {
-            options.contentCustomDimension1 = contentCustomDimensions.contentCustomDimension1
+        if options.contentCustomDimension1 == nil, let contentCustomDimension1 = contentCustomDimensions.contentCustomDimension1 {
+            options.contentCustomDimension1 = contentCustomDimension1
         }
         
-        if options.contentCustomDimension2 == nil {
-            options.contentCustomDimension2 = contentCustomDimensions.contentCustomDimension2
+        if options.contentCustomDimension2 == nil, let contentCustomDimension2 = contentCustomDimensions.contentCustomDimension2 {
+            options.contentCustomDimension2 = contentCustomDimension2
         }
         
-        if options.contentCustomDimension3 == nil {
-            options.contentCustomDimension3 = contentCustomDimensions.contentCustomDimension3
+        if options.contentCustomDimension3 == nil, let contentCustomDimension3 = contentCustomDimensions.contentCustomDimension3 {
+            options.contentCustomDimension3 = contentCustomDimension3
         }
         
-        if options.contentCustomDimension4 == nil {
-            options.contentCustomDimension4 = contentCustomDimensions.contentCustomDimension4
+        if options.contentCustomDimension4 == nil, let contentCustomDimension4 = contentCustomDimensions.contentCustomDimension4 {
+            options.contentCustomDimension4 = contentCustomDimension4
         }
             
-        if options.contentCustomDimension5 == nil {
-            options.contentCustomDimension5 = contentCustomDimensions.contentCustomDimension5
+        if options.contentCustomDimension5 == nil, let contentCustomDimension5 = contentCustomDimensions.contentCustomDimension5 {
+            options.contentCustomDimension5 = contentCustomDimension5
         }
         
-        if options.contentCustomDimension6 == nil {
-            options.contentCustomDimension6 = contentCustomDimensions.contentCustomDimension6
+        if options.contentCustomDimension6 == nil, let contentCustomDimension6 = contentCustomDimensions.contentCustomDimension6 {
+            options.contentCustomDimension6 = contentCustomDimension6
         }
            
-        if options.contentCustomDimension7 == nil {
-            options.contentCustomDimension7 = contentCustomDimensions.contentCustomDimension7
+        if options.contentCustomDimension7 == nil, let contentCustomDimension7 = contentCustomDimensions.contentCustomDimension7 {
+            options.contentCustomDimension7 = contentCustomDimension7
         }
         
-        if options.contentCustomDimension8 == nil {
-            options.contentCustomDimension8 = contentCustomDimensions.contentCustomDimension8
+        if options.contentCustomDimension8 == nil, let contentCustomDimension8 = contentCustomDimensions.contentCustomDimension8 {
+            options.contentCustomDimension8 = contentCustomDimension8
         }
         
-        if options.contentCustomDimension9 == nil {
-            options.contentCustomDimension9 = contentCustomDimensions.contentCustomDimension9
+        if options.contentCustomDimension9 == nil, let contentCustomDimension9 = contentCustomDimensions.contentCustomDimension9 {
+            options.contentCustomDimension9 = contentCustomDimension9
         }
         
-        if options.contentCustomDimension10 == nil {
-            options.contentCustomDimension10 = contentCustomDimensions.contentCustomDimension10
+        if options.contentCustomDimension10 == nil, let contentCustomDimension10 = contentCustomDimensions.contentCustomDimension10 {
+            options.contentCustomDimension10 = contentCustomDimension10
         }
         
-        if options.contentCustomDimension11 == nil {
-            options.contentCustomDimension11 = contentCustomDimensions.contentCustomDimension11
+        if options.contentCustomDimension11 == nil, let contentCustomDimension11 = contentCustomDimensions.contentCustomDimension11 {
+            options.contentCustomDimension11 = contentCustomDimension11
         }
         
-        if options.contentCustomDimension12 == nil {
-            options.contentCustomDimension12 = contentCustomDimensions.contentCustomDimension12
+        if options.contentCustomDimension12 == nil, let contentCustomDimension12 = contentCustomDimensions.contentCustomDimension12 {
+            options.contentCustomDimension12 = contentCustomDimension12
         }
         
-        if options.contentCustomDimension13 == nil {
-            options.contentCustomDimension13 = contentCustomDimensions.contentCustomDimension13
+        if options.contentCustomDimension13 == nil, let contentCustomDimension13 = contentCustomDimensions.contentCustomDimension13 {
+            options.contentCustomDimension13 = contentCustomDimension13
         }
         
-        if options.contentCustomDimension14 == nil {
-            options.contentCustomDimension14 = contentCustomDimensions.contentCustomDimension14
+        if options.contentCustomDimension14 == nil, let contentCustomDimension14 = contentCustomDimensions.contentCustomDimension14 {
+            options.contentCustomDimension14 = contentCustomDimension14
         }
         
-        if options.contentCustomDimension15 == nil {
-            options.contentCustomDimension15 = contentCustomDimensions.contentCustomDimension15
+        if options.contentCustomDimension15 == nil, let contentCustomDimension15 = contentCustomDimensions.contentCustomDimension15 {
+            options.contentCustomDimension15 = contentCustomDimension15
         }
         
-        if options.contentCustomDimension16 == nil {
-            options.contentCustomDimension16 = contentCustomDimensions.contentCustomDimension16
+        if options.contentCustomDimension16 == nil, let contentCustomDimension16 = contentCustomDimensions.contentCustomDimension16 {
+            options.contentCustomDimension16 = contentCustomDimension16
         }
         
-        if options.contentCustomDimension17 == nil {
-            options.contentCustomDimension17 = contentCustomDimensions.contentCustomDimension17
+        if options.contentCustomDimension17 == nil, let contentCustomDimension17 = contentCustomDimensions.contentCustomDimension17 {
+            options.contentCustomDimension17 = contentCustomDimension17
         }
         
-        if options.contentCustomDimension18 == nil {
-            options.contentCustomDimension18 = contentCustomDimensions.contentCustomDimension18
+        if options.contentCustomDimension18 == nil, let contentCustomDimension18 = contentCustomDimensions.contentCustomDimension18 {
+            options.contentCustomDimension18 = contentCustomDimension18
         }
         
-        if options.contentCustomDimension19 == nil {
-            options.contentCustomDimension19 = contentCustomDimensions.contentCustomDimension19
+        if options.contentCustomDimension19 == nil, let contentCustomDimension19 = contentCustomDimensions.contentCustomDimension19 {
+            options.contentCustomDimension19 = contentCustomDimension19
         }
         
-        if options.contentCustomDimension20 == nil {
-            options.contentCustomDimension20 = contentCustomDimensions.contentCustomDimension20
+        if options.contentCustomDimension20 == nil, let contentCustomDimension20 = contentCustomDimensions.contentCustomDimension20 {
+            options.contentCustomDimension20 = contentCustomDimension20
         }
     }
 
@@ -697,16 +691,16 @@ extension YouboraConfig {
     func addBackwardCompatibleFromAds(to options: YBOptions) {
         guard let ads = ads else { return }
             
-        if options.adBreaksTime == nil {
-            options.adBreaksTime = ads.adBreaksTime
+        if options.adBreaksTime == nil, let adBreaksTime = ads.adBreaksTime {
+            options.adBreaksTime = adBreaksTime
         }
         
-        if options.adCampaign == nil {
-            options.adCampaign = ads.adCampaign ?? ads.campaign
+        if options.adCampaign == nil, let campaign = ads.adCampaign ?? ads.campaign {
+            options.adCampaign = campaign
         }
         
-        if options.adCreativeId == nil {
-            options.adCreativeId = ads.adCreativeId
+        if options.adCreativeId == nil, let adCreativeId = ads.adCreativeId {
+            options.adCreativeId = adCreativeId
         }
         
         if options.adExpectedBreaks == nil, let adExpectedBreaks = ads.adExpectedBreaks {
@@ -717,16 +711,16 @@ extension YouboraConfig {
             options.adGivenBreaks = NSNumber(value: adGivenBreaks)
         }
         
-        if options.adProvider == nil {
-            options.adProvider = ads.adProvider
+        if options.adProvider == nil, let adProvider = ads.adProvider {
+            options.adProvider = adProvider
         }
         
-        if options.adResource == nil {
-            options.adResource = ads.adResource
+        if options.adResource == nil, let adResource = ads.adResource {
+            options.adResource = adResource
         }
         
-        if options.adTitle == nil {
-            options.adTitle = ads.adTitle
+        if options.adTitle == nil, let adTitle = ads.adTitle {
+            options.adTitle = adTitle
         }
         
         if options.adGivenAds == nil, let adGivenAds = ads.adGivenAds {
@@ -734,68 +728,68 @@ extension YouboraConfig {
         }
         
         if let adCustomDimensions = ads.adCustomDimensions {
-            if options.adCustomDimension1 == nil {
-                options.adCustomDimension1 = adCustomDimensions.adCustomDimension1
+            if options.adCustomDimension1 == nil, let adCustomDimension1 = adCustomDimensions.adCustomDimension1 {
+                options.adCustomDimension1 = adCustomDimension1
             }
-            if options.adCustomDimension2 == nil {
-                options.adCustomDimension2 = adCustomDimensions.adCustomDimension2
+            if options.adCustomDimension2 == nil, let adCustomDimension2 = adCustomDimensions.adCustomDimension2 {
+                options.adCustomDimension2 = adCustomDimension2
             }
-            if options.adCustomDimension3 == nil {
-                options.adCustomDimension3 = adCustomDimensions.adCustomDimension3
+            if options.adCustomDimension3 == nil, let adCustomDimension3 = adCustomDimensions.adCustomDimension3 {
+                options.adCustomDimension3 = adCustomDimension3
             }
-            if options.adCustomDimension4 == nil {
-                options.adCustomDimension4 = adCustomDimensions.adCustomDimension4
+            if options.adCustomDimension4 == nil, let adCustomDimension4 = adCustomDimensions.adCustomDimension4 {
+                options.adCustomDimension4 = adCustomDimension4
             }
-            if options.adCustomDimension5 == nil {
-                options.adCustomDimension5 = adCustomDimensions.adCustomDimension5
+            if options.adCustomDimension5 == nil, let adCustomDimension5 = adCustomDimensions.adCustomDimension5 {
+                options.adCustomDimension5 = adCustomDimension5
             }
-            if options.adCustomDimension6 == nil {
-                options.adCustomDimension6 = adCustomDimensions.adCustomDimension6
+            if options.adCustomDimension6 == nil, let adCustomDimension6 = adCustomDimensions.adCustomDimension6 {
+                options.adCustomDimension6 = adCustomDimension6
             }
-            if options.adCustomDimension7 == nil {
-                options.adCustomDimension7 = adCustomDimensions.adCustomDimension7
+            if options.adCustomDimension7 == nil, let adCustomDimension7 = adCustomDimensions.adCustomDimension7 {
+                options.adCustomDimension7 = adCustomDimension7
             }
-            if options.adCustomDimension8 == nil {
-                options.adCustomDimension8 = adCustomDimensions.adCustomDimension8
+            if options.adCustomDimension8 == nil, let adCustomDimension8 = adCustomDimensions.adCustomDimension8 {
+                options.adCustomDimension8 = adCustomDimension8
             }
-            if options.adCustomDimension9 == nil {
-                options.adCustomDimension9 = adCustomDimensions.adCustomDimension9
+            if options.adCustomDimension9 == nil, let adCustomDimension9 = adCustomDimensions.adCustomDimension9 {
+                options.adCustomDimension9 = adCustomDimension9
             }
-            if options.adCustomDimension10 == nil {
-                options.adCustomDimension10 = adCustomDimensions.adCustomDimension10
+            if options.adCustomDimension10 == nil, let adCustomDimension10 = adCustomDimensions.adCustomDimension10 {
+                options.adCustomDimension10 = adCustomDimension10
             }
         }
         
         if let extraParams = ads.extraParams {
-            if options.adCustomDimension1 == nil {
-                options.adCustomDimension1 = extraParams.param1
+            if options.adCustomDimension1 == nil, let param1 = extraParams.param1 {
+                options.adCustomDimension1 = param1
             }
-            if options.adCustomDimension2 == nil {
-                options.adCustomDimension2 = extraParams.param2
+            if options.adCustomDimension2 == nil, let param2 = extraParams.param2 {
+                options.adCustomDimension2 = param2
             }
-            if options.adCustomDimension3 == nil {
-                options.adCustomDimension3 = extraParams.param3
+            if options.adCustomDimension3 == nil, let param3 = extraParams.param3 {
+                options.adCustomDimension3 = param3
             }
-            if options.adCustomDimension4 == nil {
-                options.adCustomDimension4 = extraParams.param4
+            if options.adCustomDimension4 == nil, let param4 = extraParams.param4 {
+                options.adCustomDimension4 = param4
             }
-            if options.adCustomDimension5 == nil {
-                options.adCustomDimension5 = extraParams.param5
+            if options.adCustomDimension5 == nil, let param5 = extraParams.param5 {
+                options.adCustomDimension5 = param5
             }
-            if options.adCustomDimension6 == nil {
-                options.adCustomDimension6 = extraParams.param6
+            if options.adCustomDimension6 == nil, let param6 = extraParams.param6 {
+                options.adCustomDimension6 = param6
             }
-            if options.adCustomDimension7 == nil {
-                options.adCustomDimension7 = extraParams.param7
+            if options.adCustomDimension7 == nil, let param7 = extraParams.param7 {
+                options.adCustomDimension7 = param7
             }
-            if options.adCustomDimension8 == nil {
-                options.adCustomDimension8 = extraParams.param8
+            if options.adCustomDimension8 == nil, let param8 = extraParams.param8 {
+                options.adCustomDimension8 = param8
             }
-            if options.adCustomDimension9 == nil {
-                options.adCustomDimension9 = extraParams.param9
+            if options.adCustomDimension9 == nil, let param9 = extraParams.param9 {
+                options.adCustomDimension9 = param9
             }
-            if options.adCustomDimension10 == nil {
-                options.adCustomDimension10 = extraParams.param10
+            if options.adCustomDimension10 == nil, let param10 = extraParams.param10 {
+                options.adCustomDimension10 = param10
             }
         }
     }

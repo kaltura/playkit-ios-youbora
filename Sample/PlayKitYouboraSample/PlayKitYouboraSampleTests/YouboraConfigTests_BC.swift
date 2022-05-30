@@ -22,9 +22,9 @@ extension YouboraConfigTests {
         XCTAssertTrue(options.accountCode == ybCT.BCValues.accountCode)
         XCTAssertTrue(options.enabled == ybCT.BCValues.isEnabled)
         XCTAssertTrue(options.httpSecure == ybCT.BCValues.httpSecure)
-        XCTAssertNil(options.host)
+        XCTAssertTrue(options.host == "a-fds.youborafds01.com") // Youbora Default value.
         XCTAssertNil(options.authToken)
-        XCTAssertNil(options.authType)
+        XCTAssertTrue(options.authType == "Bearer") // Youbora Default value.
         XCTAssertTrue(options.username == ybCT.BCValues.username)
         XCTAssertTrue(options.offline == false) // Youbora Default value.
         XCTAssertTrue(options.autoDetectBackground == ybCT.BCValues.autoDetectBackground)
@@ -32,7 +32,7 @@ extension YouboraConfigTests {
         XCTAssertTrue(options.experimentIds?.count == 0) // Youbora Default creates an empty Array.
         XCTAssertNil(options.linkedViewId)
         XCTAssertTrue(options.waitForMetadata == false) // Youbora Default value.
-        XCTAssertNil(options.pendingMetadata)
+        XCTAssertTrue(options.pendingMetadata?.count == 0) // Youbora Default creates an empty Array.
     }
     
     func testBCUserOptions() throws {
@@ -197,7 +197,7 @@ extension YouboraConfigTests {
             XCTFail()
         }
         
-        XCTAssertNil(options.contentMetrics)
+        XCTAssertTrue(options.contentMetrics?.count == 0) // Youbora Default creates an empty NSDictionary.
         
         XCTAssertTrue(options.contentPackage == ybCT.BCValues.Content.contentPackage)
         XCTAssertTrue(options.contentSaga == ybCT.BCValues.Content.contentSaga)
