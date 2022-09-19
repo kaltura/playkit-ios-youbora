@@ -168,11 +168,11 @@ extension PKYouboraPlayerAdapter {
     }
     
     override func getVideoCodec() -> String? {
-        return lastReportedVideoCodec
+        return lastReportedVideoCodec?.uppercased()
     }
     
     override func getAudioCodec() -> String? {
-        return lastReportedAudioCodec
+        return lastReportedAudioCodec?.uppercased()
     }
 }
 
@@ -274,6 +274,16 @@ extension PKYouboraPlayerAdapter {
                         self.plugin?.options.contentDrm = mediaSource.isFairPlay() ? "FairPlay" : "Clear"
                     } else {
                         self.plugin?.options.contentDrm = "Unknown"
+                    }
+                }
+                
+                let streamingProtocol = self.plugin?.options.contentStreamingProtocol
+                if streamingProtocol == nil || streamingProtocol?.isEmpty == true {
+                    if let mediaSource = event.mediaSource {
+                        let mediaFormat = mediaSource.mediaFormat.description.uppercased()
+                        self.plugin?.options.contentStreamingProtocol = mediaFormat
+                    } else {
+                        self.plugin?.options.contentStreamingProtocol = "Unknown"
                     }
                 }
                 
