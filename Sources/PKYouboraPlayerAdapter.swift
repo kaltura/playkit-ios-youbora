@@ -29,6 +29,8 @@ class PKYouboraPlayerAdapter: YBPlayerAdapter<AnyObject> {
     fileprivate var shouldDelayEndedHandler = false
     
     private var lastReportedDuration: Double?
+    private var lastReportedVideoCodec: String?
+    private var lastReportedAudioCodec: String?
     
     // We must override this init in order to add our init (happens because of interopatability of youbora objc framework with swift).
     private override init() {
@@ -164,6 +166,14 @@ extension PKYouboraPlayerAdapter {
     override func getHouseholdId() -> String {
         return config?.householdId ?? config?.houseHoldId ?? "" // Backward compatible 'config?.houseHoldId'
     }
+    
+    override func getVideoCodec() -> String? {
+        return lastReportedVideoCodec
+    }
+    
+    override func getAudioCodec() -> String? {
+        return lastReportedAudioCodec
+    }
 }
 
 /************************************************************/
@@ -187,6 +197,8 @@ extension PKYouboraPlayerAdapter {
             PlayerEvent.sourceSelected,
             PlayerEvent.error,
             PlayerEvent.durationChanged,
+            PlayerEvent.videoTrackChanged,
+            PlayerEvent.audioTrackChanged,
             AdEvent.adCuePointsUpdate,
             AdEvent.allAdsCompleted
         ]
@@ -272,6 +284,10 @@ extension PKYouboraPlayerAdapter {
                 }
             case is PlayerEvent.DurationChanged:
                 self.lastReportedDuration = event.duration?.doubleValue
+            case is PlayerEvent.VideoTrackChanged:
+                self.lastReportedVideoCodec = event.codecDescription
+            case is PlayerEvent.AudioTrackChanged:
+                self.lastReportedAudioCodec = event.codecDescription
             case is AdEvent.AdCuePointsUpdate:
                 if let hasPostRoll = event.adCuePoints?.hasPostRoll, hasPostRoll == true {
                     self.shouldDelayEndedHandler = true
@@ -307,6 +323,8 @@ extension PKYouboraPlayerAdapter {
     func reset() {
         playbackInfo = nil
         lastReportedResource = nil
+        lastReportedVideoCodec = nil
+        lastReportedAudioCodec = nil
         isFirstPlay = true
         shouldDelayEndedHandler = false
     }
