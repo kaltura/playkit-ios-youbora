@@ -183,9 +183,7 @@ extension PKYouboraAdsAdapter {
                     self.fireResume()
                     // If we were coming from background and ad was resumed
                     // Has no effect when already playing ad and resumed because ad was already started.
-                    self.plugin?.adapter?.fireStart()
-                    self.fireStart()
-                    self.fireJoin()
+                    self.plugin?.adapter?.fireResume()
                 }
             case let e where e.self == AdEvent.adPaused:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
