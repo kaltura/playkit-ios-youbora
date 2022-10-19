@@ -271,7 +271,7 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     
-                    if (self.adInfo != nil && self.getPosition() != .pre){
+                    if (self.adInfo != nil && self.getPosition() != .pre) {
                         self.fireAdBreakStart()
                     }
                 }
