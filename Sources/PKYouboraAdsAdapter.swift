@@ -169,7 +169,10 @@ extension PKYouboraAdsAdapter {
                     if let positionType = event.adInfo?.positionType, positionType == .preRoll {
                         self.plugin?.adapter?.fireStart()
                     }
-                    self.fireStart()
+                    
+                    if let adId = event.adInfo?.adId {
+                        self.fireAdManifest(["AdId": adId])
+                    }
                 }
             case let e where e.self == AdEvent.adComplete:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
@@ -183,9 +186,7 @@ extension PKYouboraAdsAdapter {
                     self.fireResume()
                     // If we were coming from background and ad was resumed
                     // Has no effect when already playing ad and resumed because ad was already started.
-                    self.plugin?.adapter?.fireStart()
-                    self.fireStart()
-                    self.fireJoin()
+                    self.plugin?.adapter?.fireResume()
                 }
             case let e where e.self == AdEvent.adPaused:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
