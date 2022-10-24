@@ -295,9 +295,13 @@ extension PKYouboraPlayerAdapter {
             case is PlayerEvent.DurationChanged:
                 self.lastReportedDuration = event.duration?.doubleValue
             case is PlayerEvent.VideoTrackChanged:
-                self.lastReportedVideoCodec = event.codecDescription
+                if let description = event.codecDescription {
+                    self.lastReportedVideoCodec = description
+                }
             case is PlayerEvent.AudioTrackChanged:
-                self.lastReportedAudioCodec = event.codecDescription
+                if let description = event.codecDescription {
+                    self.lastReportedAudioCodec = description
+                }
             case is AdEvent.AdCuePointsUpdate:
                 if let hasPostRoll = event.adCuePoints?.hasPostRoll, hasPostRoll == true {
                     self.shouldDelayEndedHandler = true
