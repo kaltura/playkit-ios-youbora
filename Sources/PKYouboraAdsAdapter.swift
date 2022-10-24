@@ -141,6 +141,7 @@ extension PKYouboraAdsAdapter {
             AdEvent.adFirstQuartile,
             AdEvent.adMidpoint,
             AdEvent.adThirdQuartile,
+            AdEvent.adBreakEnded,
             AdEvent.error
         ]
     }
@@ -276,7 +277,7 @@ extension PKYouboraAdsAdapter {
                         self.fireAdBreakStart()
                     }
                 }
-            case let e where e.self == AdEvent.adBreakStarted:
+            case let e where e.self == AdEvent.adBreakEnded:
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     
