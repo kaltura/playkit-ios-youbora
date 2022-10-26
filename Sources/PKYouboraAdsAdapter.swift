@@ -171,6 +171,8 @@ extension PKYouboraAdsAdapter {
                         self.plugin?.adapter?.fireStart()
                     }
                     
+                    self.fireStart()
+                    
                     if let adId = event.adInfo?.adId {
                         self.fireAdManifest(["AdId": adId])
                     }
