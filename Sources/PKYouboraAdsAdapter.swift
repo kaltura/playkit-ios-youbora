@@ -141,6 +141,7 @@ extension PKYouboraAdsAdapter {
             AdEvent.adFirstQuartile,
             AdEvent.adMidpoint,
             AdEvent.adThirdQuartile,
+            AdEvent.adBreakEnded,
             AdEvent.error
         ]
     }
@@ -226,6 +227,7 @@ extension PKYouboraAdsAdapter {
                 messageBus.addObserver(self, events: [e.self]) { [weak self] event in
                     guard let self = self else { return }
                     self.fireStop()
+                    self.fireAdBreakStop()
                     self.adInfo = nil
                 }
             case let e where e.self == AdEvent.adClicked:
@@ -260,6 +262,26 @@ extension PKYouboraAdsAdapter {
                     if let adErrorEvent = event.data?[AdEventDataKeys.error] as? NSError {
                         self.fireFatalError(withMessage: adErrorEvent.localizedDescription, code: "\(adErrorEvent.code)", andMetadata: adErrorEvent.description)
                     }
+                }
+            case let e where e.self == AdEvent.adDidRequestContentPause:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireAdBreakStart()
+                }
+            case let e where e.self == AdEvent.adBreakStarted:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    if (self.adInfo != nil && self.getPosition() != .pre) {
+                        self.fireAdBreakStart()
+                    }
+                }
+            case let e where e.self == AdEvent.adBreakEnded:
+                messageBus.addObserver(self, events: [e.self]) { [weak self] event in
+                    guard let self = self else { return }
+                    
+                    self.fireAdBreakStop()
                 }
             default: assertionFailure("All events must be handled")
             }
