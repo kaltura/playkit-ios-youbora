@@ -29,6 +29,8 @@ class PKYouboraPlayerAdapter: YBPlayerAdapter<AnyObject> {
     fileprivate var shouldDelayEndedHandler = false
     
     private var lastReportedDuration: Double?
+    private var lastReportedVideoCodec: String?
+    private var lastReportedAudioCodec: String?
     
     // We must override this init in order to add our init (happens because of interopatability of youbora objc framework with swift).
     private override init() {
@@ -164,6 +166,14 @@ extension PKYouboraPlayerAdapter {
     override func getHouseholdId() -> String {
         return config?.householdId ?? config?.houseHoldId ?? "" // Backward compatible 'config?.houseHoldId'
     }
+    
+    override func getVideoCodec() -> String? {
+        return lastReportedVideoCodec?.uppercased()
+    }
+    
+    override func getAudioCodec() -> String? {
+        return lastReportedAudioCodec?.uppercased()
+    }
 }
 
 /************************************************************/
@@ -187,6 +197,8 @@ extension PKYouboraPlayerAdapter {
             PlayerEvent.sourceSelected,
             PlayerEvent.error,
             PlayerEvent.durationChanged,
+            PlayerEvent.videoTrackChanged,
+            PlayerEvent.audioTrackChanged,
             AdEvent.adCuePointsUpdate,
             AdEvent.allAdsCompleted
         ]
@@ -265,6 +277,16 @@ extension PKYouboraPlayerAdapter {
                     }
                 }
                 
+                let streamingProtocol = self.plugin?.options.contentStreamingProtocol
+                if streamingProtocol == nil || streamingProtocol?.isEmpty == true {
+                    if let mediaSource = event.mediaSource {
+                        let mediaFormat = mediaSource.mediaFormat.description.uppercased()
+                        self.plugin?.options.contentStreamingProtocol = mediaFormat
+                    } else {
+                        self.plugin?.options.contentStreamingProtocol = "Unknown"
+                    }
+                }
+                
                 self.postEventLog(withMessage: "\(event.namespace)")
             case is PlayerEvent.Error:
                 if let error = event.error {
@@ -272,6 +294,14 @@ extension PKYouboraPlayerAdapter {
                 }
             case is PlayerEvent.DurationChanged:
                 self.lastReportedDuration = event.duration?.doubleValue
+            case is PlayerEvent.VideoTrackChanged:
+                if let description = event.codecDescription {
+                    self.lastReportedVideoCodec = description
+                }
+            case is PlayerEvent.AudioTrackChanged:
+                if let description = event.codecDescription {
+                    self.lastReportedAudioCodec = description
+                }
             case is AdEvent.AdCuePointsUpdate:
                 if let hasPostRoll = event.adCuePoints?.hasPostRoll, hasPostRoll == true {
                     self.shouldDelayEndedHandler = true
@@ -307,6 +337,8 @@ extension PKYouboraPlayerAdapter {
     func reset() {
         playbackInfo = nil
         lastReportedResource = nil
+        lastReportedVideoCodec = nil
+        lastReportedAudioCodec = nil
         isFirstPlay = true
         shouldDelayEndedHandler = false
     }
