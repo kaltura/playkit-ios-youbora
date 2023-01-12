@@ -1,3 +1,9 @@
+![Swift 3.0+](https://img.shields.io/badge/Swift-3.0+-orange.svg)
+[![CI Status](https://github.com/kaltura/playkit-ios-youbora/actions/workflows/ci.yml/badge.svg)](https://github.com/kaltura/playkit-ios-youbora/actions/workflows/ci.yml)
+[![Version](https://img.shields.io/cocoapods/v/PlayKitYoubora.svg?style=flat)](https://cocoapods.org/pods/PlayKitYoubora)
+[![License](https://img.shields.io/cocoapods/l/PlayKitYoubora.svg?style=flat)](https://cocoapods.org/pods/PlayKitYoubora)
+[![Platform](https://img.shields.io/cocoapods/p/PlayKitYoubora.svg?style=flat)](https://cocoapods.org/pods/PlayKitYoubora)
+
 # playkit-ios-youbora
 Youbora support for PlayKit iOS
 
