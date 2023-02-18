@@ -38,6 +38,10 @@ playerOptions.pluginConfig = pluginConfig
 kalturaOTTPlayer = KalturaOTTPlayer(options: playerOptions)
 ```
 
+#### Demo App:
+You can find samples for youbora plugin in the [Kaltura Player iOS samples](https://github.com/kaltura/kaltura-player-ios-samples/tree/main/OTTSample)
+
+Youbora  section [Yobora Data](https://github.com/kaltura/kaltura-player-ios-samples/blob/a977f92e841613e94f8a766503d354adae224c60/OTTSample/OTTSample/VideoData/YouboraVideoData.swift#L19)
 #### Sample of the full options of the Youbora config
 
 ```swift
