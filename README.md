@@ -7,7 +7,38 @@
 # playkit-ios-youbora
 Youbora support for PlayKit iOS
 
-Sample of Youbora config
+##### You can find the latest version here: 
+
+[Releases](https://github.com/kaltura/playkit-ios-youbora/releases)
+
+##### You can find the Youbora lib version which we currently use here
+
+[Youbora lib version](https://github.com/kaltura/playkit-ios-youbora/blob/0938f56a9aa0a145986de976409995bd203ee919/PlayKitYoubora.podspec#L21)
+
+
+* Inorder to make youbora functional the only parameter that is must is your accountcode.
+* if extra information is required to pass to the youbora you may find the options in the example below 
+* for full referance of the options on youbroa you can check the [Options](https://bitbucket.org/npaw/lib-plugin-ios/src/master/YouboraLib/plugin/YBOptions.m)
+
+### Setup
+
+#### Create Plugin Config and set it on the player instance:
+
+``` 
+let youboraPluginParams: [String: Any] = [
+    "accountCode": "<ACCOUNT_CODE>"
+]
+
+let playerOptions = PlayerOptions()
+...
+...
+let analyticsConfig = AnalyticsConfig(params: youboraPluginParams)
+let pluginConfig = PluginConfig(config: [YouboraPlugin.pluginName: analyticsConfig]))
+playerOptions.pluginConfig = pluginConfig                 
+kalturaOTTPlayer = KalturaOTTPlayer(options: playerOptions)
+```
+
+#### Sample of the full options of the Youbora config
 
 ```swift
 
