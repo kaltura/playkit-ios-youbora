@@ -33,7 +33,7 @@ let playerOptions = PlayerOptions()
 ...
 ...
 let analyticsConfig = AnalyticsConfig(params: youboraPluginParams)
-let pluginConfig = PluginConfig(config: [YouboraPlugin.pluginName: analyticsConfig]))
+let pluginConfig = PluginConfig(config: [YouboraPlugin.pluginName: analyticsConfig])
 playerOptions.pluginConfig = pluginConfig                 
 kalturaOTTPlayer = KalturaOTTPlayer(options: playerOptions)
 ```
